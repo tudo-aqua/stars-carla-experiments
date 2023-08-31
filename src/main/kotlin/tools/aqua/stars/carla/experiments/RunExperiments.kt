@@ -35,19 +35,7 @@ import tools.aqua.stars.import.carla.CarlaSimulationRunsWrapper
 import tools.aqua.stars.import.carla.loadSegments
 
 fun main() {
-  if (!File("stars-reproduction-source").exists()) {
-    println("The experiments data is missing.")
-    if (!File("stars-reproduction-source.zip").exists()) {
-      println("The experiments data zip file is missing.")
-      if (DOWNLOAD_EXPERIMENTS_DATA) {
-        println("Start with downloading the experiments data. This may take a while.")
-        downloadExperimentsData()
-        println("Finished downloading.")
-      }
-    }
-    println("Extract experiments data from zip file.")
-    extractZipFile(zipFile = File("stars-reproduction-source.zip"), extractTo = File("."), true)
-  }
+  downloadAndUnzipExperimentsData()
 
   val tsc = tsc()
 
@@ -69,11 +57,39 @@ fun main() {
   tscEvaluation.registerMetricProvider(MissedTSCInstancesPerProjectionMetric())
   tscEvaluation.registerMetricProvider(
       MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric))
-  val test = FailedMonitorsMetric(validTSCInstancesPerProjectionMetric)
-  tscEvaluation.registerMetricProvider(test)
+  tscEvaluation.registerMetricProvider(FailedMonitorsMetric(validTSCInstancesPerProjectionMetric))
 
   tscEvaluation.runEvaluation()
-  val result = test.evaluate()
+}
+
+fun downloadAndUnzipExperimentsData() {
+  if (!File("stars-reproduction-source").exists()) {
+    println("The experiments data is missing.")
+    if (!File("stars-reproduction-source.zip").exists()) {
+      println("The experiments data zip file is missing.")
+      if (DOWNLOAD_EXPERIMENTS_DATA) {
+        println("Start with downloading the experiments data. This may take a while.")
+        downloadExperimentsData()
+        println("Finished downloading.")
+      } else {
+        simulationDataMissing()
+      }
+    }
+    if (!File("stars-reproduction-source.zip").exists()) {
+      simulationDataMissing()
+    }
+    println("Extract experiments data from zip file.")
+    extractZipFile(zipFile = File("stars-reproduction-source.zip"), extractTo = File("."), true)
+  }
+  if (!File("stars-reproduction-source").exists()) {
+    simulationDataMissing()
+  }
+}
+
+fun simulationDataMissing() {
+  error(
+      "The experiments data is not available. Either download it: https://zenodo.org/record/8131947 or set " +
+          "DOWNLOAD_EXPERIMENTS_DATA to 'true'")
 }
 
 fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> {
