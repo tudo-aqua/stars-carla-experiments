@@ -25,13 +25,5 @@ val USE_EVERY_VEHICLE_AS_EGO = false
 val MIN_SEGMENT_TICK_COUNT = 10
 val SIMULATION_RUN_FOLDER = ".\\stars-reproduction-source\\stars-experiments-data\\simulation_runs"
 val PROJECTION_IGNORE_LIST = listOf<String>()
-
-// read only seeds 20-29
-val FILTER_REGEX = "seed21"
-
-// read everything (don't forget to gradle-clean)
-// const val FILTER_REGEX = "Town(01|02|10).*"
-// const val FILTER_REGEX = "Town(01|02|10).*"
-
-// const val STATIC_FILTER_REGEX = "Town(01|02|10).*"
-const val STATIC_FILTER_REGEX = "Town(01|02|10).*"
+val FILTER_REGEX = "*"
+val STATIC_FILTER_REGEX = "*"
