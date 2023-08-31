@@ -1,0 +1,9 @@
+### Project ###
+/stars-reproduction-source
+/stars-reproduction-source.zip
+/analysis-result-logs
+
+**/.gradle
+**/build
+.idea
+/.idea/
