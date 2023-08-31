@@ -19,7 +19,7 @@ package tools.aqua.stars.carla.experiments
 
 // The download size is approximately 1.3GB!
 // Manual download via: https://zenodo.org/record/8131947
-val DOWNLOAD_EXPERIMENTS_DATA = true
+val DOWNLOAD_EXPERIMENTS_DATA = false
 
 val USE_EVERY_VEHICLE_AS_EGO = false
 val MIN_SEGMENT_TICK_COUNT = 10
