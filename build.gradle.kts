@@ -28,9 +28,10 @@ version = "1.0-SNAPSHOT"
 repositories {
   mavenCentral()
   mavenLocal()
+  maven { url = uri("https://oss.sonatype.org/content/repositories/toolsaqua-1026") }
 }
 
-var starsVersion = "0.0-development-105-9f421d7-SNAPSHOT"
+var starsVersion = "0.1"
 
 dependencies {
   testImplementation(kotlin("test"))
@@ -59,3 +60,5 @@ spotless {
 tasks.test { useJUnitPlatform() }
 
 application { mainClass.set("tools.aqua.stars.carla.experiments.RunExperimentsKt") }
+
+kotlin { jvmToolchain(17) }
