@@ -25,5 +25,5 @@ val USE_EVERY_VEHICLE_AS_EGO = false
 val MIN_SEGMENT_TICK_COUNT = 10
 val SIMULATION_RUN_FOLDER = ".\\stars-reproduction-source\\stars-experiments-data\\simulation_runs"
 val PROJECTION_IGNORE_LIST = listOf<String>()
-val FILTER_REGEX = "*"
-val STATIC_FILTER_REGEX = "*"
+val FILTER_REGEX = ".*"
+val STATIC_FILTER_REGEX = ".*"
