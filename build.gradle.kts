@@ -30,14 +30,14 @@ repositories {
   mavenLocal()
 }
 
-var starsVersion = "0.1"
+var starsVersion = "0.2"
 
 dependencies {
   testImplementation(kotlin("test"))
   implementation("tools.aqua:stars-core:$starsVersion")
   implementation("tools.aqua:stars-logic-kcmftbl:$starsVersion")
   implementation("tools.aqua:stars-data-av:$starsVersion")
-  implementation("tools.aqua:stars-import-carla:$starsVersion")
+  implementation("tools.aqua:stars-importer-carla:$starsVersion")
 }
 
 spotless {

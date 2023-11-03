@@ -31,8 +31,8 @@ import tools.aqua.stars.data.av.Actor
 import tools.aqua.stars.data.av.Segment
 import tools.aqua.stars.data.av.TickData
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
-import tools.aqua.stars.import.carla.CarlaSimulationRunsWrapper
-import tools.aqua.stars.import.carla.loadSegments
+import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
+import tools.aqua.stars.importer.carla.loadSegments
 
 fun main() {
   downloadAndUnzipExperimentsData()
