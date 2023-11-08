@@ -62,6 +62,10 @@ fun main() {
   tscEvaluation.runEvaluation()
 }
 
+/**
+ * Checks if the experiments data is available. Otherwise, it is downloaded and extracted to the
+ * correct folder.
+ */
 fun downloadAndUnzipExperimentsData() {
   if (!File("stars-reproduction-source").exists()) {
     println("The experiments data is missing.")
@@ -86,6 +90,10 @@ fun downloadAndUnzipExperimentsData() {
   }
 }
 
+/**
+ * Throws an exception when the experiments data is not available and when the
+ * [DOWNLOAD_EXPERIMENTS_DATA] is set to false.
+ */
 fun simulationDataMissing() {
   error(
       "The experiments data is not available. Either download it: https://zenodo.org/record/8131947 or set " +
@@ -126,6 +134,7 @@ fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> {
   }
 }
 
+/** Download the experiments data and saves it in the root directory of the project. */
 fun downloadExperimentsData() {
   URL("https://zenodo.org/record/8131947/files/stars-reproduction-source.zip?download=1")
       .openStream()
