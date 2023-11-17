@@ -30,7 +30,7 @@ repositories {
   mavenLocal()
 }
 
-var starsVersion = "0.2"
+var starsVersion = "0.2.1"
 
 dependencies {
   testImplementation(kotlin("test"))

@@ -27,3 +27,4 @@ val SIMULATION_RUN_FOLDER = ".\\stars-reproduction-source\\stars-experiments-dat
 val PROJECTION_IGNORE_LIST = listOf<String>()
 val FILTER_REGEX = ".*"
 val STATIC_FILTER_REGEX = ".*"
+val SORT_BY_SEED = true

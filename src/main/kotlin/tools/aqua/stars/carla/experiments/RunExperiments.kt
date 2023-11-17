@@ -41,7 +41,8 @@ fun main() {
 
   val simulationRunsWrappers = getSimulationRuns()
   val segments =
-      loadSegments(simulationRunsWrappers, USE_EVERY_VEHICLE_AS_EGO, MIN_SEGMENT_TICK_COUNT)
+      loadSegments(
+          simulationRunsWrappers, USE_EVERY_VEHICLE_AS_EGO, MIN_SEGMENT_TICK_COUNT, SORT_BY_SEED)
 
   val tscEvaluation =
       TSCEvaluation(tsc = tsc, segments = segments, projectionIgnoreList = PROJECTION_IGNORE_LIST)
