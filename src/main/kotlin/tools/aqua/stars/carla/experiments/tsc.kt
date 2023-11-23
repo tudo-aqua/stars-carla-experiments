@@ -19,9 +19,12 @@ package tools.aqua.stars.carla.experiments
 
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.core.tsc.*
-import tools.aqua.stars.data.av.Actor
-import tools.aqua.stars.data.av.Segment
-import tools.aqua.stars.data.av.TickData
+import tools.aqua.stars.core.tsc.builder.*
+import tools.aqua.stars.core.tsc.projection.proj
+import tools.aqua.stars.core.tsc.projection.projRec
+import tools.aqua.stars.data.av.dataclasses.Actor
+import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 
 fun tsc() =
     TSC(
@@ -80,12 +83,12 @@ fun tsc() =
                   leaf("Must Yield") {
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        mustYield.holds(ctx, actor2Id = otherVehicleId)
+                        mustYield.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                     monitorFunction = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        hasYielded.holds(ctx, actor2Id = otherVehicleId)
+                        hasYielded.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }
@@ -93,7 +96,7 @@ fun tsc() =
                     projectionIDs = mapOf(proj("dynamic"))
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        follows.holds(ctx, actor2Id = otherVehicleId)
+                        follows.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }
@@ -126,7 +129,7 @@ fun tsc() =
                   leaf("Oncoming traffic") {
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        oncoming.holds(ctx, actor2Id = otherVehicleId)
+                        oncoming.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }
@@ -142,7 +145,7 @@ fun tsc() =
                     projectionIDs = mapOf(proj("dynamic"))
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        follows.holds(ctx, actor2Id = otherVehicleId)
+                        follows.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }
@@ -173,7 +176,7 @@ fun tsc() =
                   leaf("Oncoming traffic") {
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        oncoming.holds(ctx, actor2Id = otherVehicleId)
+                        oncoming.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }
@@ -185,7 +188,7 @@ fun tsc() =
                     projectionIDs = mapOf(proj("dynamic"), proj("static+dynamic"))
                     condition = { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        follows.holds(ctx, actor2Id = otherVehicleId)
+                        follows.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
                   }

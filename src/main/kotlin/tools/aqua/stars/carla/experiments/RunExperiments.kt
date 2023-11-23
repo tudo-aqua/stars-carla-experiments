@@ -27,9 +27,9 @@ import kotlin.io.path.name
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
-import tools.aqua.stars.data.av.Actor
-import tools.aqua.stars.data.av.Segment
-import tools.aqua.stars.data.av.TickData
+import tools.aqua.stars.data.av.dataclasses.Actor
+import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
 import tools.aqua.stars.importer.carla.loadSegments
