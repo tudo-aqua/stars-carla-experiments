@@ -24,6 +24,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 import kotlin.io.path.name
+import kotlin.time.measureTime
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
@@ -31,37 +32,46 @@ import tools.aqua.stars.data.av.dataclasses.Actor
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
+import tools.aqua.stars.importer.carla.CarlaDataLoader
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
-import tools.aqua.stars.importer.carla.loadSegments
 
 fun main() {
-  downloadAndUnzipExperimentsData()
+  val time = measureTime {
+    downloadAndUnzipExperimentsData()
 
-  val tsc = tsc()
+    val simulationRunsWrappers = getSimulationRuns()
+    val segments =
+        CarlaDataLoader(
+                useEveryVehicleAsEgo = USE_EVERY_VEHICLE_AS_EGO,
+                minSegmentTickCount = MIN_SEGMENT_TICK_COUNT,
+                orderFilesBySeed = SORT_BY_SEED)
+            .loadSegments(
+                simulationRunsWrappers = simulationRunsWrappers,
+            )
 
-  val simulationRunsWrappers = getSimulationRuns()
-  val segments =
-      loadSegments(
-          simulationRunsWrappers, USE_EVERY_VEHICLE_AS_EGO, MIN_SEGMENT_TICK_COUNT, SORT_BY_SEED)
+    val validTSCInstancesPerProjectionMetric =
+        ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
 
-  val tscEvaluation =
-      TSCEvaluation(tsc = tsc, segments = segments, projectionIgnoreList = PROJECTION_IGNORE_LIST)
+    TSCEvaluation(tsc = tsc(), projectionIgnoreList = PROJECTION_IGNORE_LIST, numThreads = 20)
+        .apply {
+          registerMetricProviders(
+              SegmentDurationPerIdentifierMetric(),
+              SegmentCountMetric(),
+              AverageVehiclesInEgosBlockMetric(),
+              TotalSegmentTimeLengthMetric(),
+              validTSCInstancesPerProjectionMetric,
+              InvalidTSCInstancesPerProjectionMetric(),
+              MissedTSCInstancesPerProjectionMetric(),
+              MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric),
+              FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
+          )
 
-  tscEvaluation.registerMetricProvider(AverageVehiclesInEgosBlockMetric())
-  tscEvaluation.registerMetricProvider(SegmentCountMetric())
-  tscEvaluation.registerMetricProvider(SegmentDurationPerIdentifierMetric())
-  tscEvaluation.registerMetricProvider(TotalSegmentTimeLengthMetric())
-
-  val validTSCInstancesPerProjectionMetric =
-      ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
-  tscEvaluation.registerMetricProvider(validTSCInstancesPerProjectionMetric)
-  tscEvaluation.registerMetricProvider(InvalidTSCInstancesPerProjectionMetric())
-  tscEvaluation.registerMetricProvider(MissedTSCInstancesPerProjectionMetric())
-  tscEvaluation.registerMetricProvider(
-      MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric))
-  tscEvaluation.registerMetricProvider(FailedMonitorsMetric(validTSCInstancesPerProjectionMetric))
-
-  tscEvaluation.runEvaluation()
+          prepare()
+          segments.forEach { presentSegment(it) }
+          close()
+        }
+  }
+  println("Evaluation took $time.")
 }
 
 /**
@@ -102,39 +112,38 @@ fun simulationDataMissing() {
           "DOWNLOAD_EXPERIMENTS_DATA to 'true'")
 }
 
-fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> {
-  val mapFolders =
-      File(SIMULATION_RUN_FOLDER)
-          .walk()
-          .filter {
-            it.isDirectory &&
-                it != File(SIMULATION_RUN_FOLDER) &&
-                STATIC_FILTER_REGEX.toRegex().containsMatchIn(it.name)
+fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
+    File(SIMULATION_RUN_FOLDER)
+        .walk()
+        .filter {
+          it.isDirectory &&
+              it != File(SIMULATION_RUN_FOLDER) &&
+              STATIC_FILTER_REGEX.toRegex().containsMatchIn(it.name)
+        }
+        .toList()
+        .mapNotNull { mapFolder ->
+          var staticFile: Path? = null
+          val dynamicFiles = mutableListOf<Path>()
+          mapFolder.walk().forEach { mapFile ->
+            if (mapFile.nameWithoutExtension.contains("static_data") &&
+                STATIC_FILTER_REGEX.toRegex().containsMatchIn(mapFile.name)) {
+              staticFile = mapFile.toPath()
+            }
+            if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
+                FILTER_REGEX.toRegex().containsMatchIn(mapFile.name)) {
+              dynamicFiles.add(mapFile.toPath())
+            }
           }
-          .toList()
-  return mapFolders.mapNotNull { mapFolder ->
-    var staticFile: Path? = null
-    val dynamicFiles = mutableListOf<Path>()
-    mapFolder.walk().forEach { mapFile ->
-      if (mapFile.nameWithoutExtension.contains("static_data") &&
-          STATIC_FILTER_REGEX.toRegex().containsMatchIn(mapFile.name)) {
-        staticFile = mapFile.toPath()
-      }
-      if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-          FILTER_REGEX.toRegex().containsMatchIn(mapFile.name)) {
-        dynamicFiles.add(mapFile.toPath())
-      }
-    }
-    if (dynamicFiles.isEmpty()) {
-      return@mapNotNull null
-    }
+          if (dynamicFiles.isEmpty()) {
+            return@mapNotNull null
+          }
 
-    dynamicFiles.sortBy {
-      "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt() ?: 0
-    }
-    return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
-  }
-}
+          dynamicFiles.sortBy {
+            "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
+                ?: 0
+          }
+          return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
+        }
 
 /** Download the experiments data and saves it in the root directory of the project. */
 fun downloadExperimentsData() {
@@ -160,12 +169,7 @@ private fun extractZipFile(
     extractHere: Boolean = false,
 ): File? {
   return try {
-    val outputDir =
-        if (extractHere) {
-          extractTo
-        } else {
-          File(extractTo, zipFile.nameWithoutExtension)
-        }
+    val outputDir = if (extractHere) extractTo else File(extractTo, zipFile.nameWithoutExtension)
 
     ZipFile(zipFile).use { zip ->
       zip.entries().asSequence().forEach { entry ->
