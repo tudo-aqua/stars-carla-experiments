@@ -27,17 +27,17 @@ version = "1.0-SNAPSHOT"
 
 repositories {
   mavenCentral()
-  mavenLocal()
+  //mavenLocal()
 }
 
-var starsVersion = "0.2.1-19-tackle-code-scanning-alerts-22-e373909-SNAPSHOT"
+//var starsVersion = "1.0"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("tools.aqua:stars-core:$starsVersion")
-  implementation("tools.aqua:stars-logic-kcmftbl:$starsVersion")
-  implementation("tools.aqua:stars-data-av:$starsVersion")
-  implementation("tools.aqua:stars-importer-carla:$starsVersion")
+  implementation(group="tools.aqua", name="stars-core")
+  implementation(group="tools.aqua", name="stars-logic-kcmftbl")
+  implementation(group="tools.aqua", name="stars-data-av")
+  implementation(group="tools.aqua", name="stars-importer-carla")
 }
 
 spotless {
