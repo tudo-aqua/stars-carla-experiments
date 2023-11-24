@@ -51,13 +51,12 @@ fun main() {
   tscEvaluation.registerMetricProvider(SegmentCountMetric())
   tscEvaluation.registerMetricProvider(SegmentDurationPerIdentifierMetric())
   tscEvaluation.registerMetricProvider(TotalSegmentTimeLengthMetric())
-  val validTSCInstancesPerProjectionMetric =
-      ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
+
+  val validTSCInstancesPerProjectionMetric = ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
   tscEvaluation.registerMetricProvider(validTSCInstancesPerProjectionMetric)
   tscEvaluation.registerMetricProvider(InvalidTSCInstancesPerProjectionMetric())
   tscEvaluation.registerMetricProvider(MissedTSCInstancesPerProjectionMetric())
-  tscEvaluation.registerMetricProvider(
-      MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric))
+  tscEvaluation.registerMetricProvider(MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric))
   tscEvaluation.registerMetricProvider(FailedMonitorsMetric(validTSCInstancesPerProjectionMetric))
 
   tscEvaluation.runEvaluation()
