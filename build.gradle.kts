@@ -30,7 +30,7 @@ repositories {
   mavenLocal()
 }
 
-var starsVersion = "0.2.1"
+var starsVersion = "0.2.1-19-tackle-code-scanning-alerts-18-d93d8dc-SNAPSHOT"
 
 dependencies {
   testImplementation(kotlin("test"))
