@@ -38,6 +38,7 @@ dependencies {
   implementation(group="tools.aqua", name="stars-logic-kcmftbl")
   implementation(group="tools.aqua", name="stars-data-av")
   implementation(group="tools.aqua", name="stars-importer-carla")
+  implementation(group="com.github.ajalt.clikt", name="clikt", version="4.2.1")
 }
 
 spotless {
