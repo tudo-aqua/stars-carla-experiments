@@ -34,6 +34,7 @@ import kotlin.time.measureTime
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
 import tools.aqua.stars.data.av.dataclasses.Actor
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
@@ -63,10 +64,15 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by
+      option("--ignore").split(",").default(listOf())
+
+  private val noLogging: Boolean by
+      option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
   // endregion
 
   override fun run() {
+    ApplicationConstantsHolder.logging = !noLogging
     downloadAndUnzipExperimentsData()
 
     val time = measureTime {
