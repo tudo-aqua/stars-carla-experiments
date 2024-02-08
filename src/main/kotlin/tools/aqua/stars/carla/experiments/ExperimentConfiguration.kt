@@ -47,7 +47,7 @@ class ExperimentConfiguration : CliktCommand() {
   // region command line options
   private val simulationRunFolder: String by
       option("--input", help = "Directory of the input files")
-          .default(".\\stars-reproduction-source\\stars-experiments-data\\simulation_runs")
+          .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
 
   private val allEgo: Boolean by
       option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
@@ -76,6 +76,21 @@ class ExperimentConfiguration : CliktCommand() {
 
     val time = measureTime {
       val simulationRunsWrappers = getSimulationRuns()
+      println("With simulationRunFolder:")
+      println(simulationRunFolder)
+      println(File(simulationRunFolder).exists())
+      println(File(simulationRunFolder).path)
+      println(File(simulationRunFolder).isDirectory)
+      println(File(simulationRunFolder).totalSpace)
+      println(File(simulationRunFolder).walk().toList())
+
+      println("With hard string:")
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs"))
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").exists())
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").path)
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").isDirectory)
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").totalSpace)
+      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").walk().toList())
       val segments =
           CarlaDataLoader(
                   useEveryVehicleAsEgo = allEgo,
