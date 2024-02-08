@@ -64,8 +64,7 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by
-      option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
 
   private val noLogging: Boolean by
       option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
