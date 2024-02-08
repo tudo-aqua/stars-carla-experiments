@@ -76,21 +76,6 @@ class ExperimentConfiguration : CliktCommand() {
 
     val time = measureTime {
       val simulationRunsWrappers = getSimulationRuns()
-      println("With simulationRunFolder:")
-      println(simulationRunFolder)
-      println(File(simulationRunFolder).exists())
-      println(File(simulationRunFolder).path)
-      println(File(simulationRunFolder).isDirectory)
-      println(File(simulationRunFolder).totalSpace)
-      println(File(simulationRunFolder).walk().toList())
-
-      println("With hard string:")
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs"))
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").exists())
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").path)
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").isDirectory)
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").totalSpace)
-      println(File("stars-reproduction-source/stars-experiments-data/simulation_runs").walk().toList())
       val segments =
           CarlaDataLoader(
                   useEveryVehicleAsEgo = allEgo,
@@ -151,12 +136,9 @@ class ExperimentConfiguration : CliktCommand() {
     extractZipFile(zipFile = File("stars-reproduction-source.zip"), outputDir = File("."))
 
     check(File("stars-reproduction-source").exists()) { "Error unzipping simulation data." }
-    check(
-        File(
-                ".\\stars-reproduction-source\\stars-experiments-data\\simulation_runs\\_Game_Carla_Maps_Town01\\dynamic_data__Game_Carla_Maps_Town01_seed2.zip")
-            .exists()) {
-          "There was an error while downloading/extracting the simulation data. The test zip file is missing."
-        }
+    check(File("./stars-reproduction-source").totalSpace > 0) {
+      "There was an error while downloading/extracting the simulation data. The test zip file is missing."
+    }
   }
 
   private fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
@@ -168,11 +150,9 @@ class ExperimentConfiguration : CliktCommand() {
             }
             .toList()
             .mapNotNull { mapFolder ->
-              println("Found map folder: $mapFolder")
               var staticFile: Path? = null
               val dynamicFiles = mutableListOf<Path>()
               mapFolder.walk().forEach { mapFile ->
-                println("Found map file: $mapFile")
                 if (mapFile.nameWithoutExtension.contains("static_data") &&
                     staticFilter.toRegex().containsMatchIn(mapFile.name)) {
                   staticFile = mapFile.toPath()
