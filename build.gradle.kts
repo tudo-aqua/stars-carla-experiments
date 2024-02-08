@@ -27,18 +27,18 @@ version = "1.0-SNAPSHOT"
 
 repositories {
   mavenCentral()
-  //mavenLocal()
+  // mavenLocal()
 }
 
-//var starsVersion = "1.0"
+// var starsVersion = "1.0"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation(group="tools.aqua", name="stars-core")
-  implementation(group="tools.aqua", name="stars-logic-kcmftbl")
-  implementation(group="tools.aqua", name="stars-data-av")
-  implementation(group="tools.aqua", name="stars-importer-carla")
-  implementation(group="com.github.ajalt.clikt", name="clikt", version="4.2.1")
+  implementation(group = "tools.aqua", name = "stars-core")
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
+  implementation(group = "tools.aqua", name = "stars-data-av")
+  implementation(group = "tools.aqua", name = "stars-importer-carla")
+  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.1")
 }
 
 spotless {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The STARS Carla Experiments Authors
+ * Copyright 2023-2024 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,8 +64,7 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by
-      option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
 
   private val noLogging: Boolean by
       option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
