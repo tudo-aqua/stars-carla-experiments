@@ -157,9 +157,11 @@ class ExperimentConfiguration : CliktCommand() {
             }
             .toList()
             .mapNotNull { mapFolder ->
+              println("Found map folder: $mapFolder")
               var staticFile: Path? = null
               val dynamicFiles = mutableListOf<Path>()
               mapFolder.walk().forEach { mapFile ->
+                println("Found map file: $mapFile")
                 if (mapFile.nameWithoutExtension.contains("static_data") &&
                     staticFilter.toRegex().containsMatchIn(mapFile.name)) {
                   staticFile = mapFile.toPath()
