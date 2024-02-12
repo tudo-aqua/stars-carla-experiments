@@ -47,7 +47,7 @@ class ExperimentConfiguration : CliktCommand() {
   // region command line options
   private val simulationRunFolder: String by
       option("--input", help = "Directory of the input files")
-          .default(".\\stars-reproduction-source\\stars-experiments-data\\simulation_runs")
+          .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
 
   private val allEgo: Boolean by
       option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
@@ -64,8 +64,7 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by
-      option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
 
   private val noLogging: Boolean by
       option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
@@ -121,7 +120,10 @@ class ExperimentConfiguration : CliktCommand() {
    * correct folder.
    */
   private fun downloadAndUnzipExperimentsData() {
-    if (File("stars-reproduction-source").exists()) return
+    if (File("stars-reproduction-source").exists()) {
+      println("The 'stars-reproduction-source' already exists")
+      return
+    }
 
     if (!File("stars-reproduction-source.zip").exists()) {
       println("Start with downloading the experiments data. This may take a while.")
@@ -130,10 +132,17 @@ class ExperimentConfiguration : CliktCommand() {
           .use { Files.copy(it, Paths.get("stars-reproduction-source.zip")) }
     }
 
+    check(File("stars-reproduction-source.zip").exists()) {
+      "After downloading the file 'stars-reproduction-source.zip' does not exist."
+    }
+
     println("Extracting experiments data from zip file.")
     extractZipFile(zipFile = File("stars-reproduction-source.zip"), outputDir = File("."))
 
     check(File("stars-reproduction-source").exists()) { "Error unzipping simulation data." }
+    check(File("./stars-reproduction-source").totalSpace > 0) {
+      "There was an error while downloading/extracting the simulation data. The test zip file is missing."
+    }
   }
 
   private fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
