@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The STARS Carla Experiments Authors
+ * Copyright 2023-2024 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,11 +34,11 @@ repositories {
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation(group="tools.aqua", name="stars-core")
-  implementation(group="tools.aqua", name="stars-logic-kcmftbl")
-  implementation(group="tools.aqua", name="stars-data-av")
-  implementation(group="tools.aqua", name="stars-importer-carla")
-  implementation(group="com.github.ajalt.clikt", name="clikt", version="4.2.1")
+  implementation(group = "tools.aqua", name = "stars-core")
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
+  implementation(group = "tools.aqua", name = "stars-data-av")
+  implementation(group = "tools.aqua", name = "stars-importer-carla")
+  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.2")
 }
 
 spotless {
