@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The STARS Carla Experiments Authors
+ * Copyright 2023-2024 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,7 +81,11 @@ class ExperimentConfiguration : CliktCommand() {
           CarlaDataLoader(
                   useEveryVehicleAsEgo = allEgo,
                   minSegmentTickCount = minSegmentTickCount,
-                  orderFilesBySeed = sortBySeed)
+                  orderFilesBySeed = sortBySeed,
+                  simulationRunPrefetchSize=1,
+                  segmentPrefetchSize=1,
+                  numSliceThreads = 1,
+            )
               .loadSegments(
                   simulationRunsWrappers = simulationRunsWrappers,
               )
@@ -89,7 +93,7 @@ class ExperimentConfiguration : CliktCommand() {
       val validTSCInstancesPerProjectionMetric =
           ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
 
-      TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, numThreads = 20)
+      TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, numThreads = 1)
           .apply {
             registerMetricProviders(
                 SegmentDurationPerIdentifierMetric(),
