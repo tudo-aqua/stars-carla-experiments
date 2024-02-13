@@ -19,9 +19,11 @@ package tools.aqua.stars.carla.experiments
 
 import kotlin.math.abs
 import kotlin.math.sign
+import tools.aqua.stars.core.evaluation.BinaryPredicate.Companion.predicate
 import tools.aqua.stars.core.evaluation.PredicateContext
-import tools.aqua.stars.core.evaluation.predicate
+import tools.aqua.stars.core.evaluation.UnaryPredicate.Companion.predicate
 import tools.aqua.stars.data.av.*
+import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.logic.kcmftbl.*
 
 // region predicates/formulas
@@ -338,10 +340,10 @@ val mustYield =
     }
 
 val makesRightTurn =
-    predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.turnsRight } }
+    predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.isTurningRight } }
 
 val makesLeftTurn =
-    predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.turnsLeft } }
+    predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.isTurningLeft } }
 
 val makesNoTurn =
     predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.isStraight } }

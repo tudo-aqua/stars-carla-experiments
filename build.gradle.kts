@@ -23,14 +23,14 @@ plugins {
 
 group = "tools.aqua"
 
-version = "1.0-SNAPSHOT"
+version = "0.2.2"
 
 repositories {
   mavenCentral()
   mavenLocal()
 }
 
-var starsVersion = "0.2.1"
+var starsVersion = "0.2.2"
 
 dependencies {
   testImplementation(kotlin("test"))
