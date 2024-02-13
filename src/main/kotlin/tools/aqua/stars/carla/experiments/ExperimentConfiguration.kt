@@ -81,9 +81,6 @@ class ExperimentConfiguration : CliktCommand() {
                   useEveryVehicleAsEgo = allEgo,
                   minSegmentTickCount = minSegmentTickCount,
                   orderFilesBySeed = sortBySeed,
-                  simulationRunPrefetchSize=1,
-                  segmentPrefetchSize=1,
-                  numSliceThreads = 1,
             )
               .loadSegments(
                   simulationRunsWrappers = simulationRunsWrappers,
@@ -92,7 +89,7 @@ class ExperimentConfiguration : CliktCommand() {
       val validTSCInstancesPerProjectionMetric =
           ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
 
-      TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, numThreads = 1)
+      TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList)
           .apply {
             registerMetricProviders(
                 SegmentDurationPerIdentifierMetric(),
