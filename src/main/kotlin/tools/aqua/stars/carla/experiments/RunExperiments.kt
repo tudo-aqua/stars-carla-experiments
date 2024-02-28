@@ -30,6 +30,8 @@ import tools.aqua.stars.core.metric.metrics.postEvaluation.*
 import tools.aqua.stars.data.av.dataclasses.Actor
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
+import tools.aqua.stars.data.av.dataclasses.TickDataDifferenceMilliseconds
+import tools.aqua.stars.data.av.dataclasses.TickDataUnitMilliseconds
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
 import tools.aqua.stars.importer.carla.loadSegments
@@ -49,10 +51,9 @@ fun main() {
 
   tscEvaluation.registerMetricProvider(AverageVehiclesInEgosBlockMetric())
   tscEvaluation.registerMetricProvider(SegmentCountMetric())
-  tscEvaluation.registerMetricProvider(SegmentDurationPerIdentifierMetric())
-  tscEvaluation.registerMetricProvider(TotalSegmentTimeLengthMetric())
   val validTSCInstancesPerProjectionMetric =
-      ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
+      ValidTSCInstancesPerProjectionMetric<
+          Actor, TickData, Segment, TickDataUnitMilliseconds, TickDataDifferenceMilliseconds>()
   tscEvaluation.registerMetricProvider(validTSCInstancesPerProjectionMetric)
   tscEvaluation.registerMetricProvider(InvalidTSCInstancesPerProjectionMetric())
   tscEvaluation.registerMetricProvider(MissedTSCInstancesPerProjectionMetric())
