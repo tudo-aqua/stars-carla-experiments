@@ -16,7 +16,7 @@
  */
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "2.0.0-Beta4"
   application
   id("com.diffplug.spotless") version "6.21.0"
 }
@@ -34,10 +34,10 @@ var starsVersion = "0.2.2"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("tools.aqua:stars-core:$starsVersion")
-  implementation("tools.aqua:stars-logic-kcmftbl:$starsVersion")
-  implementation("tools.aqua:stars-data-av:$starsVersion")
-  implementation("tools.aqua:stars-importer-carla:$starsVersion")
+  implementation("tools.aqua:stars-core")
+  implementation("tools.aqua:stars-logic-kcmftbl")
+  implementation("tools.aqua:stars-data-av")
+  implementation("tools.aqua:stars-importer-carla")
 }
 
 spotless {
