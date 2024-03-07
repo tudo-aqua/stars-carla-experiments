@@ -51,6 +51,8 @@ fun main() {
 
   tscEvaluation.registerMetricProvider(AverageVehiclesInEgosBlockMetric())
   tscEvaluation.registerMetricProvider(SegmentCountMetric())
+  tscEvaluation.registerMetricProvider(TotalSegmentTickDifferenceMetric())
+  tscEvaluation.registerMetricProvider(TotalSegmentTickDifferencePerIdentifierMetric())
   val validTSCInstancesPerProjectionMetric =
       ValidTSCInstancesPerProjectionMetric<
           Actor, TickData, Segment, TickDataUnitMilliseconds, TickDataDifferenceMilliseconds>()
