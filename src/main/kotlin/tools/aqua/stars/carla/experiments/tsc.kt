@@ -26,7 +26,7 @@ import tools.aqua.stars.data.av.dataclasses.*
 
 fun tsc() =
     TSC(
-        root<Actor, TickData, Segment, TickDataUnitMilliseconds, TickDataDifferenceMilliseconds> {
+        root<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds> {
           all("TSCRoot") {
             valueFunction = { "TSCRoot" }
             projectionIDs =
@@ -43,65 +43,44 @@ fun tsc() =
               leaf("Clear") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherClear
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherClear
               }
               leaf("Cloudy") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherCloudy
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherCloudy
               }
               leaf("Wet") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherWet
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherWet
               }
               leaf("Wet Cloudy") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherWetCloudy
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherWetCloudy
               }
               leaf("Soft Rain") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherSoftRain
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherSoftRain
               }
               leaf("Mid Rain") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherMidRain
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherMidRain
               }
               leaf("Hard Rain") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::weatherHardRain
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherHardRain
               }
             }
             exclusive("Road Type") {
@@ -265,11 +244,8 @@ fun tsc() =
               leaf("Sunset") {
                 condition =
                     PredicateContext<
-                        Actor,
-                        TickData,
-                        Segment,
-                        TickDataUnitMilliseconds,
-                        TickDataDifferenceMilliseconds>::sunset
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        sunset
               }
               leaf("Noon") { condition = ExperimentPredicateContext::noon }
             }
