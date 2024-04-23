@@ -28,7 +28,7 @@ import tools.aqua.stars.data.av.dataclasses.TickData
 
 fun tsc() =
     TSC(
-        root<Actor, TickData, Segment> {
+        root<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds> {
           all("TSCRoot") {
             valueFunction = { "TSCRoot" }
             projectionIDs =
@@ -42,22 +42,47 @@ fun tsc() =
                     proj("multi-lane-dynamic-relations"))
             exclusive("Weather") {
               projectionIDs = mapOf(projRec("environment"), projRec("pedestrian"))
-              leaf("Clear") { condition = PredicateContext<Actor, TickData, Segment>::weatherClear }
-              leaf("Cloudy") {
-                condition = PredicateContext<Actor, TickData, Segment>::weatherCloudy
+              leaf("Clear") {
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherClear
               }
-              leaf("Wet") { condition = PredicateContext<Actor, TickData, Segment>::weatherWet }
+              leaf("Cloudy") {
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherCloudy
+              }
+              leaf("Wet") {
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherWet
+              }
               leaf("Wet Cloudy") {
-                condition = PredicateContext<Actor, TickData, Segment>::weatherWetCloudy
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherWetCloudy
               }
               leaf("Soft Rain") {
-                condition = PredicateContext<Actor, TickData, Segment>::weatherSoftRain
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherSoftRain
               }
               leaf("Mid Rain") {
-                condition = PredicateContext<Actor, TickData, Segment>::weatherMidRain
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherMidRain
               }
               leaf("Hard Rain") {
-                condition = PredicateContext<Actor, TickData, Segment>::weatherHardRain
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        weatherHardRain
               }
             }
             exclusive("Road Type") {
@@ -110,7 +135,8 @@ fun tsc() =
               }
               all("Multi-Lane") {
                 condition = { ctx ->
-                  isInMultiLane.holds(ctx, ctx.segment.firstTickId, ctx.segment.primaryEntityId)
+                  isInMultiLane.holds(
+                      ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
                 }
                 projectionIDs =
                     mapOf(
@@ -165,7 +191,8 @@ fun tsc() =
               }
               all("Single-Lane") {
                 condition = { ctx ->
-                  isInSingleLane.holds(ctx, ctx.segment.firstTickId, ctx.segment.primaryEntityId)
+                  isInSingleLane.holds(
+                      ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
                 }
                 projectionIDs =
                     mapOf(
@@ -216,7 +243,12 @@ fun tsc() =
             }
             exclusive("Time of Day") {
               projectionIDs = mapOf(projRec("environment"), projRec("pedestrian"))
-              leaf("Sunset") { condition = PredicateContext<Actor, TickData, Segment>::sunset }
+              leaf("Sunset") {
+                condition =
+                    PredicateContext<
+                        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>::
+                        sunset
+              }
               leaf("Noon") { condition = ExperimentPredicateContext::noon }
             }
           }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The STARS Carla Experiments Authors
+ * Copyright 2023-2024 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

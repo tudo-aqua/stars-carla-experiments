@@ -16,14 +16,14 @@
  */
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "2.0.0-Beta4"
   application
   id("com.diffplug.spotless") version "6.21.0"
 }
 
 group = "tools.aqua"
 
-version = "1.0-SNAPSHOT"
+version = "0.2.2"
 
 repositories {
   mavenCentral()
