@@ -19,6 +19,7 @@ plugins {
   kotlin("jvm") version "1.9.0"
   application
   id("com.diffplug.spotless") version "6.21.0"
+  kotlin("plugin.serialization") version "1.9.21"
 }
 
 group = "tools.aqua"
@@ -38,6 +39,7 @@ dependencies {
   implementation("tools.aqua:stars-logic-kcmftbl:$starsVersion")
   implementation("tools.aqua:stars-data-av:$starsVersion")
   implementation("tools.aqua:stars-importer-carla:$starsVersion")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
 
 spotless {
