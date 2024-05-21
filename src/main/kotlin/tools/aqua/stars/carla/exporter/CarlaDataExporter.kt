@@ -18,12 +18,22 @@
 package tools.aqua.stars.carla.exporter
 
 import java.io.File
+import java.io.FileOutputStream
+import kotlin.io.path.name
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToStream
 import tools.aqua.stars.carla.experiments.*
+import tools.aqua.stars.data.av.dataclasses.Block
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
+import tools.aqua.stars.importer.carla.loadBlocks
 import tools.aqua.stars.importer.carla.loadSegments
 
 /** The output directory of the exported files. */
 private const val OUTPUT_DIR = "./stars-carla-export/"
+
+/** The [Json] instance used for serialization with domain specific configuration. */
+val json = Json { encodeDefaults = true }
 
 /**
  * Exports calculated [Segment]s to the import format used by the STARS-Visualizer tool. Each
@@ -47,6 +57,8 @@ fun main() {
  *   data to export.
  */
 private fun exportSimulationRun(wrapper: CarlaSimulationRunsWrapper) {
+  val simulationRunName = wrapper.mapDataFile.name.split("__").last().split(".").first()
+
   println("Exporting Simulation Run ${wrapper.mapDataFile}")
   val segments =
       loadSegments(
@@ -57,6 +69,41 @@ private fun exportSimulationRun(wrapper: CarlaSimulationRunsWrapper) {
           SORT_BY_SEED)
   println("Loaded ${segments.count()} segments.")
 
-  // TODO: Export static data
+  val blocks = loadBlocks(wrapper.mapDataFile).toList()
+  exportStaticData(blocks, simulationRunName)
   // TODO: Export dynamic data
+}
+
+/**
+ * Exports static data to directory specified in [OUTPUT_DIR].
+ *
+ * @param blocks experiment data as [List] of [Block]s.
+ * @param simulationRunName name of the simulation run. Will be used for naming of the export.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+private fun exportStaticData(blocks: List<Block>, simulationRunName: String) {
+  println("Static Data: Parse Blocks")
+  val staticData =
+      StaticData(
+          lines =
+              blocks
+                  .flatMap { it.roads }
+                  .flatMap { it.lanes }
+                  .map { lane ->
+                    Line(
+                        width = lane.laneWidth.toFloat(),
+                        coordinates =
+                            lane.laneMidpoints.map { midpoint ->
+                              Location(
+                                  midpoint.location.x, midpoint.location.y, midpoint.location.z)
+                            })
+                  })
+  println("Static Data: Export Lines")
+
+  val staticDataFilePath = "$OUTPUT_DIR${simulationRunName}_static.json"
+  FileOutputStream(staticDataFilePath).use { fos ->
+    json.encodeToStream(StaticData.serializer(), staticData, fos)
+  }
+
+  println("Static Data: Export to file $staticDataFilePath finished successfully!")
 }
