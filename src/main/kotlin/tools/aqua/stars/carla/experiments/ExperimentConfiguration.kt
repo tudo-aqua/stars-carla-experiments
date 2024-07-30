@@ -30,17 +30,13 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 import kotlin.io.path.name
-import kotlin.time.measureTime
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
-import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
-import tools.aqua.stars.data.av.dataclasses.Actor
-import tools.aqua.stars.data.av.dataclasses.Segment
-import tools.aqua.stars.data.av.dataclasses.TickData
+import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
-import tools.aqua.stars.importer.carla.CarlaDataLoader
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
+import tools.aqua.stars.importer.carla.loadSegments
 
 class ExperimentConfiguration : CliktCommand() {
 
@@ -65,51 +61,56 @@ class ExperimentConfiguration : CliktCommand() {
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
   private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
-
-  private val noLogging: Boolean by
-      option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
   // endregion
 
   override fun run() {
-    ApplicationConstantsHolder.logging = !noLogging
     downloadAndUnzipExperimentsData()
 
-    val time = measureTime {
-      val simulationRunsWrappers = getSimulationRuns()
-      val segments =
-          CarlaDataLoader(
-                  useEveryVehicleAsEgo = allEgo,
-                  minSegmentTickCount = minSegmentTickCount,
-                  orderFilesBySeed = sortBySeed,
-            )
-              .loadSegments(
-                  simulationRunsWrappers = simulationRunsWrappers,
-              )
+    val tsc = tsc()
 
-      val validTSCInstancesPerProjectionMetric =
-          ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment>()
-
-      TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList)
-          .apply {
-            registerMetricProviders(
-                SegmentDurationPerIdentifierMetric(),
-                SegmentCountMetric(),
-                AverageVehiclesInEgosBlockMetric(),
-                TotalSegmentTimeLengthMetric(),
-                validTSCInstancesPerProjectionMetric,
-                InvalidTSCInstancesPerProjectionMetric(),
-                MissedTSCInstancesPerProjectionMetric(),
-                MissingPredicateCombinationsPerProjectionMetric(
-                    validTSCInstancesPerProjectionMetric),
-                FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
-            )
-
-            prepare()
-            segments.forEach { presentSegment(it) }
-            close()
-          }
+    println("Projections:")
+    tsc.buildProjections().forEach {
+      println("TSC for Projection $it:")
+      println(it.tsc)
+      println("All possible instances:")
+      println(it.possibleTSCInstances.size)
+      println()
     }
-    println("Evaluation took $time.")
+    println("-----------------")
+
+    println("Loading simulation runs...")
+    val simulationRunsWrappers = getSimulationRuns()
+
+    println("Loading segments...")
+    val segments =
+        loadSegments(
+            useEveryVehicleAsEgo = allEgo,
+            minSegmentTickCount = minSegmentTickCount,
+            orderFilesBySeed = sortBySeed,
+            simulationRunsWrappers = simulationRunsWrappers,
+        )
+
+    val validTSCInstancesPerProjectionMetric =
+        ValidTSCInstancesPerProjectionMetric<
+            Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
+
+    println("Creating TSC...")
+    TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, segments = segments)
+        .apply {
+          registerMetricProviders(
+              TotalSegmentTickDifferencePerIdentifierMetric(),
+              SegmentCountMetric(),
+              AverageVehiclesInEgosBlockMetric(),
+              TotalSegmentTickDifferenceMetric(),
+              validTSCInstancesPerProjectionMetric,
+              InvalidTSCInstancesPerProjectionMetric(),
+              MissedTSCInstancesPerProjectionMetric(),
+              MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric),
+              FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
+          )
+          println("Run Evaluation")
+          runEvaluation()
+        }
   }
 
   /**

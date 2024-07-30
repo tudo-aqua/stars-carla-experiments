@@ -16,28 +16,28 @@
  */
 
 plugins {
-  kotlin("jvm") version "2.0.0-Beta4"
+  kotlin("jvm") version "2.0.0"
   application
   id("com.diffplug.spotless") version "6.21.0"
 }
 
 group = "tools.aqua"
 
-version = "0.2.2"
+version = "0.3"
 
 repositories {
   mavenCentral()
   // mavenLocal()
 }
 
-// var starsVersion = "1.0"
+var starsVersion = "0.3"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation(group = "tools.aqua", name = "stars-core")
-  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
-  implementation(group = "tools.aqua", name = "stars-data-av")
-  implementation(group = "tools.aqua", name = "stars-importer-carla")
+  implementation(group = "tools.aqua", name = "stars-core", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.2")
 }
 
