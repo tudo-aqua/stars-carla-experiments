@@ -1,0 +1,93 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Tree-Based Scenario Classification - A Formal Framework for Measuring Domain Coverage When Testing Autonomous Systems
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Till
+    family-names: Schallau
+    email: till.schallau@tu-dortmund.de
+    affiliation: TU Dortmund University
+    orcid: 'https://orcid.org/0000-0002-1769-3486'
+  - given-names: Stefan
+    family-names: Naujokat
+    email: stefan.naujokat@tu-dortmund.de
+    affiliation: TU Dortmund University
+    orcid: 'https://orcid.org/0000-0002-6265-6641'
+  - given-names: Fiona
+    family-names: Kullmann
+    email: fiona.kullmann@tu-dortmund.de
+    affiliation: TU Dortmund University
+    orcid: 'https://orcid.org/0000-0001-5858-0659'
+  - given-names: Falk
+    family-names: Howar
+    email: falk.howar@tu-dortmund.de
+    affiliation: 'TU Dortmund University, Fraunhofer ISST'
+    orcid: 'https://orcid.org/0000-0002-9524-4459'
+repository-code: 'https://github.com/tudo-aqua/stars'
+abstract: >-
+    Scenario-based testing is envisioned as a key approach for the
+    safety assurance of automated driving systems. In scenario-based testing,
+    relevant (driving) scenarios are the basis of tests. Many recent works
+    focus on specification, variation, generation, and execution of individual
+    scenarios. In this work, we address the open challenges of classifying
+    sets of recorded test drives into such scenarios and measuring scenario
+    coverage in these test drives. Technically, we specify features in logic
+    formulas over complex data streams and construct tree-based classifiers
+    for scenarios from these feature specifications. For such specifications,
+    we introduce CMFTBL, a new logic that extends existing linear-time
+    temporal logics with aspects that are essential for concise specifications
+    that work on field-recorded data. We demonstrate the expressiveness
+    and effectiveness of our approach by defining a family of related scenario
+    classifiers for different aspects of urban driving.
+keywords:
+  - automated driving systems
+  - temporal logic
+  - scenario classification
+  - autonomous-driving
+  - carla
+license: Apache-2.0
+preferred-citation:
+  authors:
+    - given-names: Till
+      family-names: Schallau
+      email: till.schallau@tu-dortmund.de
+      affiliation: TU Dortmund University
+      orcid: 'https://orcid.org/0000-0002-1769-3486'
+    - given-names: Stefan
+      family-names: Naujokat
+      email: stefan.naujokat@tu-dortmund.de
+      affiliation: TU Dortmund University
+      orcid: 'https://orcid.org/0000-0002-6265-6641'
+    - given-names: Fiona
+      family-names: Kullmann
+      email: fiona.kullmann@tu-dortmund.de
+      affiliation: TU Dortmund University
+      orcid: 'https://orcid.org/0000-0001-5858-0659'
+    - given-names: Falk
+      family-names: Howar
+      email: falk.howar@tu-dortmund.de
+      affiliation: 'TU Dortmund University, Fraunhofer ISST'
+      orcid: 'https://orcid.org/0000-0002-9524-4459'
+  title: >-
+    STARS: Tree-Based Scenario Classification - A Formal Framework for Measuring Domain Coverage When Testing Autonomous Systems
+  type: conference-paper
+  year: 2024
+  doi: 10.1007/978-3-031-60698-4_15
+  collection-title: DNASA Formal Methods Symposium (NFM 2024)
+  publisher:
+    name: Springer Nature Switzerland
+  pages: 259-278
+  isbn: '978-3-031-60697-7'
+  editors:
+    - family-names: Nathaniel
+      given-names: Benz
+    - family-names: Divya
+      given-names: Gopinath
+    - family-names: Nija
+      given-names: Shi
