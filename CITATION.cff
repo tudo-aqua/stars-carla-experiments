@@ -79,7 +79,7 @@ preferred-citation:
   type: conference-paper
   year: 2024
   doi: '10.1007/978-3-031-60698-4_15'
-  collection-title: NASA Formal Methods Symposium (NFM 2024)
+  collection-title: NASA Formal Methods Symposium
   publisher:
     name: Springer Nature Switzerland
   pages: 259-278
