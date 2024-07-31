@@ -75,11 +75,11 @@ preferred-citation:
       affiliation: 'TU Dortmund University, Fraunhofer ISST'
       orcid: 'https://orcid.org/0000-0002-9524-4459'
   title: >-
-    STARS: Tree-Based Scenario Classification - A Formal Framework for Measuring Domain Coverage When Testing Autonomous Systems
+    Tree-Based Scenario Classification - A Formal Framework for Measuring Domain Coverage When Testing Autonomous Systems
   type: conference-paper
   year: 2024
-  doi: 10.1007/978-3-031-60698-4_15
-  collection-title: DNASA Formal Methods Symposium (NFM 2024)
+  doi: '10.1007/978-3-031-60698-4_15'
+  collection-title: NASA Formal Methods Symposium (NFM 2024)
   publisher:
     name: Springer Nature Switzerland
   pages: 259-278
