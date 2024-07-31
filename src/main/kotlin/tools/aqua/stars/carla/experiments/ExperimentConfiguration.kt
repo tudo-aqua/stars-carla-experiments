@@ -64,6 +64,15 @@ class ExperimentConfiguration : CliktCommand() {
   // endregion
 
   override fun run() {
+    println("Executing with the following settings:")
+    println(
+        "--input=$simulationRunFolder " +
+            "--allEgo=$allEgo " +
+            "--minSegmentTick=$minSegmentTickCount " +
+            "--sortBySeed=$sortBySeed " +
+            "--dynamicFilter=$dynamicFilter " +
+            "--staticFilter=$staticFilter")
+
     downloadAndUnzipExperimentsData()
 
     val tsc = tsc()
