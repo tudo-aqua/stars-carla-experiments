@@ -60,7 +60,13 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by
+      option(
+              "--ignore",
+              help =
+                  "A list of TSC projections that should be ignored (given as a String, separated by ',')")
+          .split(",")
+          .default(listOf())
   // endregion
 
   override fun run() {
