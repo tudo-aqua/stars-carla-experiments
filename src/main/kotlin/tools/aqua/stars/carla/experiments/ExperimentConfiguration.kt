@@ -73,7 +73,6 @@ class ExperimentConfiguration : CliktCommand() {
             "--dynamicFilter=$dynamicFilter " +
             "--staticFilter=$staticFilter")
 
-  override fun run() {
     downloadAndUnzipExperimentsData()
 
     val tsc = tsc()
@@ -88,40 +87,10 @@ class ExperimentConfiguration : CliktCommand() {
     }
     println("-----------------")
 
-
     println("Loading simulation runs...")
     val simulationRunsWrappers = getSimulationRuns()
 
     println("Loading segments...")
-    val segments = loadSegments(
-      useEveryVehicleAsEgo = allEgo,
-      minSegmentTickCount = minSegmentTickCount,
-      orderFilesBySeed = sortBySeed,
-      simulationRunsWrappers = simulationRunsWrappers,
-    )
-
-    val validTSCInstancesPerProjectionMetric =
-      ValidTSCInstancesPerProjectionMetric<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
-
-    println("Creating TSC...")
-    TSCEvaluation(tsc = tsc(),  projectionIgnoreList = projectionIgnoreList, segments=segments)
-      .apply {
-        registerMetricProviders(
-          TotalSegmentTickDifferencePerIdentifierMetric(),
-          SegmentCountMetric(),
-          AverageVehiclesInEgosBlockMetric(),
-          TotalSegmentTickDifferenceMetric(),
-          validTSCInstancesPerProjectionMetric,
-          InvalidTSCInstancesPerProjectionMetric(),
-          MissedTSCInstancesPerProjectionMetric(),
-          MissingPredicateCombinationsPerProjectionMetric(
-            validTSCInstancesPerProjectionMetric),
-          FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
-        )
-        println("Run Evaluation")
-        runEvaluation()
-      }
-
     val segments =
         loadSegments(
             useEveryVehicleAsEgo = allEgo,
@@ -166,8 +135,8 @@ class ExperimentConfiguration : CliktCommand() {
     if (!File("stars-reproduction-source.zip").exists()) {
       println("Start with downloading the experiments data. This may take a while.")
       URL("https://zenodo.org/record/8131947/files/stars-reproduction-source.zip?download=1")
-        .openStream()
-        .use { Files.copy(it, Paths.get("stars-reproduction-source.zip")) }
+          .openStream()
+          .use { Files.copy(it, Paths.get("stars-reproduction-source.zip")) }
     }
 
     check(File("stars-reproduction-source.zip").exists()) {
@@ -184,37 +153,37 @@ class ExperimentConfiguration : CliktCommand() {
   }
 
   private fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
-    File(simulationRunFolder).let { file ->
-      file
-        .walk()
-        .filter {
-          it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
-        }
-        .toList()
-        .mapNotNull { mapFolder ->
-          var staticFile: Path? = null
-          val dynamicFiles = mutableListOf<Path>()
-          mapFolder.walk().forEach { mapFile ->
-            if (mapFile.nameWithoutExtension.contains("static_data") &&
-              staticFilter.toRegex().containsMatchIn(mapFile.name)) {
-              staticFile = mapFile.toPath()
+      File(simulationRunFolder).let { file ->
+        file
+            .walk()
+            .filter {
+              it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
             }
-            if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-              dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
-              dynamicFiles.add(mapFile.toPath())
-            }
-          }
-          if (dynamicFiles.isEmpty()) {
-            return@mapNotNull null
-          }
+            .toList()
+            .mapNotNull { mapFolder ->
+              var staticFile: Path? = null
+              val dynamicFiles = mutableListOf<Path>()
+              mapFolder.walk().forEach { mapFile ->
+                if (mapFile.nameWithoutExtension.contains("static_data") &&
+                    staticFilter.toRegex().containsMatchIn(mapFile.name)) {
+                  staticFile = mapFile.toPath()
+                }
+                if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
+                    dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
+                  dynamicFiles.add(mapFile.toPath())
+                }
+              }
+              if (dynamicFiles.isEmpty()) {
+                return@mapNotNull null
+              }
 
-          dynamicFiles.sortBy {
-            "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
-              ?: 0
-          }
-          return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
-        }
-    }
+              dynamicFiles.sortBy {
+                "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
+                    ?: 0
+              }
+              return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
+            }
+      }
 
   /**
    * Extract a zip file into any directory
@@ -225,22 +194,22 @@ class ExperimentConfiguration : CliktCommand() {
    * @return the extracted directory i.e.
    */
   private fun extractZipFile(zipFile: File, outputDir: File): File? =
-    try {
-      ZipFile(zipFile).use { zip ->
-        zip.entries().asSequence().forEach { entry ->
-          zip.getInputStream(entry).use { input ->
-            if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-            else
-              File(outputDir, entry.name)
-                .also { it.parentFile.mkdirs() }
-                .outputStream()
-                .use { output -> input.copyTo(output) }
+      try {
+        ZipFile(zipFile).use { zip ->
+          zip.entries().asSequence().forEach { entry ->
+            zip.getInputStream(entry).use { input ->
+              if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
+              else
+                  File(outputDir, entry.name)
+                      .also { it.parentFile.mkdirs() }
+                      .outputStream()
+                      .use { output -> input.copyTo(output) }
+            }
           }
         }
+        outputDir
+      } catch (e: Exception) {
+        e.printStackTrace()
+        null
       }
-      outputDir
-    } catch (e: Exception) {
-      e.printStackTrace()
-      null
-    }
 }
