@@ -42,29 +42,36 @@ class ExperimentConfiguration : CliktCommand() {
 
   // region command line options
   private val simulationRunFolder: String by
-  option("--input", help = "Directory of the input files")
-    .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
+      option("--input", help = "Directory of the input files")
+          .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
 
   private val allEgo: Boolean by
-  option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
+      option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
 
   private val minSegmentTickCount: Int by
-  option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(10)
+      option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(10)
 
   private val sortBySeed: Boolean by
-  option("--sorted", help = "Whether to sort data by seed").flag(default = true)
+      option("--sorted", help = "Whether to sort data by seed").flag(default = true)
 
   private val dynamicFilter: String by
-  option("--dynamicFilter", help = "Regex to filter on dynamic data").default(".*")
+      option("--dynamicFilter", help = "Regex to filter on dynamic data").default(".*")
 
   private val staticFilter: String by
-  option("--staticFilter", help = "Regex to filter on static data").default(".*")
+      option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
   private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
-
-  private val noLogging: Boolean by
-  option("--noLogging", help = "Whether to disable log and plot output").flag(default = false)
   // endregion
+
+  override fun run() {
+    println("Executing with the following settings:")
+    println(
+        "--input=$simulationRunFolder " +
+            "--allEgo=$allEgo " +
+            "--minSegmentTick=$minSegmentTickCount " +
+            "--sortBySeed=$sortBySeed " +
+            "--dynamicFilter=$dynamicFilter " +
+            "--staticFilter=$staticFilter")
 
   override fun run() {
     downloadAndUnzipExperimentsData()
@@ -115,6 +122,35 @@ class ExperimentConfiguration : CliktCommand() {
         runEvaluation()
       }
 
+    val segments =
+        loadSegments(
+            useEveryVehicleAsEgo = allEgo,
+            minSegmentTickCount = minSegmentTickCount,
+            orderFilesBySeed = sortBySeed,
+            simulationRunsWrappers = simulationRunsWrappers,
+        )
+
+    val validTSCInstancesPerProjectionMetric =
+        ValidTSCInstancesPerProjectionMetric<
+            Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
+
+    println("Creating TSC...")
+    TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, segments = segments)
+        .apply {
+          registerMetricProviders(
+              TotalSegmentTickDifferencePerIdentifierMetric(),
+              SegmentCountMetric(),
+              AverageVehiclesInEgosBlockMetric(),
+              TotalSegmentTickDifferenceMetric(),
+              validTSCInstancesPerProjectionMetric,
+              InvalidTSCInstancesPerProjectionMetric(),
+              MissedTSCInstancesPerProjectionMetric(),
+              MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric),
+              FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
+          )
+          println("Run Evaluation")
+          runEvaluation()
+        }
   }
 
   /**

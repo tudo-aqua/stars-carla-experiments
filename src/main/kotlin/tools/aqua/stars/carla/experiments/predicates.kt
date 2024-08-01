@@ -23,7 +23,6 @@ import tools.aqua.stars.core.evaluation.BinaryPredicate.Companion.predicate
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.core.evaluation.UnaryPredicate.Companion.predicate
 import tools.aqua.stars.data.av.dataclasses.*
-import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.logic.kcmftbl.*
 
 // region predicates/formulas

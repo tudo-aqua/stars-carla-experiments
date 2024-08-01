@@ -19,6 +19,9 @@ package tools.aqua.stars.carla.experiments
 
 import tools.aqua.stars.core.tsc.*
 import tools.aqua.stars.core.tsc.builder.*
+import tools.aqua.stars.core.tsc.projection.proj
+import tools.aqua.stars.core.tsc.projection.projRec
+import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.dataclasses.*
 
 fun tsc() =
@@ -85,7 +88,7 @@ fun tsc() =
                   leaf("Must Yield") {
                     condition { ctx ->
                       ctx.entityIds.any { otherVehicleId ->
-                        mustYield.holds(ctx, entityId2 = otherVehicleId)
+                        mustYield.holds(ctx, actor2 = otherVehicleId)
                       }
                     }
 
