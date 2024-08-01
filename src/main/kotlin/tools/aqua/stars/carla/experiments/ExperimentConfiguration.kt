@@ -85,7 +85,7 @@ class ExperimentConfiguration : CliktCommand() {
     val tsc = tsc()
 
     println("Projections:")
-    tsc.buildProjections().forEach {
+    tsc.buildProjections(projectionIgnoreList).forEach {
       println("TSC for Projection $it:")
       println(it.tsc)
       println("All possible instances:")
