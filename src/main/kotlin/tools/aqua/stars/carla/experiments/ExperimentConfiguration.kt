@@ -77,7 +77,8 @@ class ExperimentConfiguration : CliktCommand() {
             "--minSegmentTick=$minSegmentTickCount " +
             "--sortBySeed=$sortBySeed " +
             "--dynamicFilter=$dynamicFilter " +
-            "--staticFilter=$staticFilter")
+            "--staticFilter=$staticFilter " +
+            "--ignore=$projectionIgnoreList ")
 
     downloadAndUnzipExperimentsData()
 
