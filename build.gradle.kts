@@ -16,28 +16,29 @@
  */
 
 plugins {
-  kotlin("jvm") version "1.9.0"
+  kotlin("jvm") version "2.0.0"
   application
   id("com.diffplug.spotless") version "6.21.0"
 }
 
 group = "tools.aqua"
 
-version = "0.2.2"
+version = "0.3"
 
 repositories {
   mavenCentral()
-  mavenLocal()
+  // mavenLocal()
 }
 
-var starsVersion = "0.2.2"
+var starsVersion = "0.3"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation("tools.aqua:stars-core:$starsVersion")
-  implementation("tools.aqua:stars-logic-kcmftbl:$starsVersion")
-  implementation("tools.aqua:stars-data-av:$starsVersion")
-  implementation("tools.aqua:stars-importer-carla:$starsVersion")
+  implementation(group = "tools.aqua", name = "stars-core", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
+  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.2")
 }
 
 spotless {
@@ -58,6 +59,6 @@ spotless {
 
 tasks.test { useJUnitPlatform() }
 
-application { mainClass.set("tools.aqua.stars.carla.experiments.RunExperimentsKt") }
+application { mainClass.set("tools.aqua.stars.carla.experiments.Experiment") }
 
 kotlin { jvmToolchain(17) }

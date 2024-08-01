@@ -22,7 +22,6 @@ import kotlin.math.sign
 import tools.aqua.stars.core.evaluation.BinaryPredicate.Companion.predicate
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.core.evaluation.UnaryPredicate.Companion.predicate
-import tools.aqua.stars.data.av.*
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.logic.kcmftbl.*
 
@@ -76,39 +75,48 @@ val isInMultiLane =
       !isInJunction.holds(ctx, v) && !isInSingleLane.holds(ctx, v)
     }
 
-fun PredicateContext<Actor, TickData, Segment>.sunset(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .sunset(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.daytime == Daytime.Sunset }
 
-typealias ExperimentPredicateContext = PredicateContext<Actor, TickData, Segment>
+typealias ExperimentPredicateContext =
+    PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
 
 fun ExperimentPredicateContext.noon(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.daytime == Daytime.Noon }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherClear(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherClear(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Clear }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherCloudy(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherCloudy(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Cloudy }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherWet(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherWet(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Wet }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherWetCloudy(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherWetCloudy(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d ->
       d.weather.type == WeatherType.WetCloudy
     }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherSoftRain(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherSoftRain(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d ->
       d.weather.type == WeatherType.SoftRainy
     }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherMidRain(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherMidRain(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d ->
       d.weather.type == WeatherType.MidRainy
     }
 
-fun PredicateContext<Actor, TickData, Segment>.weatherHardRain(): Boolean =
+fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
+    .weatherHardRain(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d ->
       d.weather.type == WeatherType.HardRainy
     }
@@ -134,8 +142,15 @@ val behind =
 val follows =
     predicate(Vehicle::class to Vehicle::class) { ctx, v0, v1 ->
       eventually(v0, v1) { v0, v1 ->
-        globally(v0, v1, 0.0 to 30.0) { v0, v1 -> behind.holds(ctx, v0, v1) } &&
-            eventually(v0, v1, 30.0 to 31.0) { _, _ -> true }
+        globally(v0, v1, TickDataDifferenceSeconds(0.0) to TickDataDifferenceSeconds(30.0)) { v0, v1
+          ->
+          behind.holds(ctx, v0, v1)
+        } &&
+            eventually(
+                v0, v1, TickDataDifferenceSeconds(30.0) to TickDataDifferenceSeconds(31.0)) { _, _
+                  ->
+                  true
+                }
       }
     }
 
