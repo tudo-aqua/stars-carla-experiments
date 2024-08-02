@@ -25,12 +25,9 @@ group = "tools.aqua"
 
 version = "0.3"
 
-repositories {
-  mavenCentral()
-  // mavenLocal()
-}
+repositories { mavenCentral() }
 
-var starsVersion = "0.3"
+var starsVersion = "0.4"
 
 dependencies {
   testImplementation(kotlin("test"))

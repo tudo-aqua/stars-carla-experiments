@@ -60,7 +60,13 @@ class ExperimentConfiguration : CliktCommand() {
   private val staticFilter: String by
       option("--staticFilter", help = "Regex to filter on static data").default(".*")
 
-  private val projectionIgnoreList: List<String> by option("--ignore").split(",").default(listOf())
+  private val projectionIgnoreList: List<String> by
+      option(
+              "--ignore",
+              help =
+                  "A list of TSC projections that should be ignored (given as a String, separated by ',')")
+          .split(",")
+          .default(listOf())
   // endregion
 
   override fun run() {
@@ -71,14 +77,15 @@ class ExperimentConfiguration : CliktCommand() {
             "--minSegmentTick=$minSegmentTickCount " +
             "--sortBySeed=$sortBySeed " +
             "--dynamicFilter=$dynamicFilter " +
-            "--staticFilter=$staticFilter")
+            "--staticFilter=$staticFilter " +
+            "--ignore=$projectionIgnoreList ")
 
     downloadAndUnzipExperimentsData()
 
     val tsc = tsc()
 
     println("Projections:")
-    tsc.buildProjections().forEach {
+    tsc.buildProjections(projectionIgnoreList.map { it.trim() }).forEach {
       println("TSC for Projection $it:")
       println(it.tsc)
       println("All possible instances:")
