@@ -18,7 +18,7 @@
 plugins {
   kotlin("jvm") version "2.0.0"
   application
-  id("com.diffplug.spotless") version "6.21.0"
+  id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "tools.aqua"
@@ -38,7 +38,7 @@ dependencies {
   implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
   implementation(group = "tools.aqua", name = "stars-data-av")
   implementation(group = "tools.aqua", name = "stars-importer-carla")
-  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.2")
+  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
 }
 
 spotless {
