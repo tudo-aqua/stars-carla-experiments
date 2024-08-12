@@ -31,10 +31,10 @@ var starsVersion = "0.4"
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation(group = "tools.aqua", name = "stars-core", version = starsVersion)
-  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = starsVersion)
-  implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
-  implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-core")
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
+  implementation(group = "tools.aqua", name = "stars-data-av")
+  implementation(group = "tools.aqua", name = "stars-importer-carla")
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
 }
 
