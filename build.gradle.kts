@@ -56,8 +56,69 @@ spotless {
 
 tasks.test { useJUnitPlatform() }
 
-application { 
-  mainClass.set("tools.aqua.stars.carla.experiments.Experiment") 
+val reproductionTest by
+    tasks.registering(JavaExec::class) {
+      group = "verification"
+      description = "Runs the reproduction test."
+      dependsOn(tasks.run.get().taskDependencies)
+
+      mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
+      classpath = sourceSets.main.get().runtimeClasspath
+      jvmArgs = listOf("-Xmx24g", "-Xms8g")
+      args =
+          listOf(
+              // Configure input
+              "--input",
+              "./stars-reproduction-source/stars-experiments-data/simulation_runs",
+
+              // Set minSegmentTicks filter
+              "--minSegmentTicks",
+              "10",
+
+              // Sort seeds
+              "--sorted",
+
+              // Save results
+              "--saveResults",
+
+              // Run reproduction mode
+              "--reproduction")
+    }
+
+val reproductionTestAll by
+    tasks.registering(JavaExec::class) {
+      group = "verification"
+      description = "Runs the reproduction test."
+      dependsOn(tasks.run.get().taskDependencies)
+
+      mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
+      classpath = sourceSets.main.get().runtimeClasspath
+      jvmArgs = listOf("-Xmx24g", "-Xms8g")
+      args =
+          listOf(
+              // Configure input
+              "--input",
+              "./stars-reproduction-source/stars-experiments-data/simulation_runs",
+
+              // Set minSegmentTicks filter
+              "--minSegmentTicks",
+              "10",
+
+              // Set allEgo
+              "--allEgo",
+
+              // Sort seeds
+              "--sorted",
+
+              // Save results
+              "--saveResults",
+
+              // Run reproduction mode
+              "--reproduction")
+    }
+
+application {
+  mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
   applicationDefaultJvmArgs = listOf("-Xmx12g", "-Xms4g")
 }
 
