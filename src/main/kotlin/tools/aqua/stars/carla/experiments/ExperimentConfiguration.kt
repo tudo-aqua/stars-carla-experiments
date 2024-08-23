@@ -38,6 +38,7 @@ import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
@@ -90,9 +91,8 @@ class ExperimentConfiguration : CliktCommand() {
       option("--compare", help = "Whether to compare the results to the previous run")
           .flag(default = false)
 
-  private val reproduction: Boolean by
-      option("--reproduction", help = "Whether to check reproduction against ground truth")
-          .flag(default = false)
+  private val reproduction: String? by
+      option("--reproduction", help = "Path to ground truth")
   // endregion
 
   override fun run() {
@@ -112,6 +112,10 @@ class ExperimentConfiguration : CliktCommand() {
             "--compare=$compareToPreviousRun " +
             "--reproduction=$reproduction")
 
+    reproduction?.let {
+      ApplicationConstantsHolder.groundTruthDirectory = it
+    }
+
     downloadAndUnzipExperimentsData()
 
     val tsc = tsc()
@@ -119,7 +123,7 @@ class ExperimentConfiguration : CliktCommand() {
     println("Projections:")
     tsc.buildProjections(projectionIgnoreList.map { it.trim() }).forEach {
       println("TSC for Projection $it:")
-      println(it.tsc)
+      println(tsc)
       println("All possible instances:")
       println(it.possibleTSCInstances.size)
       println()
@@ -139,12 +143,18 @@ class ExperimentConfiguration : CliktCommand() {
         )
 
     val validTSCInstancesPerProjectionMetric =
-        ValidTSCInstancesPerProjectionMetric<
+        ValidTSCInstancesPerTSCMetric<
             Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
 
     println("Creating TSC...")
     val evaluation =
-        TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, segments = segments)
+        TSCEvaluation(
+          tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
+          writePlots = writePlots,
+          writePlotDataCSV = writePlotDataCSV,
+          writeSerializedResults = writeSerializedResults,
+          compareToGroundTruth = compareToGroundTruth || reproduction != null,
+          compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
                   TotalSegmentTickDifferencePerIdentifierMetric(),
@@ -152,24 +162,19 @@ class ExperimentConfiguration : CliktCommand() {
                   AverageVehiclesInEgosBlockMetric(),
                   TotalSegmentTickDifferenceMetric(),
                   validTSCInstancesPerProjectionMetric,
-                  InvalidTSCInstancesPerProjectionMetric(),
-                  MissedTSCInstancesPerProjectionMetric(),
-                  MissingPredicateCombinationsPerProjectionMetric(
+                  InvalidTSCInstancesPerTSCMetric(),
+                  MissedTSCInstancesPerTSCMetric(),
+                  MissingPredicateCombinationsPerTSCMetric(
                       validTSCInstancesPerProjectionMetric),
                   FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
               )
               println("Run Evaluation")
-              runEvaluation(
-                  writePlots = writePlots,
-                  writePlotDataCSV = writePlotDataCSV,
-                  writeSerializedResults = writeSerializedResults,
-                  compareToGroundTruth = compareToGroundTruth || reproduction,
-                  compareToPreviousRun = compareToPreviousRun)
+              runEvaluation(segments = segments)
             }
 
     exitProcess(
         status =
-            if (reproduction) {
+            if (reproduction != null) {
               when (evaluation.resultsReproducedFromGroundTruth) {
                 null -> EXIT_CODE_NO_RESULTS
                 false -> EXIT_CODE_UNEQUAL_RESULTS

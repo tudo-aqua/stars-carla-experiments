@@ -82,7 +82,9 @@ val reproductionTest by
               "--saveResults",
 
               // Run reproduction mode
-              "--reproduction")
+              "--reproduction",
+            "ground-truth/"
+          )
     }
 
 val reproductionTestAll by
@@ -114,7 +116,9 @@ val reproductionTestAll by
               "--saveResults",
 
               // Run reproduction mode
-              "--reproduction")
+              "--reproduction",
+              "ground-truth-all/"
+            )
     }
 
 application {
