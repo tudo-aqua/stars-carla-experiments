@@ -39,8 +39,6 @@ import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
 import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
-import tools.aqua.stars.core.metric.utils.getGroundTruthSerializationResultDirectory
-import tools.aqua.stars.core.metric.utils.groundTruth
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
@@ -117,9 +115,6 @@ class ExperimentConfiguration : CliktCommand() {
     reproduction?.let {
       ApplicationConstantsHolder.groundTruthDirectory = it
     }
-
-    println(getGroundTruthSerializationResultDirectory())
-    println(groundTruth)
 
     downloadAndUnzipExperimentsData()
 
