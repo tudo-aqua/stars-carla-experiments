@@ -64,7 +64,6 @@ val reproductionTest by
 
       mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
       classpath = sourceSets.main.get().runtimeClasspath
-      jvmArgs = listOf("-Xmx32g", "-Xms8g")
       args =
           listOf(
               // Configure input
@@ -94,7 +93,6 @@ val reproductionTestAll by
 
       mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
       classpath = sourceSets.main.get().runtimeClasspath
-      jvmArgs = listOf("-Xmx32g", "-Xms8g")
       args =
           listOf(
               // Configure input
