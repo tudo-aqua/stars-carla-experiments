@@ -91,8 +91,7 @@ class ExperimentConfiguration : CliktCommand() {
       option("--compare", help = "Whether to compare the results to the previous run")
           .flag(default = false)
 
-  private val reproduction: String? by
-      option("--reproduction", help = "Path to ground truth")
+  private val reproduction: String? by option("--reproduction", help = "Path to ground truth")
   // endregion
 
   override fun run() {
@@ -112,9 +111,7 @@ class ExperimentConfiguration : CliktCommand() {
             "--compare=$compareToPreviousRun " +
             "--reproduction=$reproduction")
 
-    reproduction?.let {
-      ApplicationConstantsHolder.groundTruthDirectory = it
-    }
+    reproduction?.let { ApplicationConstantsHolder.groundTruthDirectory = it }
 
     downloadAndUnzipExperimentsData()
 
@@ -149,12 +146,12 @@ class ExperimentConfiguration : CliktCommand() {
     println("Creating TSC...")
     val evaluation =
         TSCEvaluation(
-          tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
-          writePlots = writePlots,
-          writePlotDataCSV = writePlotDataCSV,
-          writeSerializedResults = writeSerializedResults,
-          compareToGroundTruth = compareToGroundTruth || reproduction != null,
-          compareToPreviousRun = compareToPreviousRun)
+                tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
+                writePlots = writePlots,
+                writePlotDataCSV = writePlotDataCSV,
+                writeSerializedResults = writeSerializedResults,
+                compareToGroundTruth = compareToGroundTruth || reproduction != null,
+                compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
                   TotalSegmentTickDifferencePerIdentifierMetric(),
@@ -164,8 +161,7 @@ class ExperimentConfiguration : CliktCommand() {
                   validTSCInstancesPerProjectionMetric,
                   InvalidTSCInstancesPerTSCMetric(),
                   MissedTSCInstancesPerTSCMetric(),
-                  MissingPredicateCombinationsPerTSCMetric(
-                      validTSCInstancesPerProjectionMetric),
+                  MissingPredicateCombinationsPerTSCMetric(validTSCInstancesPerProjectionMetric),
                   FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
               )
               println("Run Evaluation")
