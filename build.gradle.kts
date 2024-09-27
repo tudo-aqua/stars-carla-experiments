@@ -83,7 +83,11 @@ val reproductionTest by
 
               // Run reproduction mode
               "--reproduction",
-              "ground-truth")
+              "ground-truth",
+
+              // Show memory usage
+              "--showMemoryConsumption"
+          )
     }
 
 val reproductionTestAll by
@@ -116,7 +120,11 @@ val reproductionTestAll by
 
               // Run reproduction mode
               "--reproduction",
-              "ground-truth-all")
+              "ground-truth-all",
+
+              // Show memory usage
+              "--showMemoryConsumption"
+          )
     }
 
 application {
