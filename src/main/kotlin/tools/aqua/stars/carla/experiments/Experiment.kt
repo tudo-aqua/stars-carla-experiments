@@ -18,6 +18,19 @@
 package tools.aqua.stars.carla.experiments
 
 object Experiment {
+
+  /** Normal exit and no reproduction run was conducted. */
+  const val EXIT_CODE_NORMAL = 0
+
+  /** Reproduction run yielded no results */
+  const val EXIT_CODE_NO_RESULTS = 4
+
+  /** Reproduction run yielded unequal results */
+  const val EXIT_CODE_UNEQUAL_RESULTS = 2
+
+  /** Reproduction run yielded equal results */
+  const val EXIT_CODE_EQUAL_RESULTS = 0
+
   @JvmStatic
   fun main(args: Array<String>) {
     ExperimentConfiguration().main(args)

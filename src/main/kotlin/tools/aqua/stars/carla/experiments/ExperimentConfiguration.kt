@@ -30,9 +30,15 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 import kotlin.io.path.name
+import kotlin.system.exitProcess
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_EQUAL_RESULTS
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NORMAL
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NO_RESULTS
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
@@ -67,6 +73,25 @@ class ExperimentConfiguration : CliktCommand() {
                   "A list of TSC projections that should be ignored (given as a String, separated by ',')")
           .split(",")
           .default(listOf())
+
+  private val writePlots: Boolean by
+      option("--writePlots", help = "Whether to write plots").flag(default = false)
+
+  private val writePlotDataCSV: Boolean by
+      option("--writePlotData", help = "Whether to write plot data to csv").flag(default = false)
+
+  private val writeSerializedResults: Boolean by
+      option("--saveResults", help = "Whether to save serialized results").flag(default = false)
+
+  private val compareToGroundTruth: Boolean by
+      option("--compareToGroundTruth", help = "Whether to compare the results to the ground truth")
+          .flag(default = false)
+
+  private val compareToPreviousRun: Boolean by
+      option("--compare", help = "Whether to compare the results to the previous run")
+          .flag(default = false)
+
+  private val reproduction: String? by option("--reproduction", help = "Path to ground truth")
   // endregion
 
   override fun run() {
@@ -78,7 +103,15 @@ class ExperimentConfiguration : CliktCommand() {
             "--sortBySeed=$sortBySeed " +
             "--dynamicFilter=$dynamicFilter " +
             "--staticFilter=$staticFilter " +
-            "--ignore=$projectionIgnoreList ")
+            "--ignore=$projectionIgnoreList " +
+            "--writePlots=$writePlots " +
+            "--writePlotData=$writePlotDataCSV " +
+            "--saveResults=$writeSerializedResults " +
+            "--compareToGroundTruth=$compareToGroundTruth " +
+            "--compare=$compareToPreviousRun " +
+            "--reproduction=$reproduction")
+
+    reproduction?.let { ApplicationConstantsHolder.groundTruthDirectory = it }
 
     downloadAndUnzipExperimentsData()
 
@@ -87,7 +120,7 @@ class ExperimentConfiguration : CliktCommand() {
     println("Projections:")
     tsc.buildProjections(projectionIgnoreList.map { it.trim() }).forEach {
       println("TSC for Projection $it:")
-      println(it.tsc)
+      println(tsc)
       println("All possible instances:")
       println(it.possibleTSCInstances.size)
       println()
@@ -107,26 +140,45 @@ class ExperimentConfiguration : CliktCommand() {
         )
 
     val validTSCInstancesPerProjectionMetric =
-        ValidTSCInstancesPerProjectionMetric<
+        ValidTSCInstancesPerTSCMetric<
             Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
 
     println("Creating TSC...")
-    TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, segments = segments)
-        .apply {
-          registerMetricProviders(
-              TotalSegmentTickDifferencePerIdentifierMetric(),
-              SegmentCountMetric(),
-              AverageVehiclesInEgosBlockMetric(),
-              TotalSegmentTickDifferenceMetric(),
-              validTSCInstancesPerProjectionMetric,
-              InvalidTSCInstancesPerProjectionMetric(),
-              MissedTSCInstancesPerProjectionMetric(),
-              MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric),
-              FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
-          )
-          println("Run Evaluation")
-          runEvaluation()
-        }
+    val evaluation =
+        TSCEvaluation(
+                tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
+                writePlots = writePlots,
+                writePlotDataCSV = writePlotDataCSV,
+                writeSerializedResults = writeSerializedResults,
+                compareToGroundTruth = compareToGroundTruth || reproduction != null,
+                compareToPreviousRun = compareToPreviousRun)
+            .apply {
+              registerMetricProviders(
+                  TotalSegmentTickDifferencePerIdentifierMetric(),
+                  SegmentCountMetric(),
+                  AverageVehiclesInEgosBlockMetric(),
+                  TotalSegmentTickDifferenceMetric(),
+                  validTSCInstancesPerProjectionMetric,
+                  InvalidTSCInstancesPerTSCMetric(),
+                  MissedTSCInstancesPerTSCMetric(),
+                  MissingPredicateCombinationsPerTSCMetric(validTSCInstancesPerProjectionMetric),
+                  FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
+              )
+              println("Run Evaluation")
+              runEvaluation(segments = segments)
+            }
+
+    exitProcess(
+        status =
+            if (reproduction != null) {
+              when (evaluation.resultsReproducedFromGroundTruth) {
+                null -> EXIT_CODE_NO_RESULTS
+                false -> EXIT_CODE_UNEQUAL_RESULTS
+                true -> EXIT_CODE_EQUAL_RESULTS
+              }
+            } else {
+              EXIT_CODE_NORMAL
+            })
   }
 
   /**
