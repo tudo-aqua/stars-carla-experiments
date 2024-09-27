@@ -91,6 +91,9 @@ class ExperimentConfiguration : CliktCommand() {
       option("--compare", help = "Whether to compare the results to the previous run")
           .flag(default = false)
 
+  private val showMemoryConsumption: Boolean by
+      option("--showMemoryConsumption", help = "Whether to show memory consumption").flag(default = false)
+
   private val reproduction: String? by option("--reproduction", help = "Path to ground truth")
   // endregion
 
@@ -109,11 +112,27 @@ class ExperimentConfiguration : CliktCommand() {
             "--saveResults=$writeSerializedResults " +
             "--compareToGroundTruth=$compareToGroundTruth " +
             "--compare=$compareToPreviousRun " +
-            "--reproduction=$reproduction")
+            "--reproduction=$reproduction" +
+            "--showMemoryConsumption=$showMemoryConsumption")
 
     reproduction?.let { ApplicationConstantsHolder.groundTruthDirectory = it }
 
     downloadAndUnzipExperimentsData()
+
+    if(showMemoryConsumption) {
+      Thread {
+        while(true) {
+          val runtime = Runtime.getRuntime()
+          val usedMemory = runtime.totalMemory() - runtime.freeMemory()
+          val freeMemory = runtime.freeMemory()
+          println("Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
+          Thread.sleep(1000)
+        }
+      }.apply {
+        isDaemon = true
+        start()
+      }
+    }
 
     val tsc = tsc()
 
