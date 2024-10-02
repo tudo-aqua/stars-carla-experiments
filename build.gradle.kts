@@ -73,7 +73,7 @@ val reproductionTest by
 
               // Set minSegmentTicks filter
               "--minSegmentTicks",
-              "10",
+              "11",
 
               // Sort seeds
               "--sorted",
@@ -104,7 +104,7 @@ val reproductionTestAll by
 
               // Set minSegmentTicks filter
               "--minSegmentTicks",
-              "10",
+              "11",
 
               // Set allEgo
               "--allEgo",
