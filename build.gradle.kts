@@ -27,8 +27,6 @@ version = "0.4"
 
 repositories { mavenCentral() }
 
-var starsVersion = "0.4"
-
 dependencies {
   testImplementation(kotlin("test"))
   implementation(group = "tools.aqua", name = "stars-core")
@@ -73,7 +71,7 @@ val reproductionTest by
 
               // Set minSegmentTicks filter
               "--minSegmentTicks",
-              "10",
+              "11",
 
               // Sort seeds
               "--sorted",
@@ -84,9 +82,6 @@ val reproductionTest by
               // Run reproduction mode
               "--reproduction",
               "ground-truth",
-
-              // Show memory usage
-              "--showMemoryConsumption"
           )
     }
 
@@ -107,7 +102,7 @@ val reproductionTestAll by
 
               // Set minSegmentTicks filter
               "--minSegmentTicks",
-              "10",
+              "11",
 
               // Set allEgo
               "--allEgo",
