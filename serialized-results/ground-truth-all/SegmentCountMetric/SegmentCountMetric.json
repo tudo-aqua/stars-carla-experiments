@@ -1,6 +1,6 @@
 {
     "type": "tools.aqua.stars.core.metric.serialization.SerializableIntResult",
-    "value": 904,
+    "value": 113767,
     "identifier": "SegmentCountMetric",
     "source": "SegmentCountMetric"
 }
