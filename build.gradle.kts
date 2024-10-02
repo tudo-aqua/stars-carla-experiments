@@ -23,7 +23,7 @@ plugins {
 
 group = "tools.aqua"
 
-version = "0.3"
+version = "0.4"
 
 repositories { mavenCentral() }
 
@@ -64,7 +64,7 @@ val reproductionTest by
 
       mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
       classpath = sourceSets.main.get().runtimeClasspath
-      jvmArgs = listOf("-Xmx14g", "-Xms8g")
+      jvmArgs = listOf("-Xmx64g")
       args =
           listOf(
               // Configure input
@@ -83,7 +83,10 @@ val reproductionTest by
 
               // Run reproduction mode
               "--reproduction",
-            "ground-truth"
+              "ground-truth",
+
+              // Show memory usage
+              "--showMemoryConsumption"
           )
     }
 
@@ -95,7 +98,7 @@ val reproductionTestAll by
 
       mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
       classpath = sourceSets.main.get().runtimeClasspath
-      jvmArgs = listOf("-Xmx14g", "-Xms8g")
+      jvmArgs = listOf("-Xmx64g")
       args =
           listOf(
               // Configure input
@@ -117,13 +120,16 @@ val reproductionTestAll by
 
               // Run reproduction mode
               "--reproduction",
-              "ground-truth-all"
-            )
+              "ground-truth-all",
+
+              // Show memory usage
+              "--showMemoryConsumption"
+          )
     }
 
 application {
   mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
-  applicationDefaultJvmArgs = listOf("-Xmx12g", "-Xms4g")
+  applicationDefaultJvmArgs = listOf("-Xmx64g")
 }
 
 kotlin { jvmToolchain(17) }
