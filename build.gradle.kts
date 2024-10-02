@@ -27,8 +27,6 @@ version = "0.4"
 
 repositories { mavenCentral() }
 
-var starsVersion = "0.4"
-
 dependencies {
   testImplementation(kotlin("test"))
   implementation(group = "tools.aqua", name = "stars-core")
@@ -84,9 +82,6 @@ val reproductionTest by
               // Run reproduction mode
               "--reproduction",
               "ground-truth",
-
-              // Show memory usage
-              "--showMemoryConsumption"
           )
     }
 

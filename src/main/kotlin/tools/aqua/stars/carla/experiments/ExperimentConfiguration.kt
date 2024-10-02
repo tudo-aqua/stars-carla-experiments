@@ -126,7 +126,7 @@ class ExperimentConfiguration : CliktCommand() {
           val usedMemory = runtime.totalMemory() - runtime.freeMemory()
           val freeMemory = runtime.freeMemory()
           println("Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
-          Thread.sleep(1000)
+          Thread.sleep(5000)
         }
       }.apply {
         isDaemon = true
