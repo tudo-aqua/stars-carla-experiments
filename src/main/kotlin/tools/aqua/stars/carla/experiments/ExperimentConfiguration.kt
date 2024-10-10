@@ -92,7 +92,8 @@ class ExperimentConfiguration : CliktCommand() {
           .flag(default = false)
 
   private val showMemoryConsumption: Boolean by
-      option("--showMemoryConsumption", help = "Whether to show memory consumption").flag(default = false)
+      option("--showMemoryConsumption", help = "Whether to show memory consumption")
+          .flag(default = false)
 
   private val reproduction: String? by option("--reproduction", help = "Path to ground truth")
   // endregion
@@ -119,19 +120,21 @@ class ExperimentConfiguration : CliktCommand() {
 
     downloadAndUnzipExperimentsData()
 
-    if(showMemoryConsumption) {
+    if (showMemoryConsumption) {
       Thread {
-        while(true) {
-          val runtime = Runtime.getRuntime()
-          val usedMemory = runtime.totalMemory() - runtime.freeMemory()
-          val freeMemory = runtime.freeMemory()
-          println("Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
-          Thread.sleep(5000)
-        }
-      }.apply {
-        isDaemon = true
-        start()
-      }
+            while (true) {
+              val runtime = Runtime.getRuntime()
+              val usedMemory = runtime.totalMemory() - runtime.freeMemory()
+              val freeMemory = runtime.freeMemory()
+              println(
+                  "Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
+              Thread.sleep(5000)
+            }
+          }
+          .apply {
+            isDaemon = true
+            start()
+          }
     }
 
     val tsc = tsc()
