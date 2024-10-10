@@ -251,7 +251,8 @@ class ExperimentConfiguration : CliktCommand() {
                   dynamicFiles.add(mapFile.toPath())
                 }
               }
-              if (dynamicFiles.isEmpty()) {
+
+              if (staticFile == null || dynamicFiles.isEmpty()) {
                 return@mapNotNull null
               }
 
@@ -259,7 +260,7 @@ class ExperimentConfiguration : CliktCommand() {
                 "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
                     ?: 0
               }
-              return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
+              return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
             }
       }
 
