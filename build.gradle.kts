@@ -118,8 +118,7 @@ val reproductionTestAll by
               "ground-truth-all",
 
               // Show memory usage
-              "--showMemoryConsumption"
-          )
+              "--showMemoryConsumption")
     }
 
 application {
