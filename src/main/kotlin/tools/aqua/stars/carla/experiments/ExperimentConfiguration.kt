@@ -183,7 +183,7 @@ class ExperimentConfiguration : CliktCommand() {
                   validTSCInstancesPerProjectionMetric,
                   InvalidTSCInstancesPerTSCMetric(),
                   MissedTSCInstancesPerTSCMetric(),
-                  MissingPredicateCombinationsPerTSCMetric(validTSCInstancesPerProjectionMetric),
+                  MissedPredicateCombinationsPerTSCMetric(validTSCInstancesPerProjectionMetric),
                   FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
               )
               println("Run Evaluation")
