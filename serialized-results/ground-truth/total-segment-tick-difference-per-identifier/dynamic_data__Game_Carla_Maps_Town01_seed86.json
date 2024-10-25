@@ -1,0 +1,6 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTickDifferenceResult",
+    "identifier": "dynamic_data__Game_Carla_Maps_Town01_seed86",
+    "source": "total-segment-tick-difference-per-identifier",
+    "value": "287.00000427663326"
+}

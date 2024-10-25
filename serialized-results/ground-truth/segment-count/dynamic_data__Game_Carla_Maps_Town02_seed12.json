@@ -1,0 +1,6 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableIntResult",
+    "identifier": "dynamic_data__Game_Carla_Maps_Town02_seed12",
+    "source": "segment-count",
+    "value": 12
+}
