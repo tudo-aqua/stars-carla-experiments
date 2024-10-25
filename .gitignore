@@ -2,11 +2,11 @@
 /stars-reproduction-source
 /stars-reproduction-source.zip
 /analysis-result-logs
-/compared-results
-/serialized-results
+/compared-results/*
+/serialized-results/*
 
-!/serialized-results/ground-truth/**/*.json
-!/serialized-results/ground-truth-all/**/*.json
+!serialized-results/ground-truth/
+!serialized-results/ground-truth-all/
 
 **/.gradle
 **/build
