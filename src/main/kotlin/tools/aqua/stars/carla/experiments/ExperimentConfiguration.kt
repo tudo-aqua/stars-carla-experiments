@@ -55,7 +55,7 @@ class ExperimentConfiguration : CliktCommand() {
       option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
 
   private val minSegmentTickCount: Int by
-      option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(10)
+      option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(11)
 
   private val sortBySeed: Boolean by
       option("--sorted", help = "Whether to sort data by seed").flag(default = true)
