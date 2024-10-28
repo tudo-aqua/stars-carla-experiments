@@ -1,0 +1,7 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCOccurrenceResult",
+    "identifier": "layer 1+2+4",
+    "source": "invalid-tsc-instances-per-tsc",
+    "count": 0,
+    "value": []
+}

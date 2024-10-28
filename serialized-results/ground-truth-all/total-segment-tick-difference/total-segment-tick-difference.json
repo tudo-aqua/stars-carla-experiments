@@ -1,0 +1,6 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTickDifferenceResult",
+    "identifier": "total-segment-tick-difference",
+    "source": "total-segment-tick-difference",
+    "value": "3975095.0592335314"
+}

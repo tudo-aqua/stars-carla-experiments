@@ -1,0 +1,7 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCResult",
+    "identifier": "layer 1+2",
+    "source": "missed-tsc-instances-per-tsc",
+    "count": 0,
+    "value": []
+}

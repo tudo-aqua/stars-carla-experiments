@@ -1,0 +1,7 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCOccurrenceResult",
+    "identifier": "pedestrian",
+    "source": "invalid-tsc-instances-per-tsc",
+    "count": 0,
+    "value": []
+}
