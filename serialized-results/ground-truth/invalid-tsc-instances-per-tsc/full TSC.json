@@ -1,0 +1,7 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCOccurrenceResult",
+    "identifier": "full TSC",
+    "source": "invalid-tsc-instances-per-tsc",
+    "count": 0,
+    "value": []
+}
