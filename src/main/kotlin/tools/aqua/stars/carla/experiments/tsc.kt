@@ -26,11 +26,11 @@ fun tsc() =
         // valueFunction = { "TSCRoot" }
         projections {
           projectionRecursive("full TSC") // all
-          projection("layer 1+2")         // static
-          projection("layer 4")           // dynamic
-          projection("layer 1+2+4")       // static + dynamic
-          projection("layer (4)+5")       // environment
-          projection("pedestrian")        // pedestrian
+          projection("layer 1+2") // static
+          projection("layer 4") // dynamic
+          projection("layer 1+2+4") // static + dynamic
+          projection("layer (4)+5") // environment
+          projection("pedestrian") // pedestrian
           projection("multi-lane-dynamic-relations")
         }
 

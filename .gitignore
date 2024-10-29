@@ -5,8 +5,8 @@
 /compared-results/*
 /serialized-results/*
 
-!serialized-results/ground-truth/
-!serialized-results/ground-truth-all/
+!serialized-results/baseline/
+!serialized-results/baseline-all/
 
 **/.gradle
 **/build

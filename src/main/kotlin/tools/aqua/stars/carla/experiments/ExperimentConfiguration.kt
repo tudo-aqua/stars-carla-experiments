@@ -38,7 +38,7 @@ import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
-import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder.baselineDirectory
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
@@ -83,8 +83,10 @@ class ExperimentConfiguration : CliktCommand() {
   private val writeSerializedResults: Boolean by
       option("--saveResults", help = "Whether to save serialized results").flag(default = false)
 
-  private val compareToGroundTruth: Boolean by
-      option("--compareToGroundTruth", help = "Whether to compare the results to the ground truth")
+  private val compareToBaselineResults: Boolean by
+      option(
+              "--compareToBaselineResults",
+              help = "Whether to compare the results to the baseline results")
           .flag(default = false)
 
   private val compareToPreviousRun: Boolean by
@@ -95,7 +97,7 @@ class ExperimentConfiguration : CliktCommand() {
       option("--showMemoryConsumption", help = "Whether to show memory consumption")
           .flag(default = false)
 
-  private val reproduction: String? by option("--reproduction", help = "Path to ground truth")
+  private val reproduction: String? by option("--reproduction", help = "Path to baseline results")
   // endregion
 
   override fun run() {
@@ -111,12 +113,12 @@ class ExperimentConfiguration : CliktCommand() {
             "--writePlots=$writePlots " +
             "--writePlotData=$writePlotDataCSV " +
             "--saveResults=$writeSerializedResults " +
-            "--compareToGroundTruth=$compareToGroundTruth " +
+            "--compareToBaseline=$compareToBaselineResults " +
             "--compare=$compareToPreviousRun " +
             "--reproduction=$reproduction" +
             "--showMemoryConsumption=$showMemoryConsumption")
 
-    reproduction?.let { ApplicationConstantsHolder.groundTruthDirectory = it }
+    reproduction?.let { baselineDirectory = it }
 
     downloadAndUnzipExperimentsData()
 
@@ -172,7 +174,7 @@ class ExperimentConfiguration : CliktCommand() {
                 writePlots = writePlots,
                 writePlotDataCSV = writePlotDataCSV,
                 writeSerializedResults = writeSerializedResults,
-                compareToGroundTruth = compareToGroundTruth || reproduction != null,
+                compareToBaselineResults = compareToBaselineResults || reproduction != null,
                 compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
@@ -193,7 +195,7 @@ class ExperimentConfiguration : CliktCommand() {
     exitProcess(
         status =
             if (reproduction != null) {
-              when (evaluation.resultsReproducedFromGroundTruth) {
+              when (evaluation.resultsReproducedFromBaseline) {
                 null -> EXIT_CODE_NO_RESULTS
                 false -> EXIT_CODE_UNEQUAL_RESULTS
                 true -> EXIT_CODE_EQUAL_RESULTS

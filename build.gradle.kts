@@ -81,7 +81,7 @@ val reproductionTest by
 
               // Run reproduction mode
               "--reproduction",
-              "ground-truth",
+              "baseline",
           )
     }
 
@@ -115,7 +115,7 @@ val reproductionTestAll by
 
               // Run reproduction mode
               "--reproduction",
-              "ground-truth-all",
+              "baseline-all",
 
               // Show memory usage
               "--showMemoryConsumption")
