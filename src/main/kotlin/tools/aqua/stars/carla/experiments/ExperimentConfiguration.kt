@@ -38,6 +38,7 @@ import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
 import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder.baselineDirectory
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
@@ -101,22 +102,26 @@ class ExperimentConfiguration : CliktCommand() {
   // endregion
 
   override fun run() {
+    ApplicationConstantsHolder.executionCommand =
+        """
+        --input=$simulationRunFolder
+        --allEgo=$allEgo
+        --minSegmentTicks=$minSegmentTickCount
+        --sorted=$sortBySeed
+        --dynamicFilter=$dynamicFilter
+        --staticFilter=$staticFilter
+        --ignore=$projectionIgnoreList
+        --writePlots=$writePlots
+        --writePlotData=$writePlotDataCSV
+        --saveResults=$writeSerializedResults
+        --compareToBaselineResults=$compareToBaselineResults
+        --compare=$compareToPreviousRun
+        --reproduction=$reproduction
+        --showMemoryConsumption=$showMemoryConsumption
+    """
+            .trimIndent()
     println("Executing with the following settings:")
-    println(
-        "--input=$simulationRunFolder " +
-            "--allEgo=$allEgo " +
-            "--minSegmentTick=$minSegmentTickCount " +
-            "--sortBySeed=$sortBySeed " +
-            "--dynamicFilter=$dynamicFilter " +
-            "--staticFilter=$staticFilter " +
-            "--ignore=$projectionIgnoreList " +
-            "--writePlots=$writePlots " +
-            "--writePlotData=$writePlotDataCSV " +
-            "--saveResults=$writeSerializedResults " +
-            "--compareToBaseline=$compareToBaselineResults " +
-            "--compare=$compareToPreviousRun " +
-            "--reproduction=$reproduction" +
-            "--showMemoryConsumption=$showMemoryConsumption")
+    println(ApplicationConstantsHolder.executionCommand)
 
     reproduction?.let { baselineDirectory = it }
 
