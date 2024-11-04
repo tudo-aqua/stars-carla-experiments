@@ -35,7 +35,7 @@ dependencies {
   implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = starsVersion)
   implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
   implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
-  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "5.0.0")
+  implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
 }
 
 spotless {
