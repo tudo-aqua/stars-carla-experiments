@@ -1,0 +1,42 @@
+#!/bin/sh
+echo "------------"
+echo "Running git pre-push hook. Running Spotless Check... "
+echo "------------"
+
+git stash -q --keep-index
+
+echo "--------------------"
+echo "Compiling classes..."
+echo "--------------------"
+
+./gradlew assemble
+compile_status=$?
+
+if [ "$compile_status" = 0 ] ; then
+    echo "Classes compiled successfully."
+else
+    echo "------------"
+    echo 1>&2 "Compilation of classes failed."
+    echo "Fix the compilation issues before trying to push again."
+    echo "------------"
+fi
+
+echo "--------------------"
+echo "Running spotless..."
+echo "--------------------"
+
+./gradlew spotlessCheck
+spotless_status=$?
+
+if [ "$spotless_status" = 0 ] ; then
+    echo "Static analysis found no problems."
+else
+    echo "------------"
+    echo 1>&2 "Spotless Check found violations."
+    echo "Run spotless apply in your terminal and fix the issues before trying to push again."
+    echo "------------"
+fi
+
+git stash pop -q
+
+exit $((spotless_status + compile_status))
