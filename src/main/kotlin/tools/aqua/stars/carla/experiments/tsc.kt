@@ -17,27 +17,40 @@
 
 package tools.aqua.stars.carla.experiments
 
+import tools.aqua.stars.core.tsc.TSC
 import tools.aqua.stars.core.tsc.builder.*
 import tools.aqua.stars.data.av.dataclasses.*
 
+private const val FULL_TSC = "full TSC"
+private const val LAYER_1_2 = "layer 1+2"
+private const val LAYER_4 = "layer 4"
+private const val LAYER_1_2_4 = "layer 1+2+4"
+private const val LAYER_4_5 = "layer (4)+5"
+private const val LAYER_PEDESTRIAN = "pedestrian"
+private const val LAYER_MULTI_LANE_DYNAMIC_RELATIONS = "multi-lane-dynamic-relations"
+
+/**
+ * Returns the [TSC] with the dataclasses [Actor], [TickData], [Segment], [TickDataUnitSeconds], and
+ * [TickDataDifferenceSeconds] that is used in this experiment.
+ */
+@Suppress("StringLiteralDuplication")
 fun tsc() =
     tsc<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds> {
       all("TSCRoot") {
-        // valueFunction = { "TSCRoot" }
         projections {
-          projectionRecursive("full TSC") // all
-          projection("layer 1+2") // static
-          projection("layer 4") // dynamic
-          projection("layer 1+2+4") // static + dynamic
-          projection("layer (4)+5") // environment
-          projection("pedestrian") // pedestrian
-          projection("multi-lane-dynamic-relations")
+          projectionRecursive(FULL_TSC) // all
+          projection(LAYER_1_2) // static
+          projection(LAYER_4) // dynamic
+          projection(LAYER_1_2_4) // static + dynamic
+          projection(LAYER_4_5) // environment
+          projection(LAYER_PEDESTRIAN) // pedestrian
+          projection(LAYER_MULTI_LANE_DYNAMIC_RELATIONS)
         }
 
         exclusive("Weather") {
           projections {
-            projectionRecursive("layer (4)+5")
-            projectionRecursive("pedestrian")
+            projectionRecursive(LAYER_4_5)
+            projectionRecursive(LAYER_PEDESTRIAN)
           }
 
           leaf("Clear") { condition { ctx -> ctx.weatherClear() } }
@@ -51,32 +64,32 @@ fun tsc() =
 
         exclusive("Road Type") {
           projections {
-            projection("layer 1+2")
-            projection("layer 4")
-            projection("layer 1+2+4")
-            projection("pedestrian")
-            projection("multi-lane-dynamic-relations")
+            projection(LAYER_1_2)
+            projection(LAYER_4)
+            projection(LAYER_1_2_4)
+            projection(LAYER_PEDESTRIAN)
+            projection(LAYER_MULTI_LANE_DYNAMIC_RELATIONS)
           }
 
           all("Junction") {
             condition { ctx -> isInJunction.holds(ctx) }
 
             projections {
-              projection("pedestrian")
-              projection("layer 1+2")
-              projection("layer 4")
-              projection("layer 1+2+4")
+              projection(LAYER_PEDESTRIAN)
+              projection(LAYER_1_2)
+              projection(LAYER_4)
+              projection(LAYER_1_2_4)
             }
 
             optional("Dynamic Relation") {
               projections {
-                projection("pedestrian")
-                projectionRecursive("layer 4")
-                projectionRecursive("layer 1+2+4")
+                projection(LAYER_PEDESTRIAN)
+                projectionRecursive(LAYER_4)
+                projectionRecursive(LAYER_1_2_4)
               }
 
               leaf("Pedestrian Crossed") {
-                projections { projection("pedestrian") }
+                projections { projection(LAYER_PEDESTRIAN) }
 
                 condition { ctx -> pedestrianCrossed.holds(ctx) }
               }
@@ -98,7 +111,7 @@ fun tsc() =
               }
 
               leaf("Following Leading Vehicle") {
-                projections { projection("layer 4") }
+                projections { projection(LAYER_4) }
 
                 condition { ctx ->
                   ctx.entityIds.any { otherVehicleId ->
@@ -110,8 +123,8 @@ fun tsc() =
 
             exclusive("Maneuver") {
               projections {
-                projectionRecursive("layer 1+2")
-                projectionRecursive("layer 1+2+4")
+                projectionRecursive(LAYER_1_2)
+                projectionRecursive(LAYER_1_2_4)
               }
 
               leaf("Lane Follow") { condition { ctx -> makesNoTurn.holds(ctx) } }
@@ -121,24 +134,24 @@ fun tsc() =
           }
           all("Multi-Lane") {
             projections {
-              projection("pedestrian")
-              projection("layer 1+2")
-              projection("layer 4")
-              projection("layer 1+2+4")
-              projection("multi-lane-dynamic-relations")
+              projection(LAYER_PEDESTRIAN)
+              projection(LAYER_1_2)
+              projection(LAYER_4)
+              projection(LAYER_1_2_4)
+              projection(LAYER_MULTI_LANE_DYNAMIC_RELATIONS)
             }
 
             condition { ctx ->
-              isInMultiLane.holds(
+              isOnMultiLane.holds(
                   ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
             }
 
             optional("Dynamic Relation") {
               projections {
-                projection("pedestrian")
-                projectionRecursive("layer 4")
-                projectionRecursive("layer 1+2+4")
-                projectionRecursive("multi-lane-dynamic-relations")
+                projection(LAYER_PEDESTRIAN)
+                projectionRecursive(LAYER_4)
+                projectionRecursive(LAYER_1_2_4)
+                projectionRecursive(LAYER_MULTI_LANE_DYNAMIC_RELATIONS)
               }
               leaf("Oncoming traffic") {
                 condition { ctx ->
@@ -152,12 +165,12 @@ fun tsc() =
                 monitors { monitor("Right Overtaking") { ctx -> noRightOvertaking.holds(ctx) } }
               }
               leaf("Pedestrian Crossed") {
-                projections { projection("pedestrian") }
+                projections { projection(LAYER_PEDESTRIAN) }
 
                 condition { ctx -> pedestrianCrossed.holds(ctx) }
               }
               leaf("Following Leading Vehicle") {
-                projections { projection("layer 4") }
+                projections { projection(LAYER_4) }
 
                 condition { ctx ->
                   ctx.entityIds.any { otherVehicleId ->
@@ -169,8 +182,8 @@ fun tsc() =
 
             exclusive("Maneuver") {
               projections {
-                projectionRecursive("layer 1+2")
-                projectionRecursive("layer 1+2+4")
+                projectionRecursive(LAYER_1_2)
+                projectionRecursive(LAYER_1_2_4)
               }
               leaf("Lane Change") { condition { ctx -> changedLane.holds(ctx) } }
               leaf("Lane Follow") { condition { ctx -> !changedLane.holds(ctx) } }
@@ -178,8 +191,8 @@ fun tsc() =
 
             bounded("Stop Type", Pair(0, 1)) {
               projections {
-                projectionRecursive("layer 1+2")
-                projectionRecursive("layer 1+2+4")
+                projectionRecursive(LAYER_1_2)
+                projectionRecursive(LAYER_1_2_4)
               }
 
               leaf("Has Red Light") {
@@ -190,22 +203,22 @@ fun tsc() =
           }
           all("Single-Lane") {
             projections {
-              projection("pedestrian")
-              projection("layer 1+2")
-              projection("layer 4")
-              projection("layer 1+2+4")
+              projection(LAYER_PEDESTRIAN)
+              projection(LAYER_1_2)
+              projection(LAYER_4)
+              projection(LAYER_1_2_4)
             }
 
             condition { ctx ->
-              isInSingleLane.holds(
+              isOnSingleLane.holds(
                   ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
             }
 
             optional("Dynamic Relation") {
               projections {
-                projection("pedestrian")
-                projectionRecursive("layer 4")
-                projectionRecursive("layer 1+2+4")
+                projection(LAYER_PEDESTRIAN)
+                projectionRecursive(LAYER_4)
+                projectionRecursive(LAYER_1_2_4)
               }
 
               leaf("Oncoming traffic") {
@@ -217,15 +230,15 @@ fun tsc() =
               }
 
               leaf("Pedestrian Crossed") {
-                projections { projection("pedestrian") }
+                projections { projection(LAYER_PEDESTRIAN) }
 
                 condition { ctx -> pedestrianCrossed.holds(ctx) }
               }
 
               leaf("Following Leading Vehicle") {
                 projections {
-                  projection("layer 4")
-                  projection("layer 1+2+4")
+                  projection(LAYER_4)
+                  projection(LAYER_1_2_4)
                 }
 
                 condition { ctx ->
@@ -238,8 +251,8 @@ fun tsc() =
 
             bounded("Stop Type", Pair(0, 1)) {
               projections {
-                projectionRecursive("layer 1+2")
-                projectionRecursive("layer 1+2+4")
+                projectionRecursive(LAYER_1_2)
+                projectionRecursive(LAYER_1_2_4)
               }
 
               leaf("Has Stop Sign") {
@@ -257,9 +270,9 @@ fun tsc() =
 
         exclusive("Traffic Density") {
           projections {
-            projectionRecursive("layer (4)+5")
-            projectionRecursive("layer 4")
-            projectionRecursive("layer 1+2+4")
+            projectionRecursive(LAYER_4_5)
+            projectionRecursive(LAYER_4)
+            projectionRecursive(LAYER_1_2_4)
           }
 
           leaf("High Traffic") { condition { ctx -> hasHighTrafficDensity.holds(ctx) } }
@@ -269,8 +282,8 @@ fun tsc() =
 
         exclusive("Time of Day") {
           projections {
-            projectionRecursive("layer (4)+5")
-            projectionRecursive("pedestrian")
+            projectionRecursive(LAYER_4_5)
+            projectionRecursive(LAYER_PEDESTRIAN)
           }
 
           leaf("Sunset") { condition { ctx -> ctx.sunset() } }
