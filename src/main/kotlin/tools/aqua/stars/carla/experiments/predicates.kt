@@ -53,16 +53,17 @@ val onSameRoad =
     predicate(Vehicle::class to Vehicle::class) { _, v0, v1 -> v0.lane.road == v1.lane.road }
 
 val oncoming =
-    predicate(Vehicle::class to Vehicle::class) { ctx, vehicle1, vehicle2 ->
-      eventually(vehicle1, vehicle2) { v0, v1 ->
+    predicate(Vehicle::class to Vehicle::class) { ctx, v0, v1 ->
+      eventually(v0, v1) { v0, v1 ->
         onSameRoad.holds(ctx, v0, v1) && v0.lane.laneId.sign != v1.lane.laneId.sign
       }
     }
 
 val isInJunction =
-    predicate(Vehicle::class) { _, it -> minPrevalence(it, 0.8) { it.lane.road.isJunction } }
+    predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.road.isJunction } }
 
-val isInSingleLane =
+/** [Vehicle] v is mostly on a single lane. */
+val isOnSingleLane =
     predicate(Vehicle::class) { ctx, v ->
       !isInJunction.holds(ctx, v) &&
           minPrevalence(v, 0.8) {
@@ -72,7 +73,7 @@ val isInSingleLane =
 
 val isInMultiLane =
     predicate(Vehicle::class) { ctx, v ->
-      !isInJunction.holds(ctx, v) && !isInSingleLane.holds(ctx, v)
+      !isInJunction.holds(ctx, v) && !isOnSingleLane.holds(ctx, v)
     }
 
 fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
@@ -165,8 +166,8 @@ val mphLimit60 =
     }
 
 val mphLimit30 =
-    predicate(Vehicle::class) { _, it ->
-      eventually(it) { it.lane.speedAt(it.positionOnLane) == 30.0 }
+    predicate(Vehicle::class) { _, v ->
+      eventually(v) { v -> v.lane.speedAt(v.positionOnLane) == 30.0 }
     }
 
 val onSameLane = predicate(Actor::class to Actor::class) { _, a1, a2 -> a1.lane.uid == a2.lane.uid }
@@ -302,7 +303,7 @@ val stopAtEnd =
 
 val passedContactPoint =
     predicate(Vehicle::class to Vehicle::class) { _, v0, v1 ->
-      v0.lane.contactPointPos(v1.lane)?.let { it < v0.positionOnLane } ?: false
+      v0.lane.contactPointPos(v1.lane)?.let { it < v0.positionOnLane } == true
     }
 
 val hasYielded =
