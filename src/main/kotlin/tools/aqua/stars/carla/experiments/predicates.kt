@@ -62,17 +62,17 @@ val oncoming =
 val isInJunction =
     predicate(Vehicle::class) { _, it -> minPrevalence(it, 0.8) { it.lane.road.isJunction } }
 
-val isInSingleLane =
-    predicate(Vehicle::class) { ctx, v ->
-      !isInJunction.holds(ctx, v) &&
-          minPrevalence(v, 0.8) {
-            v.lane.road.lanes.filter { v.lane.laneId.sign == it.laneId.sign }.size == 1
-          }
+val isOnSingleLane =
+  predicate(Vehicle::class) { ctx, v ->
+    minPrevalence(v, 0.8) { v ->
+      !v.lane.road.isJunction &&
+          v.lane.road.lanes.filter { lane -> v.lane.laneId.sign == lane.laneId.sign }.size == 1
     }
+  }
 
 val isInMultiLane =
     predicate(Vehicle::class) { ctx, v ->
-      !isInJunction.holds(ctx, v) && !isInSingleLane.holds(ctx, v)
+      !isInJunction.holds(ctx, v) && !isOnSingleLane.holds(ctx, v)
     }
 
 fun PredicateContext<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>
