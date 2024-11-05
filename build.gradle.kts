@@ -18,6 +18,7 @@
 plugins {
   kotlin("jvm") version "2.0.0"
   application
+  id("io.gitlab.arturbosch.detekt") version "1.23.6"
   id("com.diffplug.spotless") version "6.25.0"
 }
 
@@ -34,6 +35,13 @@ dependencies {
   implementation(group = "tools.aqua", name = "stars-data-av")
   implementation(group = "tools.aqua", name = "stars-importer-carla")
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
+  detektPlugins(
+      group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version = "1.23.6")
+}
+
+detekt {
+  basePath = rootProject.projectDir.absolutePath
+  config.setFrom(files(rootProject.file("contrib/detekt-rules.yml")))
 }
 
 spotless {
