@@ -32,32 +32,31 @@ import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 class SameDirectionTest {
 
   private val road0 = emptyRoad(id = 0)
-  private val lane_road_0_n1 = emptyLane(laneId = -1, road = road0)
-  private val lane_road_0_n2 = emptyLane(laneId = -2, road = road0)
-  private val lane_road_0_1 = emptyLane(laneId = 1, road = road0)
-  private val lane_road_0_2 = emptyLane(laneId = 2, road = road0)
+  private val laneRoad0IdMinus1 = emptyLane(laneId = -1, road = road0)
+  private val laneRoad0IdMinus2 = emptyLane(laneId = -2, road = road0)
+  private val laneRoad0Id1 = emptyLane(laneId = 1, road = road0)
+  private val laneRoad0Id2 = emptyLane(laneId = 2, road = road0)
   private val road1 = emptyRoad(id = 1)
-  private val lane_road_1_n1 = emptyLane(laneId = -1, road = road1)
-  private val lane_road_1_n2 = emptyLane(laneId = -2, road = road1)
-  private val lane_road_1_1 = emptyLane(laneId = 1, road = road1)
-  private val lane_road_1_2 = emptyLane(laneId = 2, road = road1)
+  private val laneRoad1IdMinus1 = emptyLane(laneId = -1, road = road1)
+  private val laneRoad1IdMinus2 = emptyLane(laneId = -2, road = road1)
+  private val laneRoad1Id1 = emptyLane(laneId = 1, road = road1)
+  private val laneRoad1Id2 = emptyLane(laneId = 2, road = road1)
 
   private val block = emptyBlock()
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(lane_road_0_1, lane_road_0_2, lane_road_0_n1, lane_road_0_n2)
-    road0.lanes = listOf(lane_road_1_1, lane_road_1_2, lane_road_1_n1, lane_road_1_n2)
+    road0.lanes = listOf(laneRoad0Id1, laneRoad0Id2, laneRoad0IdMinus1, laneRoad0IdMinus2)
+    road0.lanes = listOf(laneRoad1Id1, laneRoad1Id2, laneRoad1IdMinus1, laneRoad1IdMinus2)
     block.roads = listOf(road0, road1)
   }
 
   @Test
   fun testSameDirection() {
     val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val vehicle0 =
-        emptyVehicle(id = 0, lane = lane_road_0_1, tickData = tickData, egoVehicle = true)
-    val vehicle1 = emptyVehicle(id = 1, lane = lane_road_0_1, tickData = tickData)
-    val vehicle2 = emptyVehicle(id = 2, lane = lane_road_0_2, tickData = tickData)
+    val vehicle0 = emptyVehicle(id = 0, lane = laneRoad0Id1, tickData = tickData, egoVehicle = true)
+    val vehicle1 = emptyVehicle(id = 1, lane = laneRoad0Id1, tickData = tickData)
+    val vehicle2 = emptyVehicle(id = 2, lane = laneRoad0Id2, tickData = tickData)
 
     tickData.entities = listOf(vehicle0, vehicle1, vehicle2)
 
@@ -72,10 +71,9 @@ class SameDirectionTest {
   @Test
   fun testSameDirectionOnDifferentRoads() {
     val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val vehicle0 =
-        emptyVehicle(id = 0, lane = lane_road_0_1, tickData = tickData, egoVehicle = true)
-    val vehicle1 = emptyVehicle(id = 1, lane = lane_road_1_1, tickData = tickData)
-    val vehicle2 = emptyVehicle(id = 2, lane = lane_road_1_2, tickData = tickData)
+    val vehicle0 = emptyVehicle(id = 0, lane = laneRoad0Id1, tickData = tickData, egoVehicle = true)
+    val vehicle1 = emptyVehicle(id = 1, lane = laneRoad1Id1, tickData = tickData)
+    val vehicle2 = emptyVehicle(id = 2, lane = laneRoad1Id2, tickData = tickData)
 
     tickData.entities = listOf(vehicle0, vehicle1, vehicle2)
 

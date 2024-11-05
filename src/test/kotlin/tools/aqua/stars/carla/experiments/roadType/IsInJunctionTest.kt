@@ -19,6 +19,8 @@ package tools.aqua.stars.carla.experiments.roadType
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.emptyBlock
 import tools.aqua.stars.carla.experiments.emptyLane
 import tools.aqua.stars.carla.experiments.emptyRoad
@@ -35,8 +37,8 @@ import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 
 class IsInJunctionTest {
 
-  private val multiLaneRoad: Road = emptyRoad(id = 0, isJunction = false)
-  private val multiLane: Lane = emptyLane(laneId = 1, road = multiLaneRoad, laneLength = 50.0)
+  private val singeLaneRoad: Road = emptyRoad(id = 0, isJunction = false)
+  private val singleLane: Lane = emptyLane(laneId = 1, road = singeLaneRoad, laneLength = 50.0)
   private val junctionRoad: Road = emptyRoad(id = 1, isJunction = true)
   private val junctionLane: Lane = emptyLane(laneId = 1, road = junctionRoad, laneLength = 50.0)
   private val block: Block = emptyBlock()
@@ -45,9 +47,9 @@ class IsInJunctionTest {
 
   @BeforeTest
   fun setup() {
-    multiLaneRoad.lanes = listOf(multiLane)
+    singeLaneRoad.lanes = listOf(singleLane)
     junctionRoad.lanes = listOf(junctionLane)
-    block.roads = listOf(multiLaneRoad, junctionRoad)
+    block.roads = listOf(singeLaneRoad, junctionRoad)
   }
 
   @Test
@@ -69,7 +71,7 @@ class IsInJunctionTest {
 
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
-    assert(isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
+    assertTrue(isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
   }
 
   @Test
@@ -94,7 +96,7 @@ class IsInJunctionTest {
       val vehicle =
           emptyVehicle(
               id = vehicleId,
-              lane = multiLane,
+              lane = singleLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
               tickData = tickData)
@@ -106,10 +108,10 @@ class IsInJunctionTest {
     val ctx = PredicateContext(segment)
 
     // The vehicle is in the junction for exactly 80/100 ticks
-    assert(isInJunction.holds(ctx, TickDataUnitSeconds(1.0), vehicleId))
+    assertTrue(isInJunction.holds(ctx, TickDataUnitSeconds(1.0), vehicleId))
 
     // The vehicle is in the junction for exactly 79/100 ticks
-    assert(!isInJunction.holds(ctx, TickDataUnitSeconds(2.0), vehicleId))
+    assertFalse(isInJunction.holds(ctx, TickDataUnitSeconds(2.0), vehicleId))
   }
 
   @Test
@@ -121,7 +123,7 @@ class IsInJunctionTest {
       val vehicle =
           emptyVehicle(
               id = vehicleId,
-              lane = multiLane,
+              lane = singleLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
               tickData = tickData)
@@ -131,6 +133,6 @@ class IsInJunctionTest {
 
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
-    assert(!isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
+    assertFalse(isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
   }
 }

@@ -45,6 +45,10 @@ import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
 import tools.aqua.stars.importer.carla.loadSegments
 
+/**
+ * The [ExperimentConfiguration] configures all [CliktCommand]s that can be used for this experiment
+ * and passes them to the STARS-framework.
+ */
 class ExperimentConfiguration : CliktCommand() {
 
   // region command line options
@@ -215,27 +219,30 @@ class ExperimentConfiguration : CliktCommand() {
    * correct folder.
    */
   private fun downloadAndUnzipExperimentsData() {
-    if (File("stars-reproduction-source").exists()) {
+    val reproductionSourceFolderName = "stars-reproduction-source"
+    val reproductionSourceZipFile = "$reproductionSourceFolderName.zip"
+
+    if (File(reproductionSourceFolderName).exists()) {
       println("The 'stars-reproduction-source' already exists")
       return
     }
 
-    if (!File("stars-reproduction-source.zip").exists()) {
+    if (!File(reproductionSourceZipFile).exists()) {
       println("Start with downloading the experiments data. This may take a while.")
       URL("https://zenodo.org/record/8131947/files/stars-reproduction-source.zip?download=1")
           .openStream()
-          .use { Files.copy(it, Paths.get("stars-reproduction-source.zip")) }
+          .use { Files.copy(it, Paths.get(reproductionSourceZipFile)) }
     }
 
-    check(File("stars-reproduction-source.zip").exists()) {
-      "After downloading the file 'stars-reproduction-source.zip' does not exist."
+    check(File(reproductionSourceZipFile).exists()) {
+      "After downloading the file '$reproductionSourceZipFile' does not exist."
     }
 
     println("Extracting experiments data from zip file.")
-    extractZipFile(zipFile = File("stars-reproduction-source.zip"), outputDir = File("."))
+    extractZipFile(zipFile = File(reproductionSourceZipFile), outputDir = File("."))
 
-    check(File("stars-reproduction-source").exists()) { "Error unzipping simulation data." }
-    check(File("./stars-reproduction-source").totalSpace > 0) {
+    check(File(reproductionSourceFolderName).exists()) { "Error unzipping simulation data." }
+    check(File("./$reproductionSourceFolderName").totalSpace > 0) {
       "There was an error while downloading/extracting the simulation data. The test zip file is missing."
     }
   }
@@ -275,30 +282,26 @@ class ExperimentConfiguration : CliktCommand() {
       }
 
   /**
-   * Extract a zip file into any directory
+   * Extract a zip file into any directory.
    *
    * @param zipFile src zip file
    * @param outputDir directory to extract into. There will be new folder with the zip's name inside
    *   [outputDir] directory.
    * @return the extracted directory i.e.
    */
-  private fun extractZipFile(zipFile: File, outputDir: File): File? =
-      try {
-        ZipFile(zipFile).use { zip ->
-          zip.entries().asSequence().forEach { entry ->
-            zip.getInputStream(entry).use { input ->
-              if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-              else
-                  File(outputDir, entry.name)
-                      .also { it.parentFile.mkdirs() }
-                      .outputStream()
-                      .use { output -> input.copyTo(output) }
-            }
-          }
+  private fun extractZipFile(zipFile: File, outputDir: File): File? {
+    ZipFile(zipFile).use { zip ->
+      zip.entries().asSequence().forEach { entry ->
+        zip.getInputStream(entry).use { input ->
+          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
+          else
+              File(outputDir, entry.name)
+                  .also { it.parentFile.mkdirs() }
+                  .outputStream()
+                  .use { output -> input.copyTo(output) }
         }
-        outputDir
-      } catch (e: Exception) {
-        e.printStackTrace()
-        null
       }
+    }
+    return outputDir
+  }
 }

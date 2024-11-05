@@ -32,7 +32,6 @@ import tools.aqua.stars.carla.experiments.overtaking
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
-import tools.aqua.stars.logic.kcmftbl.next
 
 class OvertakingTest {
 
