@@ -30,8 +30,6 @@ repositories { mavenCentral() }
 
 var starsVersion = "0.5"
 
-repositories { mavenCentral() }
-
 dependencies {
   testImplementation(kotlin("test"))
   implementation(group = "tools.aqua", name = "stars-core", version = starsVersion)
