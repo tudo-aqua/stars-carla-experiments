@@ -16,5 +16,3 @@
  */
 
 rootProject.name = "stars-carla-experiments"
-
-includeBuild("../stars")
