@@ -24,16 +24,20 @@ plugins {
 
 group = "tools.aqua"
 
-repositories {
-  mavenCentral()
-}
+version = "0.5"
+
+repositories { mavenCentral() }
+
+var starsVersion = "0.5"
+
+repositories { mavenCentral() }
 
 dependencies {
   testImplementation(kotlin("test"))
-  implementation(group = "tools.aqua", name = "stars-core", version = "0.5")
-  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = "0.5")
-  implementation(group = "tools.aqua", name = "stars-data-av", version = "0.5")
-  implementation(group = "tools.aqua", name = "stars-importer-carla", version = "0.5")
+  implementation(group = "tools.aqua", name = "stars-core", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-logic-kcmftbl", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
+  implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
   detektPlugins(
       group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version = "1.23.6")
@@ -129,9 +133,6 @@ val reproductionTestAll by
               "--showMemoryConsumption")
     }
 
-application {
-  mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
-  applicationDefaultJvmArgs = listOf("-Xmx64g")
-}
+application { mainClass.set("tools.aqua.stars.carla.experiments.Experiment") }
 
 kotlin { jvmToolchain(17) }
