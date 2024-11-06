@@ -1,0 +1,2746 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCResult",
+    "identifier": "layer 4",
+    "source": "missed-tsc-instances-per-tsc",
+    "count": 54,
+    "value": [
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Must Yield",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Overtaking",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Oncoming traffic",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "High Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Middle Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Single-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "destination": {
+                                                            "label": "Following Leading Vehicle",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Traffic Density",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Low Traffic",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

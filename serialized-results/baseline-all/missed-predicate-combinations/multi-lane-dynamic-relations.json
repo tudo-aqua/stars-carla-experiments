@@ -1,0 +1,57 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializablePredicateCombinationResult",
+    "identifier": "multi-lane-dynamic-relations",
+    "source": "missed-predicate-combinations",
+    "tsc": {
+        "label": "TSCRoot",
+        "outgoingEdges": [
+            {
+                "destination": {
+                    "label": "Road Type",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "Multi-Lane",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Oncoming traffic",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Overtaking",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Following Leading Vehicle",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "count": 0,
+    "value": []
+}

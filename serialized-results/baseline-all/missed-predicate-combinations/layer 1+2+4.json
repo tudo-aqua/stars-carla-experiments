@@ -1,0 +1,249 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializablePredicateCombinationResult",
+    "identifier": "layer 1+2+4",
+    "source": "missed-predicate-combinations",
+    "tsc": {
+        "label": "TSCRoot",
+        "outgoingEdges": [
+            {
+                "destination": {
+                    "label": "Road Type",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "Junction",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Must Yield",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Following Leading Vehicle",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "destination": {
+                                            "label": "Maneuver",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Lane Follow",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Right Turn",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Left Turn",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Multi-Lane",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Oncoming traffic",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Overtaking",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Following Leading Vehicle",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "destination": {
+                                            "label": "Maneuver",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Lane Change",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Lane Follow",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "destination": {
+                                            "label": "Stop Type",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Has Red Light",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Single-Lane",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Oncoming traffic",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Following Leading Vehicle",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "destination": {
+                                            "label": "Stop Type",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Has Stop Sign",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Has Yield Sign",
+                                                        "outgoingEdges": []
+                                                    }
+                                                },
+                                                {
+                                                    "destination": {
+                                                        "label": "Has Red Light",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "destination": {
+                    "label": "Traffic Density",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "High Traffic",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Middle Traffic",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Low Traffic",
+                                "outgoingEdges": []
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "count": 5,
+    "value": [
+        {
+            "first": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Dynamic Relation\n        --> Overtaking",
+            "second": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Maneuver\n        --> Lane Change"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Dynamic Relation\n        --> Overtaking",
+            "second": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Stop Type\n        --> Has Red Light"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Road Type\n    --> Single-Lane\n      --> Stop Type\n        --> Has Stop Sign",
+            "second": "\n--> TSCRoot\n  --> Traffic Density\n    --> High Traffic"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Road Type\n    --> Single-Lane\n      --> Stop Type\n        --> Has Yield Sign",
+            "second": "\n--> TSCRoot\n  --> Traffic Density\n    --> High Traffic"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Road Type\n    --> Single-Lane\n      --> Stop Type\n        --> Has Yield Sign",
+            "second": "\n--> TSCRoot\n  --> Traffic Density\n    --> Middle Traffic"
+        }
+    ]
+}

@@ -17,7 +17,24 @@
 
 package tools.aqua.stars.carla.experiments
 
+/** Singleton the contains the [main] function and exit codes for this experiment. */
 object Experiment {
+
+  /** Normal exit and no reproduction run was conducted. */
+  const val EXIT_CODE_NORMAL = 0
+
+  /** Reproduction run yielded no results. */
+  const val EXIT_CODE_NO_RESULTS = 4
+
+  /** Reproduction run yielded unequal results. */
+  const val EXIT_CODE_UNEQUAL_RESULTS = 2
+
+  /** Reproduction run yielded equal results. */
+  const val EXIT_CODE_EQUAL_RESULTS = 0
+
+  /**
+   * The main function that starts the experiment and passes all arguments to the Clikt-framework.
+   */
   @JvmStatic
   fun main(args: Array<String>) {
     ExperimentConfiguration().main(args)

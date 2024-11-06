@@ -18,16 +18,19 @@
 plugins {
   kotlin("jvm") version "2.0.0"
   application
+  id("io.gitlab.arturbosch.detekt") version "1.23.6"
   id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "tools.aqua"
 
-version = "0.4"
+version = "0.5"
 
 repositories { mavenCentral() }
 
-var starsVersion = "0.4"
+var starsVersion = "0.5"
+
+repositories { mavenCentral() }
 
 dependencies {
   testImplementation(kotlin("test"))
@@ -36,6 +39,13 @@ dependencies {
   implementation(group = "tools.aqua", name = "stars-data-av", version = starsVersion)
   implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "4.4.0")
+  detektPlugins(
+      group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version = "1.23.6")
+}
+
+detekt {
+  basePath = rootProject.projectDir.absolutePath
+  config.setFrom(files(rootProject.file("contrib/detekt-rules.yml")))
 }
 
 spotless {
@@ -55,6 +65,73 @@ spotless {
 }
 
 tasks.test { useJUnitPlatform() }
+
+val reproductionTest by
+    tasks.registering(JavaExec::class) {
+      group = "verification"
+      description = "Runs the reproduction test."
+      dependsOn(tasks.run.get().taskDependencies)
+
+      mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
+      classpath = sourceSets.main.get().runtimeClasspath
+      jvmArgs = listOf("-Xmx64g")
+      args =
+          listOf(
+              // Configure input
+              "--input",
+              "./stars-reproduction-source/stars-experiments-data/simulation_runs",
+
+              // Set minSegmentTicks filter
+              "--minSegmentTicks",
+              "11",
+
+              // Sort seeds
+              "--sorted",
+
+              // Save results
+              "--saveResults",
+
+              // Run reproduction mode
+              "--reproduction",
+              "baseline",
+          )
+    }
+
+val reproductionTestAll by
+    tasks.registering(JavaExec::class) {
+      group = "verification"
+      description = "Runs the reproduction test."
+      dependsOn(tasks.run.get().taskDependencies)
+
+      mainClass.set("tools.aqua.stars.carla.experiments.Experiment")
+      classpath = sourceSets.main.get().runtimeClasspath
+      jvmArgs = listOf("-Xmx64g")
+      args =
+          listOf(
+              // Configure input
+              "--input",
+              "./stars-reproduction-source/stars-experiments-data/simulation_runs",
+
+              // Set minSegmentTicks filter
+              "--minSegmentTicks",
+              "11",
+
+              // Set allEgo
+              "--allEgo",
+
+              // Sort seeds
+              "--sorted",
+
+              // Save results
+              "--saveResults",
+
+              // Run reproduction mode
+              "--reproduction",
+              "baseline-all",
+
+              // Show memory usage
+              "--showMemoryConsumption")
+    }
 
 application { mainClass.set("tools.aqua.stars.carla.experiments.Experiment") }
 

@@ -1,0 +1,160 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializablePredicateCombinationResult",
+    "identifier": "pedestrian",
+    "source": "missed-predicate-combinations",
+    "tsc": {
+        "label": "TSCRoot",
+        "outgoingEdges": [
+            {
+                "destination": {
+                    "label": "Weather",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "Clear",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Cloudy",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Wet",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Wet Cloudy",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Soft Rain",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Mid Rain",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Hard Rain",
+                                "outgoingEdges": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "destination": {
+                    "label": "Road Type",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "Junction",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Multi-Lane",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Single-Lane",
+                                "outgoingEdges": [
+                                    {
+                                        "destination": {
+                                            "label": "Dynamic Relation",
+                                            "outgoingEdges": [
+                                                {
+                                                    "destination": {
+                                                        "label": "Pedestrian Crossed",
+                                                        "outgoingEdges": []
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "destination": {
+                    "label": "Time of Day",
+                    "outgoingEdges": [
+                        {
+                            "destination": {
+                                "label": "Sunset",
+                                "outgoingEdges": []
+                            }
+                        },
+                        {
+                            "destination": {
+                                "label": "Noon",
+                                "outgoingEdges": []
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "count": 3,
+    "value": [
+        {
+            "first": "\n--> TSCRoot\n  --> Weather\n    --> Clear",
+            "second": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Dynamic Relation\n        --> Pedestrian Crossed"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Weather\n    --> Wet Cloudy",
+            "second": "\n--> TSCRoot\n  --> Road Type\n    --> Junction\n      --> Dynamic Relation\n        --> Pedestrian Crossed"
+        },
+        {
+            "first": "\n--> TSCRoot\n  --> Weather\n    --> Wet Cloudy",
+            "second": "\n--> TSCRoot\n  --> Road Type\n    --> Multi-Lane\n      --> Dynamic Relation\n        --> Pedestrian Crossed"
+        }
+    ]
+}

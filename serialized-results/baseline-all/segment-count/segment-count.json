@@ -1,0 +1,6 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableIntResult",
+    "identifier": "segment-count",
+    "source": "segment-count",
+    "value": 113767
+}

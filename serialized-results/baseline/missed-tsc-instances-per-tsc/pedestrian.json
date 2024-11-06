@@ -1,0 +1,1140 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCResult",
+    "identifier": "pedestrian",
+    "source": "missed-tsc-instances-per-tsc",
+    "count": 20,
+    "value": [
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Clear",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Clear",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Clear",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Clear",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Wet Cloudy",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Soft Rain",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Soft Rain",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Mid Rain",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Mid Rain",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Multi-Lane",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Noon",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "label": "TSCRoot",
+            "outgoingEdges": [
+                {
+                    "destination": {
+                        "label": "Weather",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Hard Rain",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Road Type",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Junction",
+                                    "outgoingEdges": [
+                                        {
+                                            "destination": {
+                                                "label": "Dynamic Relation",
+                                                "outgoingEdges": [
+                                                    {
+                                                        "destination": {
+                                                            "label": "Pedestrian Crossed",
+                                                            "outgoingEdges": []
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "destination": {
+                        "label": "Time of Day",
+                        "outgoingEdges": [
+                            {
+                                "destination": {
+                                    "label": "Sunset",
+                                    "outgoingEdges": []
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

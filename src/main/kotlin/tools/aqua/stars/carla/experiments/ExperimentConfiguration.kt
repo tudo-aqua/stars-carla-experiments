@@ -30,14 +30,25 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.zip.ZipFile
 import kotlin.io.path.name
+import kotlin.system.exitProcess
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_EQUAL_RESULTS
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NORMAL
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NO_RESULTS
+import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
+import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder.baselineDirectory
 import tools.aqua.stars.data.av.dataclasses.*
 import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
 import tools.aqua.stars.importer.carla.loadSegments
 
+/**
+ * The [ExperimentConfiguration] configures all [CliktCommand]s that can be used for this experiment
+ * and passes them to the STARS-framework.
+ */
 class ExperimentConfiguration : CliktCommand() {
 
   // region command line options
@@ -49,7 +60,7 @@ class ExperimentConfiguration : CliktCommand() {
       option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
 
   private val minSegmentTickCount: Int by
-      option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(10)
+      option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(11)
 
   private val sortBySeed: Boolean by
       option("--sorted", help = "Whether to sort data by seed").flag(default = true)
@@ -67,27 +78,82 @@ class ExperimentConfiguration : CliktCommand() {
                   "A list of TSC projections that should be ignored (given as a String, separated by ',')")
           .split(",")
           .default(listOf())
+
+  private val writePlots: Boolean by
+      option("--writePlots", help = "Whether to write plots").flag(default = false)
+
+  private val writePlotDataCSV: Boolean by
+      option("--writePlotData", help = "Whether to write plot data to csv").flag(default = false)
+
+  private val writeSerializedResults: Boolean by
+      option("--saveResults", help = "Whether to save serialized results").flag(default = false)
+
+  private val compareToBaselineResults: Boolean by
+      option(
+              "--compareToBaselineResults",
+              help = "Whether to compare the results to the baseline results")
+          .flag(default = false)
+
+  private val compareToPreviousRun: Boolean by
+      option("--compare", help = "Whether to compare the results to the previous run")
+          .flag(default = false)
+
+  private val showMemoryConsumption: Boolean by
+      option("--showMemoryConsumption", help = "Whether to show memory consumption")
+          .flag(default = false)
+
+  private val reproduction: String? by option("--reproduction", help = "Path to baseline results")
   // endregion
 
   override fun run() {
+    ApplicationConstantsHolder.executionCommand =
+        """
+        --input=$simulationRunFolder
+        --allEgo=$allEgo
+        --minSegmentTicks=$minSegmentTickCount
+        --sorted=$sortBySeed
+        --dynamicFilter=$dynamicFilter
+        --staticFilter=$staticFilter
+        --ignore=$projectionIgnoreList
+        --writePlots=$writePlots
+        --writePlotData=$writePlotDataCSV
+        --saveResults=$writeSerializedResults
+        --compareToBaselineResults=$compareToBaselineResults
+        --compare=$compareToPreviousRun
+        --reproduction=$reproduction
+        --showMemoryConsumption=$showMemoryConsumption
+    """
+            .trimIndent()
     println("Executing with the following settings:")
-    println(
-        "--input=$simulationRunFolder " +
-            "--allEgo=$allEgo " +
-            "--minSegmentTick=$minSegmentTickCount " +
-            "--sortBySeed=$sortBySeed " +
-            "--dynamicFilter=$dynamicFilter " +
-            "--staticFilter=$staticFilter " +
-            "--ignore=$projectionIgnoreList ")
+    println(ApplicationConstantsHolder.executionCommand)
+
+    reproduction?.let { baselineDirectory = it }
 
     downloadAndUnzipExperimentsData()
+
+    if (showMemoryConsumption) {
+      Thread {
+            while (true) {
+              val runtime = Runtime.getRuntime()
+              val usedMemory = runtime.totalMemory() - runtime.freeMemory()
+              val freeMemory = runtime.freeMemory()
+              println(
+                  "Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
+              Thread.sleep(5000)
+            }
+          }
+          .apply {
+            isDaemon = true
+            start()
+          }
+    }
 
     val tsc = tsc()
 
     println("Projections:")
     tsc.buildProjections(projectionIgnoreList.map { it.trim() }).forEach {
       println("TSC for Projection $it:")
-      println(it.tsc)
+      println(tsc)
       println("All possible instances:")
       println(it.possibleTSCInstances.size)
       println()
@@ -107,26 +173,45 @@ class ExperimentConfiguration : CliktCommand() {
         )
 
     val validTSCInstancesPerProjectionMetric =
-        ValidTSCInstancesPerProjectionMetric<
+        ValidTSCInstancesPerTSCMetric<
             Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
 
     println("Creating TSC...")
-    TSCEvaluation(tsc = tsc(), projectionIgnoreList = projectionIgnoreList, segments = segments)
-        .apply {
-          registerMetricProviders(
-              TotalSegmentTickDifferencePerIdentifierMetric(),
-              SegmentCountMetric(),
-              AverageVehiclesInEgosBlockMetric(),
-              TotalSegmentTickDifferenceMetric(),
-              validTSCInstancesPerProjectionMetric,
-              InvalidTSCInstancesPerProjectionMetric(),
-              MissedTSCInstancesPerProjectionMetric(),
-              MissingPredicateCombinationsPerProjectionMetric(validTSCInstancesPerProjectionMetric),
-              FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
-          )
-          println("Run Evaluation")
-          runEvaluation()
-        }
+    val evaluation =
+        TSCEvaluation(
+                tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
+                writePlots = writePlots,
+                writePlotDataCSV = writePlotDataCSV,
+                writeSerializedResults = writeSerializedResults,
+                compareToBaselineResults = compareToBaselineResults || reproduction != null,
+                compareToPreviousRun = compareToPreviousRun)
+            .apply {
+              registerMetricProviders(
+                  TotalSegmentTickDifferencePerIdentifierMetric(),
+                  SegmentCountMetric(),
+                  AverageVehiclesInEgosBlockMetric(),
+                  TotalSegmentTickDifferenceMetric(),
+                  validTSCInstancesPerProjectionMetric,
+                  InvalidTSCInstancesPerTSCMetric(),
+                  MissedTSCInstancesPerTSCMetric(),
+                  MissedPredicateCombinationsPerTSCMetric(validTSCInstancesPerProjectionMetric),
+                  FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
+              )
+              println("Run Evaluation")
+              runEvaluation(segments = segments)
+            }
+
+    exitProcess(
+        status =
+            if (reproduction != null) {
+              when (evaluation.resultsReproducedFromBaseline) {
+                null -> EXIT_CODE_NO_RESULTS
+                false -> EXIT_CODE_UNEQUAL_RESULTS
+                true -> EXIT_CODE_EQUAL_RESULTS
+              }
+            } else {
+              EXIT_CODE_NORMAL
+            })
   }
 
   /**
@@ -134,27 +219,30 @@ class ExperimentConfiguration : CliktCommand() {
    * correct folder.
    */
   private fun downloadAndUnzipExperimentsData() {
-    if (File("stars-reproduction-source").exists()) {
+    val reproductionSourceFolderName = "stars-reproduction-source"
+    val reproductionSourceZipFile = "$reproductionSourceFolderName.zip"
+
+    if (File(reproductionSourceFolderName).exists()) {
       println("The 'stars-reproduction-source' already exists")
       return
     }
 
-    if (!File("stars-reproduction-source.zip").exists()) {
+    if (!File(reproductionSourceZipFile).exists()) {
       println("Start with downloading the experiments data. This may take a while.")
       URL("https://zenodo.org/record/8131947/files/stars-reproduction-source.zip?download=1")
           .openStream()
-          .use { Files.copy(it, Paths.get("stars-reproduction-source.zip")) }
+          .use { Files.copy(it, Paths.get(reproductionSourceZipFile)) }
     }
 
-    check(File("stars-reproduction-source.zip").exists()) {
-      "After downloading the file 'stars-reproduction-source.zip' does not exist."
+    check(File(reproductionSourceZipFile).exists()) {
+      "After downloading the file '$reproductionSourceZipFile' does not exist."
     }
 
     println("Extracting experiments data from zip file.")
-    extractZipFile(zipFile = File("stars-reproduction-source.zip"), outputDir = File("."))
+    extractZipFile(zipFile = File(reproductionSourceZipFile), outputDir = File("."))
 
-    check(File("stars-reproduction-source").exists()) { "Error unzipping simulation data." }
-    check(File("./stars-reproduction-source").totalSpace > 0) {
+    check(File(reproductionSourceFolderName).exists()) { "Error unzipping simulation data." }
+    check(File("./$reproductionSourceFolderName").totalSpace > 0) {
       "There was an error while downloading/extracting the simulation data. The test zip file is missing."
     }
   }
@@ -180,7 +268,8 @@ class ExperimentConfiguration : CliktCommand() {
                   dynamicFiles.add(mapFile.toPath())
                 }
               }
-              if (dynamicFiles.isEmpty()) {
+
+              if (staticFile == null || dynamicFiles.isEmpty()) {
                 return@mapNotNull null
               }
 
@@ -188,35 +277,31 @@ class ExperimentConfiguration : CliktCommand() {
                 "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
                     ?: 0
               }
-              return@mapNotNull CarlaSimulationRunsWrapper(staticFile!!, dynamicFiles)
+              return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
             }
       }
 
   /**
-   * Extract a zip file into any directory
+   * Extract a zip file into any directory.
    *
    * @param zipFile src zip file
    * @param outputDir directory to extract into. There will be new folder with the zip's name inside
    *   [outputDir] directory.
    * @return the extracted directory i.e.
    */
-  private fun extractZipFile(zipFile: File, outputDir: File): File? =
-      try {
-        ZipFile(zipFile).use { zip ->
-          zip.entries().asSequence().forEach { entry ->
-            zip.getInputStream(entry).use { input ->
-              if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-              else
-                  File(outputDir, entry.name)
-                      .also { it.parentFile.mkdirs() }
-                      .outputStream()
-                      .use { output -> input.copyTo(output) }
-            }
-          }
+  private fun extractZipFile(zipFile: File, outputDir: File): File? {
+    ZipFile(zipFile).use { zip ->
+      zip.entries().asSequence().forEach { entry ->
+        zip.getInputStream(entry).use { input ->
+          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
+          else
+              File(outputDir, entry.name)
+                  .also { it.parentFile.mkdirs() }
+                  .outputStream()
+                  .use { output -> input.copyTo(output) }
         }
-        outputDir
-      } catch (e: Exception) {
-        e.printStackTrace()
-        null
       }
+    }
+    return outputDir
+  }
 }

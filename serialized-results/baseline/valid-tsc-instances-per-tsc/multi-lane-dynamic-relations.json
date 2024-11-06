@@ -1,0 +1,459 @@
+{
+    "type": "tools.aqua.stars.core.metric.serialization.SerializableTSCOccurrenceResult",
+    "identifier": "multi-lane-dynamic-relations",
+    "source": "valid-tsc-instances-per-tsc",
+    "count": 8,
+    "value": [
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Oncoming traffic",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 10.000000149011612)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed1 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed1 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 190.00000283122063)..TickDataUnitSeconds(tickSeconds: 217.50000324100256))] from dynamic_data__Game_Carla_Maps_Town10HD_seed1 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 285.00000424683094)..TickDataUnitSeconds(tickSeconds: 301.0000044852495))] from dynamic_data__Game_Carla_Maps_Town10HD_seed1 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.0000012665987)..TickDataUnitSeconds(tickSeconds: 114.00000169873238))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 182.00000271201134)..TickDataUnitSeconds(tickSeconds: 213.50000318139791))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed6 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed6 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 128.00000190734863)..TickDataUnitSeconds(tickSeconds: 147.0000021904707))] from dynamic_data__Game_Carla_Maps_Town10HD_seed6 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 87.00000129640102)..TickDataUnitSeconds(tickSeconds: 116.50000173598528))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 184.00000274181366)..TickDataUnitSeconds(tickSeconds: 190.00000283122063))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 103.0000015348196)..TickDataUnitSeconds(tickSeconds: 122.50000182539225))] from dynamic_data__Game_Carla_Maps_Town10HD_seed11 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 129.50000192970037)..TickDataUnitSeconds(tickSeconds: 159.00000236928463))] from dynamic_data__Game_Carla_Maps_Town10HD_seed11 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 169.00000251829624)..TickDataUnitSeconds(tickSeconds: 188.0000028014183))] from dynamic_data__Game_Carla_Maps_Town10HD_seed11 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 205.50000306218863)..TickDataUnitSeconds(tickSeconds: 226.500003375113))] from dynamic_data__Game_Carla_Maps_Town10HD_seed11 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 37.000000551342964))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.500000558793545)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 162.5000024214387)..TickDataUnitSeconds(tickSeconds: 182.50000271946192))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 285.5000042542815)..TickDataUnitSeconds(tickSeconds: 301.0000044852495))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 84.00000125169754)..TickDataUnitSeconds(tickSeconds: 113.00000168383121))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 124.00000184774399)..TickDataUnitSeconds(tickSeconds: 168.00000250339508))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 193.0000028759241)..TickDataUnitSeconds(tickSeconds: 221.5000033006072))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 235.00000350177288)..TickDataUnitSeconds(tickSeconds: 254.50000379234552))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 10.000000149011612)..TickDataUnitSeconds(tickSeconds: 37.500000558793545))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 163.00000242888927)..TickDataUnitSeconds(tickSeconds: 182.50000271946192))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 266.0000039637089)..TickDataUnitSeconds(tickSeconds: 288.0000042915344))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 14.500000216066837)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 84.50000125914812)..TickDataUnitSeconds(tickSeconds: 113.5000016912818))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 162.5000024214387)..TickDataUnitSeconds(tickSeconds: 182.50000271946192))] from dynamic_data__Game_Carla_Maps_Town10HD_seed40 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 51.5000007674098)..TickDataUnitSeconds(tickSeconds: 71.00000105798244))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 82.00000122189522)..TickDataUnitSeconds(tickSeconds: 102.00000151991844))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 119.50000178068876)..TickDataUnitSeconds(tickSeconds: 141.00000210106373))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 163.00000242888927)..TickDataUnitSeconds(tickSeconds: 199.50000297278166))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 14.000000208616257)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed51 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed51 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 278.0000041425228)..TickDataUnitSeconds(tickSeconds: 297.0000044256449))] from dynamic_data__Game_Carla_Maps_Town10HD_seed51 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 11.000000163912773)..TickDataUnitSeconds(tickSeconds: 37.000000551342964))] from dynamic_data__Game_Carla_Maps_Town10HD_seed56 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.500000558793545)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed56 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 35.50000052899122))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.0000005364418)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.0000012665987)..TickDataUnitSeconds(tickSeconds: 113.5000016912818))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 123.00000183284283)..TickDataUnitSeconds(tickSeconds: 143.00000213086605))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 206.5000030770898)..TickDataUnitSeconds(tickSeconds: 245.0000036507845))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 282.00000420212746)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 193.5000028833747)..TickDataUnitSeconds(tickSeconds: 198.5000029578805))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 202.50000301748514)..TickDataUnitSeconds(tickSeconds: 224.0000033378601))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 14.000000208616257)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed85 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed85 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 127.50000189989805)..TickDataUnitSeconds(tickSeconds: 147.50000219792128))] from dynamic_data__Game_Carla_Maps_Town10HD_seed85 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 171.00000254809856)..TickDataUnitSeconds(tickSeconds: 190.00000283122063))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 12.000000178813934)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 163.00000242888927)..TickDataUnitSeconds(tickSeconds: 183.50000273436308))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 201.50000300258398)..TickDataUnitSeconds(tickSeconds: 223.00000332295895))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 265.0000039488077)..TickDataUnitSeconds(tickSeconds: 286.5000042691827))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 289.50000431388617)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.0000005364418))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 125.50000187009573)..TickDataUnitSeconds(tickSeconds: 145.50000216811895))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 78.00000116229057))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed92 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 77.50000115483999))] from dynamic_data__Game_Carla_Maps_Town10HD_seed92 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 162.5000024214387)..TickDataUnitSeconds(tickSeconds: 182.00000271201134))] from dynamic_data__Game_Carla_Maps_Town10HD_seed92 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 199.50000297278166)..TickDataUnitSeconds(tickSeconds: 220.50000328570604))] from dynamic_data__Game_Carla_Maps_Town10HD_seed92 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 11.000000163912773)..TickDataUnitSeconds(tickSeconds: 36.500000543892384))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 164.00000244379044)..TickDataUnitSeconds(tickSeconds: 186.00000277161598))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 237.50000353902578)..TickDataUnitSeconds(tickSeconds: 245.0000036507845))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 9.500000141561031)..TickDataUnitSeconds(tickSeconds: 37.500000558793545))] from dynamic_data__Game_Carla_Maps_Town10HD_seed98 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Oncoming traffic",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        },
+                                                        {
+                                                            "destination": {
+                                                                "label": "Following Leading Vehicle",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.0000012665987)..TickDataUnitSeconds(tickSeconds: 115.50000172108412))] from dynamic_data__Game_Carla_Maps_Town10HD_seed1 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 122.00000181794167)..TickDataUnitSeconds(tickSeconds: 168.00000250339508))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 221.00000329315662)..TickDataUnitSeconds(tickSeconds: 291.5000043436885))] from dynamic_data__Game_Carla_Maps_Town10HD_seed3 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.0000012665987)..TickDataUnitSeconds(tickSeconds: 117.50000175088644))] from dynamic_data__Game_Carla_Maps_Town10HD_seed6 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 164.50000245124102)..TickDataUnitSeconds(tickSeconds: 301.0000044852495))] from dynamic_data__Game_Carla_Maps_Town10HD_seed6 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 79.50000118464231))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 128.00000190734863)..TickDataUnitSeconds(tickSeconds: 171.00000254809856))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 196.50000292807817)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed9 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 12.500000186264515)..TickDataUnitSeconds(tickSeconds: 77.00000114738941))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 38.000000566244125)..TickDataUnitSeconds(tickSeconds: 85.50000127404928))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 94.50000140815973)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 122.50000182539225)..TickDataUnitSeconds(tickSeconds: 170.0000025331974))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 184.50000274926424)..TickDataUnitSeconds(tickSeconds: 218.00000324845314))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 227.0000033825636)..TickDataUnitSeconds(tickSeconds: 289.0000043064356))] from dynamic_data__Game_Carla_Maps_Town10HD_seed37 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 47.000000700354576)..TickDataUnitSeconds(tickSeconds: 83.50000124424696))] from dynamic_data__Game_Carla_Maps_Town10HD_seed40 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 92.00000137090683)..TickDataUnitSeconds(tickSeconds: 153.50000228732824))] from dynamic_data__Game_Carla_Maps_Town10HD_seed40 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 12.000000178813934)..TickDataUnitSeconds(tickSeconds: 42.00000062584877))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 217.50000324100256)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed44 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.0000012665987)..TickDataUnitSeconds(tickSeconds: 199.50000297278166))] from dynamic_data__Game_Carla_Maps_Town10HD_seed51 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 86.00000128149986)..TickDataUnitSeconds(tickSeconds: 172.5000025704503))] from dynamic_data__Game_Carla_Maps_Town10HD_seed56 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 147.50000219792128)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed74 with primary entity 48",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 36.500000543892384)..TickDataUnitSeconds(tickSeconds: 80.0000011920929))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 88.50000131875277)..TickDataUnitSeconds(tickSeconds: 156.00000232458115))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 117.00000174343586))] from dynamic_data__Game_Carla_Maps_Town10HD_seed85 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 165.0000024586916)..TickDataUnitSeconds(tickSeconds: 205.50000306218863))] from dynamic_data__Game_Carla_Maps_Town10HD_seed85 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 10.000000149011612)..TickDataUnitSeconds(tickSeconds: 46.500000692903996))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 47.000000700354576)..TickDataUnitSeconds(tickSeconds: 86.50000128895044))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 95.5000014230609)..TickDataUnitSeconds(tickSeconds: 161.50000240653753))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed89 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 115.50000172108412))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 85.50000127404928)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed92 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 37.000000551342964)..TickDataUnitSeconds(tickSeconds: 83.00000123679638))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 92.00000137090683)..TickDataUnitSeconds(tickSeconds: 154.00000229477882))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 38.000000566244125)..TickDataUnitSeconds(tickSeconds: 80.0000011920929))] from dynamic_data__Game_Carla_Maps_Town10HD_seed98 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 89.50000133365393)..TickDataUnitSeconds(tickSeconds: 156.00000232458115))] from dynamic_data__Game_Carla_Maps_Town10HD_seed98 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 247.00000368058681)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed98 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Following Leading Vehicle",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 259.50000386685133)..TickDataUnitSeconds(tickSeconds: 301.0000044852495))] from dynamic_data__Game_Carla_Maps_Town10HD_seed11 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 262.5000039115548)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Oncoming traffic",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        },
+                                                        {
+                                                            "destination": {
+                                                                "label": "Pedestrian Crossed",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 200.00000298023224)..TickDataUnitSeconds(tickSeconds: 222.50000331550837))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 259.50000386685133)..TickDataUnitSeconds(tickSeconds: 282.50000420957804))] from dynamic_data__Game_Carla_Maps_Town10HD_seed14 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 175.5000026151538)..TickDataUnitSeconds(tickSeconds: 185.00000275671482))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 200.00000298023224)..TickDataUnitSeconds(tickSeconds: 222.50000331550837))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 160.50000239163637)..TickDataUnitSeconds(tickSeconds: 183.0000027269125))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 257.0000038295984)..TickDataUnitSeconds(tickSeconds: 279.50000416487455))] from dynamic_data__Game_Carla_Maps_Town10HD_seed72 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 12.000000178813934)..TickDataUnitSeconds(tickSeconds: 23.500000350177288))] from dynamic_data__Game_Carla_Maps_Town10HD_seed74 with primary entity 48",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 91.50000136345625)..TickDataUnitSeconds(tickSeconds: 111.00000165402889))] from dynamic_data__Game_Carla_Maps_Town10HD_seed74 with primary entity 48",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 163.50000243633986)..TickDataUnitSeconds(tickSeconds: 185.5000027641654))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 163.00000242888927)..TickDataUnitSeconds(tickSeconds: 183.0000027269125))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 200.50000298768282)..TickDataUnitSeconds(tickSeconds: 223.00000332295895))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 196.0000029206276)..TickDataUnitSeconds(tickSeconds: 201.0000029951334))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 205.50000306218863)..TickDataUnitSeconds(tickSeconds: 231.00000344216824))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 258.50000385195017)..TickDataUnitSeconds(tickSeconds: 284.0000042319298))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": []
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 255.0000037997961)..TickDataUnitSeconds(tickSeconds: 264.00000393390656))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 288.500004298985)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed28 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 289.0000043064356)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 287.00000427663326)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed95 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Oncoming traffic",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        },
+                                                        {
+                                                            "destination": {
+                                                                "label": "Pedestrian Crossed",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        },
+                                                        {
+                                                            "destination": {
+                                                                "label": "Following Leading Vehicle",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 264.50000394135714)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed20 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 13.000000193715096)..TickDataUnitSeconds(tickSeconds: 46.500000692903996))] from dynamic_data__Game_Carla_Maps_Town10HD_seed40 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 200.00000298023224)..TickDataUnitSeconds(tickSeconds: 250.50000373274088))] from dynamic_data__Game_Carla_Maps_Town10HD_seed40 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 265.5000039562583)..TickDataUnitSeconds(tickSeconds: 300.50000447779894))] from dynamic_data__Game_Carla_Maps_Town10HD_seed90 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Pedestrian Crossed",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 115.00000171363354)..TickDataUnitSeconds(tickSeconds: 139.500002078712))] from dynamic_data__Game_Carla_Maps_Town10HD_seed74 with primary entity 48",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 263.500003926456)..TickDataUnitSeconds(tickSeconds: 286.5000042691827))] from dynamic_data__Game_Carla_Maps_Town10HD_seed91 with primary entity 47"
+            ]
+        },
+        {
+            "tscInstance": {
+                "label": "TSCRoot",
+                "outgoingEdges": [
+                    {
+                        "destination": {
+                            "label": "Road Type",
+                            "outgoingEdges": [
+                                {
+                                    "destination": {
+                                        "label": "Multi-Lane",
+                                        "outgoingEdges": [
+                                            {
+                                                "destination": {
+                                                    "label": "Dynamic Relation",
+                                                    "outgoingEdges": [
+                                                        {
+                                                            "destination": {
+                                                                "label": "Oncoming traffic",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        },
+                                                        {
+                                                            "destination": {
+                                                                "label": "Overtaking",
+                                                                "outgoingEdges": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "segmentIdentifiers": [
+                "Segment[(TickDataUnitSeconds(tickSeconds: 166.00000247359276)..TickDataUnitSeconds(tickSeconds: 185.00000275671482))] from dynamic_data__Game_Carla_Maps_Town10HD_seed75 with primary entity 47",
+                "Segment[(TickDataUnitSeconds(tickSeconds: 207.50000309199095)..TickDataUnitSeconds(tickSeconds: 229.0000034123659))] from dynamic_data__Game_Carla_Maps_Town10HD_seed87 with primary entity 47"
+            ]
+        }
+    ]
+}
