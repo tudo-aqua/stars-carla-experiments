@@ -16,7 +16,7 @@
  */
 
 plugins {
-  kotlin("jvm") version "2.0.0"
+  kotlin("jvm") version "2.1.0"
   application
   id("io.gitlab.arturbosch.detekt") version "1.23.6"
   id("com.diffplug.spotless") version "6.25.0"
