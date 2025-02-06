@@ -17,6 +17,8 @@
 
 package tools.aqua.stars.carla.experiments
 
+import com.github.ajalt.clikt.core.main
+
 /** Singleton the contains the [main] function and exit codes for this experiment. */
 object Experiment {
 
