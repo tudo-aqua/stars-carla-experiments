@@ -164,13 +164,29 @@ class ExperimentConfiguration : CliktCommand() {
     val simulationRunsWrappers = getSimulationRuns()
 
     println("Loading segments...")
+    // Select correct ego vehicle for individual simulation runs
     val segments =
         loadSegments(
+            egoIds = listOf(391),
             useEveryVehicleAsEgo = allEgo,
             minSegmentTickCount = minSegmentTickCount,
             orderFilesBySeed = sortBySeed,
-            simulationRunsWrappers = simulationRunsWrappers,
-        )
+            simulationRunsWrappers = simulationRunsWrappers.subList(0, 1),
+        ) +
+            loadSegments(
+                egoIds = listOf(135),
+                useEveryVehicleAsEgo = allEgo,
+                minSegmentTickCount = minSegmentTickCount,
+                orderFilesBySeed = sortBySeed,
+                simulationRunsWrappers = simulationRunsWrappers.subList(1, 2),
+            ) +
+            loadSegments(
+                egoIds = listOf(47),
+                useEveryVehicleAsEgo = allEgo,
+                minSegmentTickCount = minSegmentTickCount,
+                orderFilesBySeed = sortBySeed,
+                simulationRunsWrappers = simulationRunsWrappers.subList(2, 3),
+            )
 
     val validTSCInstancesPerProjectionMetric =
         ValidTSCInstancesPerTSCMetric<
