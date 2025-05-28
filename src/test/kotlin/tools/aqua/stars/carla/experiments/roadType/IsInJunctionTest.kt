@@ -21,11 +21,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.carla.experiments.isInJunction
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.data.av.dataclasses.Block
@@ -34,105 +29,118 @@ import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class IsInJunctionTest {
 
-  private val singeLaneRoad: Road = emptyRoad(id = 0, isJunction = false)
-  private val singleLane: Lane = emptyLane(laneId = 1, road = singeLaneRoad, laneLength = 50.0)
-  private val junctionRoad: Road = emptyRoad(id = 1, isJunction = true)
-  private val junctionLane: Lane = emptyLane(laneId = 1, road = junctionRoad, laneLength = 50.0)
-  private val block: Block = emptyBlock()
+  private lateinit var singleLaneRoad: Road
+  private lateinit var singleLane: Lane
+
+  private lateinit var junctionRoad: Road
+  private lateinit var junctionLane: Lane
+
+  private lateinit var block: Block
 
   private val vehicleId: Int = 0
 
   @BeforeTest
   fun setup() {
-    singeLaneRoad.lanes = listOf(singleLane)
-    junctionRoad.lanes = listOf(junctionLane)
-    block.roads = listOf(singeLaneRoad, junctionRoad)
+    singleLane = Lane(laneId = 1, laneLength = 50.0)
+    singleLaneRoad =
+        Road(id = 0, isJunction = false, lanes = listOf(singleLane)).apply {
+          singleLane.road = this
+        }
+
+    junctionLane = Lane(laneId = 1, laneLength = 50.0)
+    junctionRoad =
+        Road(id = 1, isJunction = true, lanes = listOf(junctionLane)).apply {
+          junctionLane.road = this
+        }
+
+    block = Block(roads = listOf(singleLaneRoad, junctionRoad))
   }
 
   @Test
   fun testIsInJunctionAllTheTime() {
-    val tickDataList = mutableListOf<TickData>()
+    val tds = mutableListOf<TickData>()
+
     for (i in 0..80) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val vehicle =
-          emptyVehicle(
-              id = vehicleId,
-              lane = junctionLane,
-              positionOnLane = i.toDouble(),
-              egoVehicle = true,
-              tickData = tickData)
-      tickData.entities = listOf(vehicle)
-      tickDataList.add(tickData)
+
+      val veh =
+          Vehicle(id = vehicleId, lane = junctionLane, positionOnLane = i.toDouble(), isEgo = true)
+      // 2) create the TickData with that vehicle in its entities
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(veh))
+      // 3) wire back‐reference
+      veh.tickData = td
+
+      tds += td
     }
 
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-    assertTrue(isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertTrue { isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId) }
   }
 
   @Test
   fun testIsInJunction80Percent() {
-    val tickDataList = mutableListOf<TickData>()
+    val tds = mutableListOf<TickData>()
+
+    // ticks 1–80 in junction
     for (i in 1..80) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val vehicle =
-          emptyVehicle(
-              id = vehicleId,
-              lane = junctionLane,
-              positionOnLane = i.toDouble(),
-              egoVehicle = true,
-              tickData = tickData)
-      tickData.entities = listOf(vehicle)
-      tickDataList.add(tickData)
-    }
-    for (i in 81..100) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val vehicle =
-          emptyVehicle(
-              id = vehicleId,
-              lane = singleLane,
-              positionOnLane = i.toDouble(),
-              egoVehicle = true,
-              tickData = tickData)
-      tickData.entities = listOf(vehicle)
-      tickDataList.add(tickData)
+      val veh =
+          Vehicle(id = vehicleId, lane = junctionLane, positionOnLane = i.toDouble(), isEgo = true)
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(veh))
+      veh.tickData = td
+      tds += td
     }
 
-    val segment = Segment(tickDataList, segmentSource = "")
+    // ticks 81–100 off junction
+    for (i in 81..100) {
+      val veh =
+          Vehicle(id = vehicleId, lane = singleLane, positionOnLane = i.toDouble(), isEgo = true)
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(veh))
+      veh.tickData = td
+      tds += td
+    }
+
+    val segment = Segment(tds, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // The vehicle is in the junction for exactly 80/100 ticks
-    assertTrue(isInJunction.holds(ctx, TickDataUnitSeconds(1.0), vehicleId))
-
-    // The vehicle is in the junction for exactly 79/100 ticks
-    assertFalse(isInJunction.holds(ctx, TickDataUnitSeconds(2.0), vehicleId))
+    // exactly 80/100 in junction → holds at t=1
+    assertTrue { isInJunction.holds(ctx, TickDataUnitSeconds(1.0), vehicleId) }
+    // only 79/100 from t=2 → no longer holds
+    assertFalse { isInJunction.holds(ctx, TickDataUnitSeconds(2.0), vehicleId) }
   }
 
   @Test
   fun testIsInJunctionForMultiLaneRoad() {
-    val tickDataList = mutableListOf<TickData>()
+    val tds = mutableListOf<TickData>()
+
+    // never in junction
     for (i in 0..100) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val vehicle =
-          emptyVehicle(
-              id = vehicleId,
-              lane = singleLane,
-              positionOnLane = i.toDouble(),
-              egoVehicle = true,
-              tickData = tickData)
-      tickData.entities = listOf(vehicle)
-      tickDataList.add(tickData)
+      val veh =
+          Vehicle(id = vehicleId, lane = singleLane, positionOnLane = i.toDouble(), isEgo = true)
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(veh))
+      veh.tickData = td
+      tds += td
     }
 
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-    assertFalse(isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId))
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertFalse { isInJunction.holds(ctx, TickDataUnitSeconds(0.0), vehicleId) }
   }
 }

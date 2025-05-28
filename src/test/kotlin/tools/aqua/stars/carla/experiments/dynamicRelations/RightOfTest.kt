@@ -19,48 +19,60 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.carla.experiments.rightOf
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class RightOfTest {
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
+  private lateinit var road0lane3: Lane
+  private lateinit var road0laneMinus1: Lane
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road0lane2 = emptyLane(laneId = 2, road = road0, laneLength = 50.0)
-  private val road0lane3 = emptyLane(laneId = 3, road = road0, laneLength = 50.0)
-  private val road0laneMinus1 = emptyLane(laneId = -1, road = road0, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val road1 = emptyRoad(id = 1)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
-
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2, road0lane3, road0laneMinus1)
-    road1.lanes = listOf(road1lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road0lane3 = Lane(laneId = 3, laneLength = 50.0)
+    road0laneMinus1 = Lane(laneId = -1, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
+
+    road0 =
+        Road(id = 0, lanes = listOf(road0lane1, road0lane2, road0lane3, road0laneMinus1)).apply {
+          road0lane1.road = this
+          road0lane2.road = this
+          road0lane3.road = this
+          road0laneMinus1.road = this
+        }
+
+    road1 = Road(id = 1, lanes = listOf(road1lane1)).apply { road1lane1.road = this }
+
+    block = Block(roads = listOf(road0, road1))
   }
 
   @Test
   fun vehicleIsLeftOfEgo() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane2, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -70,15 +82,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsLeftWithLaneInBetweenOfEgo() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane3, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane3, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -88,15 +99,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsLeftOfEgoOnDifferentDirection() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane3, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0laneMinus1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane3, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0laneMinus1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -106,15 +116,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsLeftOfEgoButBehind() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane3, positionOnLane = 10.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane3, positionOnLane = 10.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -124,15 +133,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsLeftOfEgoButInFront() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane3, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 10.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane3, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 10.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -142,15 +150,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsOnSameLaneAndBehind() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane1, positionOnLane = 10.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 10.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -160,15 +167,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsOnSameLaneAndInFront() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane1, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road0lane1, positionOnLane = 10.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road0lane1, positionOnLane = 10.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -178,15 +184,14 @@ class RightOfTest {
 
   @Test
   fun vehicleIsOnDifferentRoadAndInLeftOfLaneId() {
-    val ego = emptyVehicle(id = 0, egoVehicle = true, lane = road0lane2, positionOnLane = 0.0)
-    val otherVehicle =
-        emptyVehicle(id = 1, egoVehicle = false, lane = road1lane1, positionOnLane = 0.0)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val otherVehicle = Vehicle(id = 1, isEgo = false, lane = road1lane1, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(ego, otherVehicle))
+            entities = listOf(ego, otherVehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 

@@ -19,192 +19,186 @@ package tools.aqua.stars.carla.experiments.stopType
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyLocation
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyRotation
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyTrafficLight
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.hasRedLight
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
 import tools.aqua.stars.data.av.dataclasses.ContactLaneInfo
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Location
+import tools.aqua.stars.data.av.dataclasses.Road
+import tools.aqua.stars.data.av.dataclasses.Rotation
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.StaticTrafficLight
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.TrafficLight
 import tools.aqua.stars.data.av.dataclasses.TrafficLightState
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class HasRedLightTest {
 
-  private val block = emptyBlock(id = "1")
-
   private val staticTrafficLight01 =
       StaticTrafficLight(
-          id = 10, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 10, location = Location(), rotation = Rotation(), stopLocations = listOf())
   private val staticTrafficLight02 =
       StaticTrafficLight(
-          id = 11, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 11, location = Location(), rotation = Rotation(), stopLocations = listOf())
   private val staticTrafficLight11 =
       StaticTrafficLight(
-          id = 12, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 12, location = Location(), rotation = Rotation(), stopLocations = listOf())
 
-  private val road0 = emptyRoad(id = 0, block = block)
-  private val road0lane1 =
-      emptyLane(
-          laneId = 1,
-          road = road0,
-          laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight01))
-  private val road0lane2 =
-      emptyLane(
-          laneId = 2,
-          road = road0,
-          laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight02))
+  private lateinit var block0: Block
 
-  private val road = emptyRoad(id = -1, block = block)
-  private val contactLaneInfo = ContactLaneInfo(lane = road0lane1)
-  private val roadLane1 =
-      emptyLane(laneId = 1, road = road, successorLanes = listOf(contactLaneInfo))
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
 
-  private val road1 = emptyRoad(id = 1, block = block)
-  private val road1lane1 =
-      emptyLane(
-          laneId = 1,
-          road = road1,
-          laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight11))
+  private lateinit var roadSingle: Road
+  private lateinit var contactLaneInfo: ContactLaneInfo
+  private lateinit var roadLane1: Lane
 
-  private val blocks = listOf(block)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
+
+  private lateinit var blocks: List<Block>
 
   private val egoId = 0
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2)
-    road1.lanes = listOf(road1lane1)
+    // lanes for road0
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0, trafficLights = listOf(staticTrafficLight01))
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0, trafficLights = listOf(staticTrafficLight02))
 
-    block.roads = listOf(road0, road1)
+    // lanes for roadSingle
+    contactLaneInfo = ContactLaneInfo(lane = road0lane1)
+    roadLane1 = Lane(laneId = 1, successorLanes = listOf(contactLaneInfo))
+
+    // lane for road1
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0, trafficLights = listOf(staticTrafficLight11))
+
+    roadSingle = Road(id = -1, lanes = listOf(roadLane1))
+    roadLane1.road = roadSingle
+
+    road0 = Road(id = 0, lanes = listOf(road0lane1, road0lane2))
+    road0lane1.road = road0
+    road0lane2.road = road0
+
+    road1 = Road(id = 1, lanes = listOf(road1lane1))
+    road1lane1.road = road1
+
+    block0 = Block(id = "1", roads = listOf(road0, road1))
+
+    road0.block = block0
+    road1.block = block0
+
+    blocks = listOf(block0)
   }
 
   @Test
   fun laneHasRedLight() {
     val trafficLight =
-        emptyTrafficLight(
+        TrafficLight(
             id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+
+    val ego = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+
+    // 2) create the TickData with that vehicle
     val tickData =
-        emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = blocks,
+            trafficLights = listOf(trafficLight),
+            entities = listOf(ego))
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    // 3) wire back–reference & set speed
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(0.0)
 
-    assert(!hasRedLight.holds(ctx, ego))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasRedLight.holds(ctx, ego) }
   }
 
   @Test
   fun laneHasGreenLight() {
     val trafficLight =
-        emptyTrafficLight(
+        TrafficLight(
             id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+
+    val ego = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
     val tickData =
-        emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = blocks,
+            trafficLights = listOf(trafficLight),
+            entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(0.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasRedLight.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasRedLight.holds(ctx, ego) }
   }
 
   @Test
   fun successorLaneHasRedLight() {
     val trafficLight =
-        emptyTrafficLight(
+        TrafficLight(
             id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+
+    val ego = Vehicle(id = egoId, isEgo = true, lane = roadLane1, positionOnLane = 0.0)
     val tickData =
-        emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = roadLane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = blocks,
+            trafficLights = listOf(trafficLight),
+            entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(0.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(hasRedLight.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertTrue { hasRedLight.holds(ctx, ego) }
   }
 
   @Test
   fun successorLaneHasGreenLight() {
     val trafficLight =
-        emptyTrafficLight(
+        TrafficLight(
             id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+
+    val ego = Vehicle(id = egoId, isEgo = true, lane = roadLane1, positionOnLane = 0.0)
     val tickData =
-        emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = roadLane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = blocks,
+            trafficLights = listOf(trafficLight),
+            entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(0.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasRedLight.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasRedLight.holds(ctx, ego) }
   }
 
   @Test
   fun differentLaneHasRedLight() {
     val trafficLight =
-        emptyTrafficLight(
+        TrafficLight(
             id = 2, relatedOpenDriveId = staticTrafficLight11.id, state = TrafficLightState.Green)
+
+    val ego = Vehicle(id = egoId, isEgo = true, lane = roadLane1, positionOnLane = 0.0)
     val tickData =
-        emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = roadLane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = blocks,
+            trafficLights = listOf(trafficLight),
+            entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(0.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasRedLight.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasRedLight.holds(ctx, ego) }
   }
 }

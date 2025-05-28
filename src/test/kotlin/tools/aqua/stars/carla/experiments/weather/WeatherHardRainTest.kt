@@ -20,14 +20,14 @@ package tools.aqua.stars.carla.experiments.weather
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
-import tools.aqua.stars.carla.experiments.emptyWeatherParameters
 import tools.aqua.stars.carla.experiments.weatherHardRain
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Lane
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
+import tools.aqua.stars.data.av.dataclasses.WeatherParameters
 import tools.aqua.stars.data.av.dataclasses.WeatherType
 
 class WeatherHardRainTest {
@@ -41,9 +41,9 @@ class WeatherHardRainTest {
       if (weatherType == currentWeatherCondition) {
         return@forEach
       }
-      val weatherParameters = emptyWeatherParameters(weatherType)
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(weatherParameters = weatherParameters, actors = listOf(ego))
+      val weatherParameters = WeatherParameters(weatherType)
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(weather = weatherParameters, entities = listOf(ego))
       val segment = Segment(listOf(tick), segmentSource = "")
       val context = PredicateContext(segment)
 
@@ -53,9 +53,9 @@ class WeatherHardRainTest {
 
   @Test
   fun testWeatherConditions() {
-    val weatherParameters = emptyWeatherParameters(currentWeatherCondition)
-    val ego = emptyVehicle(egoVehicle = true)
-    val tick = emptyTickData(weatherParameters = weatherParameters, actors = listOf(ego))
+    val weatherParameters = WeatherParameters(currentWeatherCondition)
+    val ego = Vehicle(isEgo = true, lane = Lane())
+    val tick = TickData(weather = weatherParameters, entities = listOf(ego))
     val segment = Segment(listOf(tick), segmentSource = "")
     val context = PredicateContext(segment)
 
@@ -66,15 +66,15 @@ class WeatherHardRainTest {
   fun testWeatherConditionsOver60Percent() {
     val ticks = mutableListOf<TickData>()
     for (i in 1..6) {
-      val weatherParameters = emptyWeatherParameters(currentWeatherCondition)
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(weatherParameters = weatherParameters, actors = listOf(ego))
+      val weatherParameters = WeatherParameters(currentWeatherCondition)
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(weather = weatherParameters, entities = listOf(ego))
       ticks.add(tick)
     }
     for (i in 1..4) {
-      val weatherParameters = emptyWeatherParameters(otherWeatherCondition)
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(weatherParameters = weatherParameters, actors = listOf(ego))
+      val weatherParameters = WeatherParameters(otherWeatherCondition)
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(weather = weatherParameters, entities = listOf(ego))
       ticks.add(tick)
     }
     val segment = Segment(ticks, segmentSource = "")
@@ -87,23 +87,23 @@ class WeatherHardRainTest {
   fun testWeatherConditionsUnder60Percent() {
     val ticks = mutableListOf<TickData>()
     for (i in 1..5) {
-      val weatherParameters = emptyWeatherParameters(currentWeatherCondition)
-      val ego = emptyVehicle(egoVehicle = true)
+      val weatherParameters = WeatherParameters(currentWeatherCondition)
+      val ego = Vehicle(isEgo = true, lane = Lane())
       val tick =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
-              weatherParameters = weatherParameters,
-              actors = listOf(ego))
+              weather = weatherParameters,
+              entities = listOf(ego))
       ticks.add(tick)
     }
     for (i in 6..10) {
-      val weatherParameters = emptyWeatherParameters(otherWeatherCondition)
-      val ego = emptyVehicle(egoVehicle = true)
+      val weatherParameters = WeatherParameters(otherWeatherCondition)
+      val ego = Vehicle(isEgo = true, lane = Lane())
       val tick =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
-              weatherParameters = weatherParameters,
-              actors = listOf(ego))
+              weather = weatherParameters,
+              entities = listOf(ego))
       ticks.add(tick)
     }
     val segment = Segment(ticks, segmentSource = "")

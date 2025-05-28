@@ -19,348 +19,339 @@ package tools.aqua.stars.carla.experiments.maneuver
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.makesLeftTurn
 import tools.aqua.stars.carla.experiments.makesNoTurn
 import tools.aqua.stars.carla.experiments.makesRightTurn
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
 import tools.aqua.stars.data.av.dataclasses.LaneDirection
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class MakesTurnTest {
+  private lateinit var road0: Road
 
-  private val road0 = emptyRoad(id = 0)
-  private val laneStraight =
-      emptyLane(laneId = 1, road = road0, laneDirection = LaneDirection.STRAIGHT)
-  private val laneLeftTurn =
-      emptyLane(laneId = 2, road = road0, laneDirection = LaneDirection.LEFT_TURN)
-  private val laneRightTurn =
-      emptyLane(laneId = 3, road = road0, laneDirection = LaneDirection.RIGHT_TURN)
-  private val laneUnknown =
-      emptyLane(laneId = 4, road = road0, laneDirection = LaneDirection.UNKNOWN)
+  private lateinit var laneStraight: Lane
+  private lateinit var laneLeftTurn: Lane
+  private lateinit var laneRightTurn: Lane
+  private lateinit var laneUnknown: Lane
 
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
-  private val blocks = listOf(block)
+  private lateinit var blocks: List<Block>
 
   private val egoId = 0
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(laneLeftTurn, laneStraight, laneRightTurn, laneUnknown)
+    laneStraight = Lane(laneId = 1, laneDirection = LaneDirection.STRAIGHT)
+    laneLeftTurn = Lane(laneId = 2, laneDirection = LaneDirection.LEFT_TURN)
+    laneRightTurn = Lane(laneId = 3, laneDirection = LaneDirection.RIGHT_TURN)
+    laneUnknown = Lane(laneId = 4, laneDirection = LaneDirection.UNKNOWN)
 
-    block.roads = listOf(road0)
+    road0 =
+        Road(id = 0, lanes = listOf(laneLeftTurn, laneStraight, laneRightTurn, laneUnknown)).apply {
+          laneStraight.road = this
+          laneLeftTurn.road = this
+          laneRightTurn.road = this
+          laneUnknown.road = this
+        }
+
+    block = Block(roads = listOf(road0))
+    blocks = listOf(block)
   }
 
   @Test
   fun makesLeftTurnTest() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = laneLeftTurn,
-            effVelocityMPH = 11.0,
-            positionOnLane = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = laneLeftTurn, positionOnLane = 0.0)
 
-    assert(makesLeftTurn.holds(ctx, ego))
-    assert(!makesRightTurn.holds(ctx, ego))
-    assert(!makesNoTurn.holds(ctx, ego))
+    // 2) build TickData with ego
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+
+    // 3) wire and set speed
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertTrue { makesLeftTurn.holds(ctx, ego) }
+    assertFalse { makesRightTurn.holds(ctx, ego) }
+    assertFalse { makesNoTurn.holds(ctx, ego) }
   }
 
   @Test
   fun atLeast80TicksLeftTurn() {
-    val tickDataList = mutableListOf<TickData>()
-    for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneLeftTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val tds = mutableListOf<TickData>()
 
-    assert(makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    // first 0–90 ticks on left-turn lane
+    for (i in 0..90) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneLeftTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    // ticks 91–100 on straight lane
+    for (i in 91..100) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertTrue { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun under80TicksLeftTurn() {
-    val tickDataList = mutableListOf<TickData>()
+    val tds = mutableListOf<TickData>()
+
+    // 0–90 ticks all on straight, then 91–100 on left-turn
     for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
       val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
     }
     for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
       val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneLeftTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
+          Vehicle(id = egoId, isEgo = true, lane = laneLeftTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
     }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
 
-    assert(!makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun makesRightTurnTest() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = laneRightTurn,
-            effVelocityMPH = 11.0,
-            positionOnLane = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = laneRightTurn, positionOnLane = 0.0)
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!makesLeftTurn.holds(ctx, ego))
-    assert(makesRightTurn.holds(ctx, ego))
-    assert(!makesNoTurn.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, ego) }
+    assertTrue { makesRightTurn.holds(ctx, ego) }
+    assertFalse { makesNoTurn.holds(ctx, ego) }
   }
 
   @Test
   fun atLeast80TicksRightTurn() {
-    val tickDataList = mutableListOf<TickData>()
-    for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneRightTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val tds = mutableListOf<TickData>()
 
-    assert(!makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    // 0–90 ticks on right-turn lane
+    for (i in 0..90) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneRightTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    // 91–100 on straight
+    for (i in 91..100) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun under80TicksRightTurn() {
-    val tickDataList = mutableListOf<TickData>()
-    for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneRightTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val tds = mutableListOf<TickData>()
 
-    assert(!makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    // 0–90 straight
+    for (i in 0..90) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    // 91–100 right-turn
+    for (i in 91..100) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneRightTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun drivesStraightTest() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = laneStraight,
-            effVelocityMPH = 11.0,
-            positionOnLane = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = 0.0)
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!makesLeftTurn.holds(ctx, ego))
-    assert(!makesRightTurn.holds(ctx, ego))
-    assert(makesNoTurn.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, ego) }
+    assertFalse { makesRightTurn.holds(ctx, ego) }
+    assertTrue { makesNoTurn.holds(ctx, ego) }
   }
 
   @Test
   fun atLeast80TicksStraight() {
-    val tickDataList = mutableListOf<TickData>()
-    for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneLeftTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val tds = mutableListOf<TickData>()
 
-    assert(!makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    // 0–90 straight
+    for (i in 0..90) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    // 91–100 left-turn
+    for (i in 91..100) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneLeftTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun under80TicksStraight() {
-    val tickDataList = mutableListOf<TickData>()
-    for (i in 0..90) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneLeftTurn,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    for (i in 91..100) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = laneStraight,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
-    }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val tds = mutableListOf<TickData>()
 
-    assert(makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(!makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    // 0–90 left-turn
+    for (i in 0..90) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneLeftTurn, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    // 91–100 straight
+    for (i in 91..100) {
+      val ego =
+          Vehicle(id = egoId, isEgo = true, lane = laneStraight, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+      tds += td
+    }
+
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertTrue { makesLeftTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesRightTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { makesNoTurn.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun drivingDirectionUnknown() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = laneUnknown,
-            effVelocityMPH = 11.0,
-            positionOnLane = 0.0,
-            tickData = tickData)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = laneUnknown, positionOnLane = 0.0)
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!makesLeftTurn.holds(ctx, ego))
-    assert(!makesRightTurn.holds(ctx, ego))
-    assert(!makesNoTurn.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { makesLeftTurn.holds(ctx, ego) }
+    assertFalse { makesRightTurn.holds(ctx, ego) }
+    assertFalse { makesNoTurn.holds(ctx, ego) }
   }
 }

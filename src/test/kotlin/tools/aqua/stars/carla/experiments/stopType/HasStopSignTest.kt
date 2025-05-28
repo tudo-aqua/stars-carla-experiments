@@ -19,20 +19,22 @@ package tools.aqua.stars.carla.experiments.stopType
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyLocation
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyRotation
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.hasStopSign
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
 import tools.aqua.stars.data.av.dataclasses.ContactLaneInfo
 import tools.aqua.stars.data.av.dataclasses.Landmark
 import tools.aqua.stars.data.av.dataclasses.LandmarkType
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Location
+import tools.aqua.stars.data.av.dataclasses.Road
+import tools.aqua.stars.data.av.dataclasses.Rotation
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class HasStopSignTest {
   private val stopSign1 =
@@ -46,8 +48,8 @@ class HasStopSignTest {
           value = 0.0,
           unit = "",
           text = "",
-          location = emptyLocation(),
-          rotation = emptyRotation())
+          location = Location(),
+          rotation = Rotation())
   private val stopSign2 =
       Landmark(
           id = 12,
@@ -59,258 +61,206 @@ class HasStopSignTest {
           value = 0.0,
           unit = "",
           text = "",
-          location = emptyLocation(),
-          rotation = emptyRotation())
+          location = Location(),
+          rotation = Rotation())
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road1 = emptyRoad(id = 1)
-  private val road1lane1 =
-      emptyLane(laneId = 1, road = road1, laneLength = 50.0, landmarks = listOf(stopSign1))
-  private val road1lane2 = emptyLane(laneId = 2, road = road1, laneLength = 50.0)
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
 
-  private val road2 = emptyRoad(id = 2)
-  private val road2lane1 =
-      emptyLane(laneId = 1, road = road2, laneLength = 50.0, landmarks = listOf(stopSign2))
-  private val road3 = emptyRoad(id = 2)
-  private val road3lane1 = emptyLane(laneId = 1, road = road3, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
+  private lateinit var road1lane2: Lane
 
-  private val block = emptyBlock()
+  private lateinit var road2: Road
+  private lateinit var road2lane1: Lane
 
-  private val blocks = listOf(block)
+  private lateinit var road3: Road
+  private lateinit var road3lane1: Lane
+
+  private lateinit var block: Block
+  private lateinit var blocks: List<Block>
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1)
-    road1.lanes = listOf(road1lane1, road1lane2)
-    road2.lanes = listOf(road2lane1)
-    road3.lanes = listOf(road3lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0, landmarks = listOf(stopSign1))
+    road1lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road2lane1 = Lane(laneId = 1, laneLength = 50.0, landmarks = listOf(stopSign2))
+    road3lane1 = Lane(laneId = 1, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1, road2, road3)
+    road0 = Road(id = 0, lanes = listOf(road0lane1)).apply { road0lane1.road = this }
+    road1 =
+        Road(id = 1, lanes = listOf(road1lane1, road1lane2)).apply {
+          road1lane1.road = this
+          road1lane2.road = this
+        }
+    road2 = Road(id = 2, lanes = listOf(road2lane1)).apply { road2lane1.road = this }
+    road3 = Road(id = 3, lanes = listOf(road3lane1)).apply { road3lane1.road = this }
+
+    block = Block(roads = listOf(road0, road1, road2, road3))
+    blocks = listOf(block)
 
     road0lane1.successorLanes = listOf(ContactLaneInfo(road1lane1))
     road1lane1.predecessorLanes = listOf(ContactLaneInfo(road0lane1))
-
     road2lane1.successorLanes = listOf(ContactLaneInfo(road3lane1))
     road3lane1.predecessorLanes = listOf(ContactLaneInfo(road2lane1))
   }
 
   @Test
   fun laneHasStopSignIsAtStart() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road1lane1,
-            tickData = tickData,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road1lane1, positionOnLane = 0.0)
 
-    assert(hasStopSign.holds(ctx, ego))
+    // 2) tickData with ego
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+
+    // 3) back‐ref + speed
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertTrue { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun laneHasStopSignIsAtEnd() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
     val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road1lane1,
-            tickData = tickData,
-            positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+        Vehicle(
+            id = 0, isEgo = true, lane = road1lane1, positionOnLane = road0lane1.laneLength - 1.0)
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(hasStopSign.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertTrue { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun laneHasNoStopSignIsAtStart() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasStopSign.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun laneHasNoStopSignIsAtEnd() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
     val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData,
-            positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+        Vehicle(
+            id = 0, isEgo = true, lane = road0lane1, positionOnLane = road0lane1.laneLength - 1.0)
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasStopSign.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun successorLaneHasStopSign() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasStopSign.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun predecessorLaneHasStopSign() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road3lane1,
-            tickData = tickData,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = 0, isEgo = true, lane = road3lane1, positionOnLane = 0.0)
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasStopSign.holds(ctx, ego))
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun otherLaneOfOtherRoadHasStopSign() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
+
     val ego =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road1lane2,
-            tickData = tickData,
-            positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
-    tickData.entities = listOf(ego)
+        Vehicle(
+            id = 0, isEgo = true, lane = road1lane2, positionOnLane = road0lane1.laneLength - 1.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    // 2) tickData with that vehicle
+    val tickData =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
 
-    assert(!hasStopSign.holds(ctx, ego))
+    // 3) wire back-ref and set speed
+    ego.tickData = tickData
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    // 4) assertion
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx, ego) }
   }
 
   @Test
   fun drivesIntoLaneWithStopSign() {
-    // lane without stop sign
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
+    // tick 0: on a lane without a stop sign
     val ego0 =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData0,
-            positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
+        Vehicle(
+            id = 0, isEgo = true, lane = road0lane1, positionOnLane = road0lane1.laneLength - 1.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    val ctx0 = PredicateContext(Segment(listOf(tickData0), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx0, ego0) }
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    // tick 1: on a lane with a stop sign
+    val ego1 = Vehicle(id = 0, isEgo = true, lane = road1lane1, positionOnLane = 0.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    val ctx1 = PredicateContext(Segment(listOf(tickData1), segmentSource = ""))
+    assertTrue { hasStopSign.holds(ctx1, ego1) }
 
-    assert(!hasStopSign.holds(ctx0, ego0))
-
-    // lane with stop sign
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road1lane1,
-            tickData = tickData1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(hasStopSign.holds(ctx1, ego1))
-
-    // Full check
+    // full segment check
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
-
-    assert(hasStopSign.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    assertTrue { hasStopSign.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 
   @Test
   fun drivesFromLaneWithStopSign() {
-    // lane without stop sign
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
+    // tick 0: start on lane WITH a stop sign
     val ego0 =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road2lane1,
-            tickData = tickData0,
-            positionOnLane = road2lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
+        Vehicle(
+            id = 0, isEgo = true, lane = road2lane1, positionOnLane = road2lane1.laneLength - 1.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    val ctx0 = PredicateContext(Segment(listOf(tickData0), segmentSource = ""))
+    assertTrue { hasStopSign.holds(ctx0, ego0) }
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    // tick 1: then move onto a lane without a stop sign
+    val ego1 = Vehicle(id = 0, isEgo = true, lane = road3lane1, positionOnLane = 0.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    val ctx1 = PredicateContext(Segment(listOf(tickData1), segmentSource = ""))
+    assertFalse { hasStopSign.holds(ctx1, ego1) }
 
-    assert(hasStopSign.holds(ctx0, ego0))
-
-    // lane with stop sign
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road3lane1,
-            tickData = tickData1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!hasStopSign.holds(ctx1, ego1))
-
-    // Full check
+    // full segment check
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
-
-    assert(hasStopSign.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    assertTrue { hasStopSign.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 }

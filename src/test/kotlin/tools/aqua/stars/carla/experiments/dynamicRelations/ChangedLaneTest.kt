@@ -19,165 +19,140 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.changedLane
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class ChangedLaneTest {
+  private lateinit var block1: Block
 
-  private val block = emptyBlock(id = "1")
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
 
-  private val road0 = emptyRoad(id = 0, block = block)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road0lane2 = emptyLane(laneId = 2, road = road0, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val road1 = emptyRoad(id = 1, block = block)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
+  private lateinit var block2: Block
 
-  private val block2 = emptyBlock(id = "2")
+  private lateinit var road2: Road
+  private lateinit var road2lane1: Lane
 
-  private val road2 = emptyRoad(id = 2, block = block2)
-  private val road2lane1 = emptyLane(laneId = 1, road = road2, laneLength = 50.0)
-
-  private val blocks = listOf(block, block2)
+  private lateinit var blocks: List<Block>
 
   private val egoId = 0
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2)
-    road1.lanes = listOf(road1lane1)
 
-    block.roads = listOf(road0, road1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road2lane1 = Lane(laneId = 1, laneLength = 50.0)
 
-    road2.lanes = listOf(road2lane1)
+    road0 = Road(id = 0, lanes = listOf(road0lane1, road0lane2))
+    road1 = Road(id = 1, lanes = listOf(road1lane1))
+    road2 = Road(id = 2, lanes = listOf(road2lane1))
 
-    block2.roads = listOf(road2)
+    block1 = Block(roads = listOf(road0, road1))
+    block2 = Block(roads = listOf(road2))
+
+    road0.block = block1
+    road1.block = block1
+    road2.block = block2
+
+    blocks = listOf(block1, block2)
   }
 
   @Test
   fun changedLane() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData0,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
 
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData1,
-            lane = road0lane2,
-            positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 5.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    assert(changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    assertTrue { changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun stayedOnLane() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData0,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
 
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData1,
-            lane = road0lane1,
-            positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 5.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    assert(!changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    assertFalse { changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun changedRoadButToSameLaneId() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData0,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
 
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData1,
-            lane = road1lane1,
-            positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 0.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road1lane1, positionOnLane = 5.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    assert(!changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    assertFalse { changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 
   @Test
   fun changedRoadButToDifferentLaneId() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks)
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData0,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0)
 
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            tickData = tickData1,
-            lane = road1lane1,
-            positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val tickData0 =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego0))
+    ego0.tickData = tickData0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road1lane1, positionOnLane = 5.0)
+    val tickData1 =
+        TickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks, entities = listOf(ego1))
+    ego1.tickData = tickData1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    assert(!changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    assertFalse { changedLane.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 }

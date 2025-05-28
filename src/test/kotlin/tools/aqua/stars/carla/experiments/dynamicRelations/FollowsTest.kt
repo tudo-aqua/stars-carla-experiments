@@ -19,41 +19,60 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.follows
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
 import tools.aqua.stars.data.av.dataclasses.ContactLaneInfo
 import tools.aqua.stars.data.av.dataclasses.Lane
 import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class FollowsTest {
+  private lateinit var road1: Road
+  private lateinit var road2: Road
+  private lateinit var successorRoad: Road
 
-  private val road: Road = emptyRoad(id = 1)
-  private val road2: Road = emptyRoad(id = 2)
-  private val laneRoad2 = emptyLane(laneId = 1, road = road2, laneLength = 50.0)
-  private val lane1 = emptyLane(laneId = 1, road = road, laneLength = 50.0)
-  private val lane2 = emptyLane(laneId = 2, road = road, laneLength = 50.0)
-  private val successorRoad: Road = emptyRoad(id = 3)
-  private val laneSuccessorRoad: Lane = emptyLane(laneId = 1)
-  private val block = emptyBlock()
-  private val vehicle0 = emptyVehicle(egoVehicle = true, id = 0)
-  private val vehicle1 = emptyVehicle(egoVehicle = false, id = 1)
-  private val vehicle2 = emptyVehicle(egoVehicle = false, id = 2)
+  private lateinit var lane1: Lane
+  private lateinit var lane2: Lane
+  private lateinit var laneRoad2: Lane
+  private lateinit var laneSuccessorRoad: Lane
+
+  private lateinit var block: Block
+
+  private lateinit var vehicle0: Vehicle
+  private lateinit var vehicle1: Vehicle
+  private lateinit var vehicle2: Vehicle
 
   @BeforeTest
   fun setup() {
-    road.lanes = listOf(lane1, lane2)
-    road2.lanes = listOf(laneRoad2)
-    successorRoad.lanes = listOf(laneSuccessorRoad)
+    lane1 = Lane(laneId = 1, laneLength = 50.0)
+    lane2 = Lane(laneId = 2, laneLength = 50.0)
+    laneRoad2 = Lane(laneId = 1, laneLength = 50.0)
+    laneSuccessorRoad = Lane(laneId = 1)
+
+    road1 =
+        Road(id = 1, lanes = listOf(lane1, lane2)).apply {
+          lane1.road = this
+          lane2.road = this
+        }
+
+    road2 = Road(id = 2, lanes = listOf(laneRoad2)).apply { laneRoad2.road = this }
+
+    successorRoad =
+        Road(id = 3, lanes = listOf(laneSuccessorRoad)).apply { laneSuccessorRoad.road = this }
+
     lane1.successorLanes = listOf(ContactLaneInfo(laneSuccessorRoad))
-    block.roads = listOf(road, road2)
+
+    block = Block(roads = listOf(road1, road2))
+
+    vehicle0 = Vehicle(isEgo = true, id = 0, lane = lane1)
+    vehicle1 = Vehicle(isEgo = false, id = 1, lane = lane1)
+    vehicle2 = Vehicle(isEgo = false, id = 2, lane = lane1)
   }
 
   @Test
@@ -61,72 +80,70 @@ class FollowsTest {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v1 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+
+      val v1 = Vehicle(isEgo = true, id = vehicle1.id, positionOnLane = i.toDouble(), lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle2.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
-      tickData.entities = listOf(v1, v2)
+          Vehicle(
+              isEgo = false, id = vehicle2.id, positionOnLane = i.toDouble() + 10.0, lane = lane1)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v1, v2))
+
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // Vehicle with id 0 should follow Vehicle with id 1
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
-    assert(follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1]))
+    // Vehicle with id 1 should follow Vehicle with id 2
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
+    assertTrue {
+      follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1])
+    }
 
-    // Vehicle with id 1 should follow Vehicle with id 0
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0]))
+    // Vehicle with id 2 should not follow Vehicle with id 1
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id) }
+    assertFalse {
+      follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0])
+    }
   }
 
   @Test
   fun testFollowsWithTooShortSegment() {
     val tickDataList = mutableListOf<TickData>()
 
-    // The minimum duration for the follows predicate is set to 30.0
+    // minimum duration is 30.0, so only 0..29
     for (i in 0..29) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v1 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+      val v1 = Vehicle(isEgo = true, id = vehicle1.id, positionOnLane = i.toDouble(), lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle2.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
-      tickData.entities = listOf(v1, v2)
+          Vehicle(
+              isEgo = false, id = vehicle2.id, positionOnLane = i.toDouble() + 10.0, lane = lane1)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v1, v2))
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // Vehicle with id 0 should follow Vehicle with id 1
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1]))
-
-    // Vehicle with id 1 should follow Vehicle with id 0
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0]))
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
+    assertFalse {
+      follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1])
+    }
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id) }
   }
 
   @Test
@@ -134,47 +151,38 @@ class FollowsTest {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v1 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle0.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+      val v1 = Vehicle(isEgo = true, id = vehicle0.id, positionOnLane = i.toDouble(), lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+          Vehicle(
+              isEgo = false, id = vehicle1.id, positionOnLane = i.toDouble() + 10.0, lane = lane1)
       val v3 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle2.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 5.0,
-              lane = lane1)
-      tickData.entities = listOf(v1, v2, v3)
+          Vehicle(
+              isEgo = false, id = vehicle2.id, positionOnLane = i.toDouble() + 5.0, lane = lane1)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v1, v2, v3))
+      v1.tickData = tickData
+      v2.tickData = tickData
+      v3.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // Vehicle with id 0 should not follow Vehicle with id 1 as there is some between
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id))
-
-    // Vehicle with id 2 should follow Vehicle with id 1
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id))
-
-    // Vehicle with id 0 should follow Vehicle with id 2
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id))
-
-    // All other combinations should not hold
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle0.id))
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
+    // v0 should not follow v1 (v3 is between)
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id) }
+    // v2 should follow v1
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id) }
+    // v0 should follow v2
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id) }
+    // all other combos false
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle0.id) }
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
   }
 
   @Test
@@ -182,35 +190,36 @@ class FollowsTest {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v1 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle0.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+
+      val v1 = Vehicle(isEgo = true, id = vehicle0.id, positionOnLane = i.toDouble(), lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 10.0,
-              lane = lane2)
-      tickData.entities = listOf(v1, v2)
+          Vehicle(
+              isEgo = false, id = vehicle1.id, positionOnLane = i.toDouble() + 10.0, lane = lane2)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v1, v2))
+
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // Vehicle with id 0 should not follow Vehicle with id 1
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1]))
-
-    // Vehicle with id 1 should not follow Vehicle with id 0
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle0.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0]))
+    // neither follows the other across different lanes
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id) }
+    assertFalse {
+      follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1])
+    }
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle0.id) }
+    assertFalse {
+      follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0])
+    }
   }
 
   @Test
@@ -218,41 +227,36 @@ class FollowsTest {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v0 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle0.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+      val v0 = Vehicle(isEgo = true, id = vehicle0.id, positionOnLane = i.toDouble(), lane = lane1)
       val v1 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = laneRoad2)
+          Vehicle(isEgo = false, id = vehicle1.id, positionOnLane = i.toDouble(), lane = laneRoad2)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
+          Vehicle(
+              isEgo = false,
               id = vehicle2.id,
-              tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
               lane = laneRoad2)
-      tickData.entities = listOf(v0, v1, v2)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v0, v1, v2))
+      v0.tickData = tickData
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // The vehicle with id 0 should not follow either vehicle with id 1 or 2
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id))
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id))
-
-    // The vehicle with id 1 should follow the vehicle with id 2
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
+    // v0 does not follow v1 or v2 across roads
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id) }
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id) }
+    // v1 follows v2 on the same road
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
   }
 
   @Test
@@ -260,78 +264,73 @@ class FollowsTest {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v1 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+      val v1 = Vehicle(isEgo = true, id = vehicle1.id, positionOnLane = i.toDouble(), lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
+          Vehicle(
+              isEgo = false,
               id = vehicle2.id,
-              tickData = tickData,
               positionOnLane = i.toDouble(),
               lane = laneSuccessorRoad)
-      tickData.entities = listOf(v1, v2)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v1, v2))
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // Vehicle with id 0 should follow Vehicle with id 1
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
-    assert(follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1]))
-
-    // Vehicle with id 1 should follow Vehicle with id 0
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id))
-    assert(!follows.holds(ctx, tickDataList.first().vehicles[1], tickDataList.first().vehicles[0]))
+    // v1 follows v2 via successor lane relation
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
+    assertTrue {
+      follows.holds(ctx, tickDataList.first().vehicles[0], tickDataList.first().vehicles[1])
+    }
+    // v2 does not follow v1
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle2.id, vehicle1.id) }
   }
 
   @Test
-  fun testFollowsSuccessorLaneWithSomeOneBetween() {
+  fun testFollowsSuccessorLaneWithSomeoneBetween() {
     val tickDataList = mutableListOf<TickData>()
 
     for (i in 0..30) {
-      val tickData =
-          emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks = listOf(block))
-      val v0 =
-          emptyVehicle(
-              egoVehicle = true,
-              id = vehicle0.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              lane = lane1)
+      val v0 = Vehicle(isEgo = true, id = vehicle0.id, positionOnLane = i.toDouble(), lane = lane1)
       val v1 =
-          emptyVehicle(
-              egoVehicle = false,
-              id = vehicle1.id,
-              tickData = tickData,
-              positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+          Vehicle(
+              isEgo = false, id = vehicle1.id, positionOnLane = i.toDouble() + 10.0, lane = lane1)
       val v2 =
-          emptyVehicle(
-              egoVehicle = false,
+          Vehicle(
+              isEgo = false,
               id = vehicle2.id,
-              tickData = tickData,
               positionOnLane = i.toDouble(),
               lane = laneSuccessorRoad)
-      tickData.entities = listOf(v0, v1, v2)
+
+      val tickData =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = listOf(block),
+              entities = listOf(v0, v1, v2))
+      v0.tickData = tickData
+      v1.tickData = tickData
+      v2.tickData = tickData
+
       tickDataList.add(tickData)
     }
+
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    // The vehicle with id 0 should follow the vehicle with id 1
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id))
-
-    // The vehicle with id 1 should follow the vehicle with id 2
-    assert(follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id))
-
-    // The vehicle with id 0 should not follow the vehicle with id 2
-    assert(!follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id))
+    // v0 follows v1 (same lane, v1 ahead)
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle1.id) }
+    // v1 follows v2 (successor lane)
+    assertTrue { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle1.id, vehicle2.id) }
+    // v0 does NOT follow v2 directly
+    assertFalse { follows.holds(ctx, TickDataUnitSeconds(0.0), vehicle0.id, vehicle2.id) }
   }
 }

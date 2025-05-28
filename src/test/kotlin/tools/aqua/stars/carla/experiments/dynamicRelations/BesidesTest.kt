@@ -20,26 +20,20 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import tools.aqua.stars.carla.experiments.besides
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.data.av.dataclasses.*
 
 class BesidesTest {
+  private lateinit var road0: Road
+  private lateinit var road0Lane1: Lane
+  private lateinit var road0Lane2: Lane
+  private lateinit var road0Lane3: Lane
+  private lateinit var road0LaneNeg1: Lane
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0Lane1 = emptyLane(laneId = 1, road = road0)
-  private val road0Lane2 = emptyLane(laneId = 2, road = road0)
-  private val road0Lane3 = emptyLane(laneId = 3, road = road0)
-  private val road0LaneNeg1 = emptyLane(laneId = -1, road = road0)
+  private lateinit var road1: Road
+  private lateinit var road1Lane1: Lane
 
-  private val road1 = emptyRoad(id = 1)
-  private val road1Lane1 = emptyLane(laneId = 1, road = road1)
-
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
   private val vehicleId0 = 0
   private val vehicleId1 = 1
@@ -47,18 +41,33 @@ class BesidesTest {
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0Lane1, road0Lane2, road0Lane3, road0LaneNeg1)
-    road1.lanes = listOf(road1Lane1)
-    block.roads = listOf(road0, road1)
+    road0Lane1 = Lane(laneId = 1)
+    road0Lane2 = Lane(laneId = 2)
+    road0Lane3 = Lane(laneId = 3)
+    road0LaneNeg1 = Lane(laneId = -1)
+
+    road1Lane1 = Lane(laneId = 1)
+
+    road0 = Road(id = 0, lanes = listOf(road0Lane1, road0Lane2, road0Lane3, road0LaneNeg1))
+    road1 = Road(id = 1, lanes = listOf(road1Lane1))
+    block = Block(roads = listOf(road0, road1))
+
+    road0Lane1.road = road0
+    road0Lane2.road = road0
+    road0Lane3.road = road0
+    road0LaneNeg1.road = road0
+
+    road1Lane1.road = road1
   }
 
   @Test
   fun twoVehiclesBesides() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane2)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane2)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -71,11 +80,12 @@ class BesidesTest {
 
   @Test
   fun twoVehiclesBesidesDifferentDirection() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0LaneNeg1)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0LaneNeg1)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -88,11 +98,12 @@ class BesidesTest {
 
   @Test
   fun vehicleBesidesLeft() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane2)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane1)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane2)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane1)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -105,11 +116,12 @@ class BesidesTest {
 
   @Test
   fun vehicleBesidesRight() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane2)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane3)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane2)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane3)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -122,11 +134,12 @@ class BesidesTest {
 
   @Test
   fun vehicleBesidesWithLaneInBetween() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane3)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane3)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -139,13 +152,15 @@ class BesidesTest {
 
   @Test
   fun besidesForThreeVehiclesNextToEachOther() {
-    val vehicle0 = emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1)
-    val vehicle1 = emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane2)
-    val vehicle2 = emptyVehicle(egoVehicle = false, id = vehicleId2, lane = road0Lane3)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane2)
+    val vehicle2 = Vehicle(isEgo = false, id = vehicleId2, lane = road0Lane3)
 
     val tickData =
-        emptyTickData(
-            TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1, vehicle2))
+        TickData(
+            TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(vehicle0, vehicle1, vehicle2))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -160,13 +175,12 @@ class BesidesTest {
 
   @Test
   fun tooFarAwayInFront() {
-    val vehicle0 =
-        emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1, positionOnLane = 10.0)
-    val vehicle1 =
-        emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane2, positionOnLane = 0.0)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1, positionOnLane = 10.0)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane2, positionOnLane = 0.0)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -177,13 +191,12 @@ class BesidesTest {
 
   @Test
   fun tooFarAwayBehind() {
-    val vehicle0 =
-        emptyVehicle(egoVehicle = true, id = vehicleId0, lane = road0Lane1, positionOnLane = 0.0)
-    val vehicle1 =
-        emptyVehicle(egoVehicle = false, id = vehicleId1, lane = road0Lane2, positionOnLane = 10.0)
+    val vehicle0 = Vehicle(isEgo = true, id = vehicleId0, lane = road0Lane1, positionOnLane = 0.0)
+    val vehicle1 = Vehicle(isEgo = false, id = vehicleId1, lane = road0Lane2, positionOnLane = 10.0)
 
     val tickData =
-        emptyTickData(TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1))
+        TickData(
+            TickDataUnitSeconds(0.0), blocks = listOf(block), entities = listOf(vehicle0, vehicle1))
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)

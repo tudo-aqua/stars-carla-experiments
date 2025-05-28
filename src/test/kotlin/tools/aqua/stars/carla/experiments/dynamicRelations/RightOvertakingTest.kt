@@ -19,1109 +19,642 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.besides
 import tools.aqua.stars.carla.experiments.bothOver10MPH
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.carla.experiments.isBehind
 import tools.aqua.stars.carla.experiments.noRightOvertaking
 import tools.aqua.stars.carla.experiments.rightOf
 import tools.aqua.stars.carla.experiments.rightOvertaking
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class RightOvertakingTest {
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
+  private lateinit var road0lane3: Lane
+  private lateinit var road0laneMinus1: Lane
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road0lane2 = emptyLane(laneId = 2, road = road0, laneLength = 50.0)
-  private val road0lane3 = emptyLane(laneId = 3, road = road0, laneLength = 50.0)
-  private val road0laneMinus1 = emptyLane(laneId = -1, road = road0, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val road1 = emptyRoad(id = 1)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
-
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
   private val egoId = 0
   private val otherId = 1
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2, road0lane3, road0laneMinus1)
-    road1.lanes = listOf(road1lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road0lane3 = Lane(laneId = 3, laneLength = 50.0)
+    road0laneMinus1 = Lane(laneId = -1, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
+
+    road0 =
+        Road(id = 0, lanes = listOf(road0lane1, road0lane2, road0lane3, road0laneMinus1)).apply {
+          road0lane1.road = this
+          road0lane2.road = this
+          road0lane3.road = this
+          road0laneMinus1.road = this
+        }
+
+    road1 = Road(id = 1, lanes = listOf(road1lane1)).apply { road1lane1.road = this }
+
+    block = Block(roads = listOf(road0, road1))
   }
 
   @Test
   fun behindRightOfInFront() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, other0, ego0) }
+    assertTrue { bothOver10MPH.holds(ctx0, ego0, other0) }
+    assertTrue { bothOver10MPH.holds(ctx0, other0, ego0) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, ego0, other0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 13.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 13.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertTrue { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(bothOver10MPH.holds(ctx0, other0, ego0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 20.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane3, positionOnLane = 15.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
 
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1, other1)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertTrue { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(bothOver10MPH.holds(ctx1, other1, ego1))
-
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 20.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, other2, ego2))
-    assert(!isBehind.holds(ctx2, ego2, other2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(bothOver10MPH.holds(ctx2, other2, ego2))
-
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(!noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertTrue { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertFalse { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun behindRightOfBehindLeftOfInFront() {
-    // behind
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { besides.holds(ctx0, other0, ego0) }
+    assertTrue { bothOver10MPH.holds(ctx0, ego0, other0) }
+    assertTrue { bothOver10MPH.holds(ctx0, other0, ego0) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 15.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 15.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, other0, ego0))
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertFalse { rightOf.holds(ctx1, other1, ego1) }
+    assertTrue { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(bothOver10MPH.holds(ctx0, other0, ego0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 18.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 22.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
 
-    // right of
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData1)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 15.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData1)
-    tickData1.entities = listOf(ego1, other1)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, ego2, other2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertTrue { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
+    val ego3 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 25.0)
+    val other3 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 25.0)
+    val td3 =
+        TickData(
+            currentTick = TickDataUnitSeconds(3.0),
+            blocks = listOf(block),
+            entities = listOf(ego3, other3))
+    ego3.tickData = td3
+    ego3.setVelocityFromEffVelocityMPH(11.0)
+    other3.tickData = td3
+    other3.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
+    val ctx3 = PredicateContext(Segment(listOf(td3), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx3, ego3, other3) }
+    assertTrue { rightOf.holds(ctx3, other3, ego3) }
+    assertTrue { besides.holds(ctx3, ego3, other3) }
+    assertTrue { bothOver10MPH.holds(ctx3, ego3, other3) }
 
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
+    val ego4 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 35.0)
+    val other4 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 30.0)
+    val td4 =
+        TickData(
+            currentTick = TickDataUnitSeconds(4.0),
+            blocks = listOf(block),
+            entities = listOf(ego4, other4))
+    ego4.tickData = td4
+    ego4.setVelocityFromEffVelocityMPH(11.0)
+    other4.tickData = td4
+    other4.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
+    val ctx4 = PredicateContext(Segment(listOf(td4), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx4, ego4, other4) }
+    assertTrue { isBehind.holds(ctx4, other4, ego4) }
+    assertFalse { rightOf.holds(ctx4, ego4, other4) }
+    assertFalse { besides.holds(ctx4, ego4, other4) }
+    assertTrue { bothOver10MPH.holds(ctx4, ego4, other4) }
 
-    assert(bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(bothOver10MPH.holds(ctx1, other1, ego1))
-
-    // behind
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 18.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData2)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 22.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData2)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, ego2, other2))
-    assert(!isBehind.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(bothOver10MPH.holds(ctx2, other2, ego2))
-
-    // left of
-    val tickData3 = emptyTickData(currentTick = TickDataUnitSeconds(3.0), blocks = listOf(block))
-    val ego3 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 25.0,
-            tickData = tickData3,
-            effVelocityMPH = 11.0)
-    val other3 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 25.0,
-            tickData = tickData3,
-            effVelocityMPH = 11.0)
-    tickData3.entities = listOf(ego3, other3)
-
-    val segment3 = Segment(listOf(tickData3), segmentSource = "")
-    val ctx3 = PredicateContext(segment3)
-
-    assert(!isBehind.holds(ctx3, ego3, other3))
-    assert(!isBehind.holds(ctx3, other3, ego3))
-
-    assert(!rightOf.holds(ctx3, ego3, other3))
-    assert(rightOf.holds(ctx3, other3, ego3))
-
-    assert(besides.holds(ctx3, ego3, other3))
-    assert(besides.holds(ctx3, other3, ego3))
-
-    assert(bothOver10MPH.holds(ctx3, ego3, other3))
-    assert(bothOver10MPH.holds(ctx3, other3, ego3))
-
-    // in front of
-    val tickData4 = emptyTickData(currentTick = TickDataUnitSeconds(4.0), blocks = listOf(block))
-    val ego4 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 35.0,
-            tickData = tickData4,
-            effVelocityMPH = 11.0)
-    val other4 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 30.0,
-            tickData = tickData4,
-            effVelocityMPH = 11.0)
-    tickData4.entities = listOf(ego4, other4)
-
-    val segment4 = Segment(listOf(tickData4), segmentSource = "")
-    val ctx4 = PredicateContext(segment4)
-
-    assert(!isBehind.holds(ctx4, ego4, other4))
-    assert(isBehind.holds(ctx4, other4, ego4))
-
-    assert(!besides.holds(ctx4, ego4, other4))
-    assert(!besides.holds(ctx4, other4, ego4))
-
-    assert(!rightOf.holds(ctx4, ego4, other4))
-    assert(!rightOf.holds(ctx4, other4, ego4))
-
-    assert(bothOver10MPH.holds(ctx4, ego4, other4))
-    assert(bothOver10MPH.holds(ctx4, other4, ego4))
-
-    val segment =
-        Segment(listOf(tickData0, tickData1, tickData2, tickData3, tickData4), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2, td3, td4), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun behindLeftOfInFront() {
-    // behind
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            tickData = tickData0,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            tickData = tickData0,
-            positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 5.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertTrue { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 10.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, other1, ego1) }
+    assertTrue { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(bothOver10MPH.holds(ctx0, other0, ego0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 15.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 12.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
 
-    // left of
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData1,
-            positionOnLane = 10.0,
-            effVelocityMPH = 11.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            tickData = tickData1,
-            positionOnLane = 10.0,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1, other1)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx2, ego2, other2) }
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertTrue { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(!rightOf.holds(ctx1, ego1, other1))
-    assert(rightOf.holds(ctx1, other1, ego1))
-
-    assert(bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(bothOver10MPH.holds(ctx1, other1, ego1))
-
-    // in front
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            tickData = tickData2,
-            positionOnLane = 15.0,
-            effVelocityMPH = 11.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            tickData = tickData2,
-            positionOnLane = 12.0,
-            effVelocityMPH = 11.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(!isBehind.holds(ctx2, ego2, other2))
-    assert(isBehind.holds(ctx2, other2, ego2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(bothOver10MPH.holds(ctx2, other2, ego2))
-
-    // Full check
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun behindLeftOfBehindRightOfInFront() {
-    // behind
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { besides.holds(ctx0, other0, ego0) }
+    assertTrue { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 15.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 15.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, other0, ego0))
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, other1, ego1) }
+    assertTrue { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(bothOver10MPH.holds(ctx0, other0, ego0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 18.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 22.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
 
-    // left of
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 15.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData1)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 15.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData1)
-    tickData1.entities = listOf(ego1, other1)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, ego2, other2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertTrue { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
+    val ego3 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 25.0)
+    val other3 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 25.0)
+    val td3 =
+        TickData(
+            currentTick = TickDataUnitSeconds(3.0),
+            blocks = listOf(block),
+            entities = listOf(ego3, other3))
+    ego3.tickData = td3
+    ego3.setVelocityFromEffVelocityMPH(11.0)
+    other3.tickData = td3
+    other3.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
+    val ctx3 = PredicateContext(Segment(listOf(td3), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx3, ego3, other3) }
+    assertTrue { rightOf.holds(ctx3, ego3, other3) }
+    assertTrue { besides.holds(ctx3, ego3, other3) }
+    assertTrue { bothOver10MPH.holds(ctx3, ego3, other3) }
 
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
+    val ego4 = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 35.0)
+    val other4 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 30.0)
+    val td4 =
+        TickData(
+            currentTick = TickDataUnitSeconds(4.0),
+            blocks = listOf(block),
+            entities = listOf(ego4, other4))
+    ego4.tickData = td4
+    ego4.setVelocityFromEffVelocityMPH(11.0)
+    other4.tickData = td4
+    other4.setVelocityFromEffVelocityMPH(11.0)
 
-    assert(!rightOf.holds(ctx1, ego1, other1))
-    assert(rightOf.holds(ctx1, other1, ego1))
+    val ctx4 = PredicateContext(Segment(listOf(td4), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx4, ego4, other4) }
+    assertTrue { isBehind.holds(ctx4, other4, ego4) }
+    assertFalse { besides.holds(ctx4, ego4, other4) }
+    assertFalse { rightOf.holds(ctx4, ego4, other4) }
+    assertTrue { bothOver10MPH.holds(ctx4, ego4, other4) }
 
-    assert(bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(bothOver10MPH.holds(ctx1, other1, ego1))
-
-    // behind
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 18.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData2)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 22.0,
-            effVelocityMPH = 11.0,
-            tickData = tickData2)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, ego2, other2))
-    assert(!isBehind.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(bothOver10MPH.holds(ctx2, other2, ego2))
-
-    // right of
-    val tickData3 = emptyTickData(currentTick = TickDataUnitSeconds(3.0), blocks = listOf(block))
-    val ego3 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 25.0,
-            tickData = tickData3,
-            effVelocityMPH = 11.0)
-    val other3 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 25.0,
-            tickData = tickData3,
-            effVelocityMPH = 11.0)
-    tickData3.entities = listOf(ego3, other3)
-
-    val segment3 = Segment(listOf(tickData3), segmentSource = "")
-    val ctx3 = PredicateContext(segment3)
-
-    assert(!isBehind.holds(ctx3, ego3, other3))
-    assert(!isBehind.holds(ctx3, other3, ego3))
-
-    assert(rightOf.holds(ctx3, ego3, other3))
-    assert(!rightOf.holds(ctx3, other3, ego3))
-
-    assert(besides.holds(ctx3, ego3, other3))
-    assert(besides.holds(ctx3, other3, ego3))
-
-    assert(bothOver10MPH.holds(ctx3, ego3, other3))
-    assert(bothOver10MPH.holds(ctx3, other3, ego3))
-
-    // in front of
-    val tickData4 = emptyTickData(currentTick = TickDataUnitSeconds(4.0), blocks = listOf(block))
-    val ego4 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 35.0,
-            tickData = tickData4,
-            effVelocityMPH = 11.0)
-    val other4 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 30.0,
-            tickData = tickData4,
-            effVelocityMPH = 11.0)
-    tickData4.entities = listOf(ego4, other4)
-
-    val segment4 = Segment(listOf(tickData4), segmentSource = "")
-    val ctx4 = PredicateContext(segment4)
-
-    assert(!isBehind.holds(ctx4, ego4, other4))
-    assert(isBehind.holds(ctx4, other4, ego4))
-
-    assert(!besides.holds(ctx4, ego4, other4))
-    assert(!besides.holds(ctx4, other4, ego4))
-
-    assert(!rightOf.holds(ctx4, ego4, other4))
-    assert(!rightOf.holds(ctx4, other4, ego4))
-
-    assert(bothOver10MPH.holds(ctx4, ego4, other4))
-    assert(bothOver10MPH.holds(ctx4, other4, ego4))
-
-    val segment =
-        Segment(listOf(tickData0, tickData1, tickData2, tickData3, tickData4), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(!noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    // final assertions over full segment
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2, td3, td4), segmentSource = ""))
+    assertTrue { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertFalse { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun slowlyOvertakingRight() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            tickData = tickData0,
-            effVelocityMPH = 9.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(9.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 13.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 13.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(9.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertFalse { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, ego0, other0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 20.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane3, positionOnLane = 15.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(9.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertFalse { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
-
-    assert(!bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(!bothOver10MPH.holds(ctx0, other0, ego0))
-
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 9.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1, other1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(!bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(!bothOver10MPH.holds(ctx1, other1, ego1))
-
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 20.0,
-            tickData = tickData2,
-            effVelocityMPH = 9.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, other2, ego2))
-    assert(!isBehind.holds(ctx2, ego2, other2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(!bothOver10MPH.holds(ctx2, other2, ego2))
-
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun rightOvertakingOfSlowVehicle() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            tickData = tickData0,
-            effVelocityMPH = 9.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(9.0)
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 13.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 13.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(9.0)
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertFalse { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, ego0, other0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 20.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane3, positionOnLane = 15.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(9.0)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertFalse { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
-
-    assert(!bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(!bothOver10MPH.holds(ctx0, other0, ego0))
-
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 9.0)
-    tickData1.entities = listOf(ego1, other1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(!bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(!bothOver10MPH.holds(ctx1, other1, ego1))
-
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 20.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            tickData = tickData2,
-            effVelocityMPH = 9.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, other2, ego2))
-    assert(!isBehind.holds(ctx2, ego2, other2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(!bothOver10MPH.holds(ctx2, other2, ego2))
-
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun rightOvertakingOfStandingVehicle() {
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            tickData = tickData0,
-            effVelocityMPH = 0.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(0.0)
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { isBehind.holds(ctx0, other0, ego0) }
+    assertFalse { besides.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertFalse { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 13.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 13.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(11.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(0.0)
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertFalse { isBehind.holds(ctx1, ego1, other1) }
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertTrue { besides.holds(ctx1, ego1, other1) }
+    assertFalse { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, ego0, other0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 20.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane3, positionOnLane = 15.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(11.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(0.0)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { rightOf.holds(ctx2, ego2, other2) }
+    assertFalse { besides.holds(ctx2, ego2, other2) }
+    assertFalse { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
-
-    assert(!bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(!bothOver10MPH.holds(ctx0, other0, ego0))
-
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 0.0)
-    tickData1.entities = listOf(ego1, other1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(!bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(!bothOver10MPH.holds(ctx1, other1, ego1))
-
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 20.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            tickData = tickData2,
-            effVelocityMPH = 0.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, other2, ego2))
-    assert(!isBehind.holds(ctx2, ego2, other2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(!bothOver10MPH.holds(ctx2, other2, ego2))
-
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 
   @Test
   fun slowedDownWhileRightOf() {
-    // behind
-    val tickData0 = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val ego0 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 0.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    val other0 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 10.0,
-            tickData = tickData0,
-            effVelocityMPH = 11.0)
-    tickData0.entities = listOf(ego0, other0)
 
-    val segment0 = Segment(listOf(tickData0), segmentSource = "")
-    val ctx0 = PredicateContext(segment0)
+    val ego0 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 0.0)
+    val other0 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 10.0)
+    val td0 =
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block),
+            entities = listOf(ego0, other0))
+    ego0.tickData = td0
+    ego0.setVelocityFromEffVelocityMPH(11.0)
+    other0.tickData = td0
+    other0.setVelocityFromEffVelocityMPH(11.0)
+    val ctx0 = PredicateContext(Segment(listOf(td0), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx0, ego0, other0) }
+    assertFalse { rightOf.holds(ctx0, ego0, other0) }
+    assertTrue { bothOver10MPH.holds(ctx0, ego0, other0) }
 
-    assert(isBehind.holds(ctx0, ego0, other0))
-    assert(!isBehind.holds(ctx0, other0, ego0))
+    val ego1 = Vehicle(id = egoId, isEgo = true, lane = road0lane3, positionOnLane = 13.0)
+    val other1 = Vehicle(id = otherId, isEgo = false, lane = road0lane2, positionOnLane = 13.0)
+    val td1 =
+        TickData(
+            currentTick = TickDataUnitSeconds(1.0),
+            blocks = listOf(block),
+            entities = listOf(ego1, other1))
+    ego1.tickData = td1
+    ego1.setVelocityFromEffVelocityMPH(10.0)
+    other1.tickData = td1
+    other1.setVelocityFromEffVelocityMPH(11.0)
+    val ctx1 = PredicateContext(Segment(listOf(td1), segmentSource = ""))
+    assertTrue { rightOf.holds(ctx1, ego1, other1) }
+    assertFalse { bothOver10MPH.holds(ctx1, ego1, other1) }
 
-    assert(!besides.holds(ctx0, ego0, other0))
-    assert(!besides.holds(ctx0, ego0, other0))
+    val ego2 = Vehicle(id = egoId, isEgo = true, lane = road0lane2, positionOnLane = 20.0)
+    val other2 = Vehicle(id = otherId, isEgo = false, lane = road0lane3, positionOnLane = 15.0)
+    val td2 =
+        TickData(
+            currentTick = TickDataUnitSeconds(2.0),
+            blocks = listOf(block),
+            entities = listOf(ego2, other2))
+    ego2.tickData = td2
+    ego2.setVelocityFromEffVelocityMPH(9.0)
+    other2.tickData = td2
+    other2.setVelocityFromEffVelocityMPH(11.0)
+    val ctx2 = PredicateContext(Segment(listOf(td2), segmentSource = ""))
+    assertTrue { isBehind.holds(ctx2, other2, ego2) }
+    assertFalse { bothOver10MPH.holds(ctx2, ego2, other2) }
 
-    assert(!rightOf.holds(ctx0, ego0, other0))
-    assert(!rightOf.holds(ctx0, other0, ego0))
-
-    assert(bothOver10MPH.holds(ctx0, ego0, other0))
-    assert(bothOver10MPH.holds(ctx0, other0, ego0))
-
-    // right of
-    val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = listOf(block))
-    val ego1 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane3,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 10.0)
-    val other1 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane2,
-            positionOnLane = 13.0,
-            tickData = tickData1,
-            effVelocityMPH = 11.0)
-    tickData1.entities = listOf(ego1, other1)
-
-    val segment1 = Segment(listOf(tickData1), segmentSource = "")
-    val ctx1 = PredicateContext(segment1)
-
-    assert(!isBehind.holds(ctx1, ego1, other1))
-    assert(!isBehind.holds(ctx1, other1, ego1))
-
-    assert(rightOf.holds(ctx1, ego1, other1))
-    assert(!rightOf.holds(ctx1, other1, ego1))
-
-    assert(besides.holds(ctx1, ego1, other1))
-    assert(besides.holds(ctx1, other1, ego1))
-
-    assert(!bothOver10MPH.holds(ctx1, ego1, other1))
-    assert(!bothOver10MPH.holds(ctx1, other1, ego1))
-
-    // in front
-    val tickData2 = emptyTickData(currentTick = TickDataUnitSeconds(2.0), blocks = listOf(block))
-    val ego2 =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane2,
-            positionOnLane = 20.0,
-            tickData = tickData2,
-            effVelocityMPH = 9.0)
-    val other2 =
-        emptyVehicle(
-            id = otherId,
-            egoVehicle = false,
-            lane = road0lane3,
-            positionOnLane = 15.0,
-            tickData = tickData2,
-            effVelocityMPH = 11.0)
-    tickData2.entities = listOf(ego2, other2)
-
-    val segment2 = Segment(listOf(tickData2), segmentSource = "")
-    val ctx2 = PredicateContext(segment2)
-
-    assert(isBehind.holds(ctx2, other2, ego2))
-    assert(!isBehind.holds(ctx2, ego2, other2))
-
-    assert(!besides.holds(ctx2, ego2, other2))
-    assert(!besides.holds(ctx2, other2, ego2))
-
-    assert(!rightOf.holds(ctx2, ego2, other2))
-    assert(!rightOf.holds(ctx2, other2, ego2))
-
-    assert(!bothOver10MPH.holds(ctx2, ego2, other2))
-    assert(!bothOver10MPH.holds(ctx2, other2, ego2))
-
-    val segment = Segment(listOf(tickData0, tickData1, tickData2), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId, otherId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-
-    assert(!rightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId, egoId))
-    assert(noRightOvertaking.holds(ctx, TickDataUnitSeconds(0.0), otherId))
+    val fullCtx = PredicateContext(Segment(listOf(td0, td1, td2), segmentSource = ""))
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId, otherId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), egoId) }
+    assertFalse { rightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId, egoId) }
+    assertTrue { noRightOvertaking.holds(fullCtx, TickDataUnitSeconds(0.0), otherId) }
   }
 }

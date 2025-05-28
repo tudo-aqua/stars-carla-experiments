@@ -19,188 +19,206 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyPedestrian
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.pedestrianCrossed
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Pedestrian
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class PedestrianCrossedTest {
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
+  private lateinit var road0lane3: Lane
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road0lane2 = emptyLane(laneId = 2, road = road0, laneLength = 50.0)
-  private val road0lane3 = emptyLane(laneId = 3, road = road0, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val road1 = emptyRoad(id = 1)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
-
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2, road0lane3)
-    road1.lanes = listOf(road1lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road0lane3 = Lane(laneId = 3, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
+
+    road0 =
+        Road(id = 0, lanes = listOf(road0lane1, road0lane2, road0lane3)).apply {
+          road0lane1.road = this
+          road0lane2.road = this
+          road0lane3.road = this
+        }
+
+    road1 = Road(id = 1, lanes = listOf(road1lane1)).apply { road1lane1.road = this }
+
+    block = Block(roads = listOf(road0, road1))
   }
 
   @Test
   fun pedestrianCrossed() {
     val tickDataList = mutableListOf<TickData>()
     for (i in 0..3) {
+
+      val ego =
+          Vehicle(
+              id = 0, isEgo = true, positionOnLane = road0lane1.laneLength - 3.0, lane = road0lane1)
+      val pedestrianLane =
+          when (i) {
+            1 -> road0lane3
+            2 -> road0lane2
+            else -> road0lane1
+          }
+      val pedestrian =
+          Pedestrian(
+              id = 1, lane = pedestrianLane, positionOnLane = pedestrianLane.laneLength - 1.0)
+
       val tickData =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
-      val ego =
-          emptyVehicle(
-              id = 0,
-              egoVehicle = true,
-              positionOnLane = road0lane1.laneLength - 3.0,
-              lane = road0lane1,
-              tickData = tickData)
-      val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
-      val pedestrian =
-          emptyPedestrian(
-              id = 1,
-              lane = pedestrianLane,
-              positionOnLane = pedestrianLane.laneLength - 1.0,
-              tickData = tickData)
-      tickData.entities = listOf(ego, pedestrian)
+              entities = listOf(ego, pedestrian))
+
+      ego.tickData = tickData
+      pedestrian.tickData = tickData
+
       tickDataList.add(tickData)
     }
     val segment = Segment(tickDataList, segmentSource = "")
     val ctx = PredicateContext(segment)
 
-    assert(pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    assertTrue { pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 
   @Test
   fun pedestrianCrossedTooEarly() {
     val tickDataList = mutableListOf<TickData>()
     for (i in 0..3) {
+      val ego =
+          Vehicle(
+              id = 0,
+              isEgo = true,
+              positionOnLane = road0lane1.laneLength - 20.0,
+              lane = road0lane1)
+      val pedestrianLane =
+          when (i) {
+            1 -> road0lane3
+            2 -> road0lane2
+            else -> road0lane1
+          }
+      val pedestrian =
+          Pedestrian(
+              id = 1, lane = pedestrianLane, positionOnLane = pedestrianLane.laneLength - 1.0)
+
       val tickData =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
-      val ego =
-          emptyVehicle(
-              id = 0,
-              egoVehicle = true,
-              positionOnLane = road0lane1.laneLength - 20.0,
-              lane = road0lane1,
-              tickData = tickData)
-      val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
-      val pedestrian =
-          emptyPedestrian(
-              id = 1,
-              lane = pedestrianLane,
-              positionOnLane = pedestrianLane.laneLength - 1.0,
-              tickData = tickData)
-      tickData.entities = listOf(ego, pedestrian)
+              entities = listOf(ego, pedestrian))
+      ego.tickData = tickData
+      pedestrian.tickData = tickData
+
       tickDataList.add(tickData)
     }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    val ctx = PredicateContext(Segment(tickDataList, segmentSource = ""))
+    assertFalse { pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 
   @Test
   fun pedestrianCrossedTooLate() {
     val tickDataList = mutableListOf<TickData>()
     for (i in 0..3) {
+      val ego =
+          Vehicle(
+              id = 0,
+              isEgo = true,
+              positionOnLane = road0lane1.laneLength - 20.0,
+              lane = road0lane1)
+      val pedestrianLane =
+          when (i) {
+            1 -> road0lane3
+            2 -> road0lane2
+            else -> road0lane1
+          }
+      val pedestrian =
+          Pedestrian(
+              id = 1, lane = pedestrianLane, positionOnLane = pedestrianLane.laneLength - 30.0)
+
       val tickData =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
-      val ego =
-          emptyVehicle(
-              id = 0,
-              egoVehicle = true,
-              positionOnLane = road0lane1.laneLength - 20.0,
-              lane = road0lane1,
-              tickData = tickData)
-      val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
-      val pedestrian =
-          emptyPedestrian(
-              id = 1,
-              lane = pedestrianLane,
-              positionOnLane = pedestrianLane.laneLength - 30.0,
-              tickData = tickData)
-      tickData.entities = listOf(ego, pedestrian)
+              entities = listOf(ego, pedestrian))
+      ego.tickData = tickData
+      pedestrian.tickData = tickData
+
       tickDataList.add(tickData)
     }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    val ctx = PredicateContext(Segment(tickDataList, segmentSource = ""))
+    assertFalse { pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 
   @Test
   fun noPedestrianCrossed() {
     val tickDataList = mutableListOf<TickData>()
     for (i in 0..3) {
+      val ego =
+          Vehicle(
+              id = 0,
+              isEgo = true,
+              positionOnLane = road0lane1.laneLength - 20.0,
+              lane = road0lane1)
+
       val tickData =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
-      val ego =
-          emptyVehicle(
-              id = 0,
-              egoVehicle = true,
-              positionOnLane = road0lane1.laneLength - 20.0,
-              lane = road0lane1,
-              tickData = tickData)
-      tickData.entities = listOf(ego)
+              entities = listOf(ego))
+      ego.tickData = tickData
+
       tickDataList.add(tickData)
     }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    val ctx = PredicateContext(Segment(tickDataList, segmentSource = ""))
+    assertFalse { pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 
   @Test
   fun vehicleCrossed() {
     val tickDataList = mutableListOf<TickData>()
     for (i in 0..3) {
+      val ego =
+          Vehicle(
+              id = 0, isEgo = true, positionOnLane = road0lane1.laneLength - 3.0, lane = road0lane1)
+      val otherVehicleLane =
+          when (i) {
+            1 -> road0lane3
+            2 -> road0lane2
+            else -> road0lane1
+          }
+      val otherVehicle =
+          Vehicle(
+              id = 1, lane = otherVehicleLane, positionOnLane = otherVehicleLane.laneLength - 1.0)
+
       val tickData =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
-      val ego =
-          emptyVehicle(
-              id = 0,
-              egoVehicle = true,
-              positionOnLane = road0lane1.laneLength - 3.0,
-              lane = road0lane1,
-              tickData = tickData)
-      val otherVehicleLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
-      val otherVehicle =
-          emptyVehicle(
-              id = 1,
-              lane = otherVehicleLane,
-              positionOnLane = otherVehicleLane.laneLength - 1.0,
-              tickData = tickData)
-      tickData.entities = listOf(ego, otherVehicle)
+              entities = listOf(ego, otherVehicle))
+      ego.tickData = tickData
+      otherVehicle.tickData = tickData
+
       tickDataList.add(tickData)
     }
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0))
+    val ctx = PredicateContext(Segment(tickDataList, segmentSource = ""))
+    // since it's a Vehicle, not Pedestrian, predicate should be false
+    assertFalse { pedestrianCrossed.holds(ctx, TickDataUnitSeconds(0.0), 0) }
   }
 }

@@ -19,229 +19,234 @@ package tools.aqua.stars.carla.experiments.trafficDensity
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.hasHighTrafficDensity
 import tools.aqua.stars.carla.experiments.hasLowTrafficDensity
 import tools.aqua.stars.carla.experiments.hasMidTrafficDensity
 import tools.aqua.stars.core.evaluation.PredicateContext
-import tools.aqua.stars.data.av.dataclasses.Actor
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class TrafficDensityTest {
 
-  private val block = emptyBlock(id = "1")
+  private lateinit var block0: Block
+  private lateinit var block2: Block
 
-  private val road0 = emptyRoad(id = 0, block = block)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
 
-  private val road1 = emptyRoad(id = 1, block = block)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val block2 = emptyBlock(id = "2")
-
-  private val road2 = emptyRoad(id = 2, block = block2)
-  private val road2lane1 = emptyLane(laneId = 1, road = road2, laneLength = 50.0)
+  private lateinit var road2: Road
+  private lateinit var road2lane1: Lane
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1)
-    road1.lanes = listOf(road1lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road2lane1 = Lane(laneId = 1, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1)
+    road0 = Road(id = 0, lanes = listOf(road0lane1))
+    road0lane1.road = road0
 
-    road2.lanes = listOf(road2lane1)
+    road1 = Road(id = 1, lanes = listOf(road1lane1))
+    road1lane1.road = road1
 
-    block2.roads = listOf(road2)
+    block0 = Block(id = "1", roads = listOf(road0, road1))
+    road0.block = block0
+    road1.block = block0
+
+    road2 = Road(id = 2, lanes = listOf(road2lane1))
+    road2lane1.road = road2
+
+    block2 = Block(id = "2", roads = listOf(road2))
+    road2.block = block2
   }
 
   @Test
   fun hasLowTrafficDensity() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..5) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
+
+    val actors =
+        (1..5).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+
+    // 2) single TickData containing them all
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block0), entities = actors)
+
+    // 3) wire back‐refs and speed
+    actors.forEach {
+      it.apply {
+        tickData = td
+        setVelocityFromEffVelocityMPH(11.0)
+      }
     }
-    tickData.entities = actors
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertTrue { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 
   @Test
   fun hasMidTrafficDensity() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..10) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
+
+    val actors =
+        (1..10).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+
+    // 2) single TickData containing them all
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block0), entities = actors)
+
+    // 3) wire back‐refs and speed
+    actors.forEach {
+      it.apply {
+        tickData = td
+        setVelocityFromEffVelocityMPH(11.0)
+      }
     }
-    tickData.entities = actors
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertTrue { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 
   @Test
   fun hasHighTrafficDensity() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..20) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
+
+    val actors =
+        (1..20).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+
+    // 2) single TickData containing them all
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block0), entities = actors)
+
+    // 3) wire back‐refs and speed
+    actors.forEach {
+      it.apply {
+        tickData = td
+        setVelocityFromEffVelocityMPH(11.0)
+      }
     }
-    tickData.entities = actors
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(!hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertTrue { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 
   @Test
   fun hasLowTrafficAndOtherBlockHasHighTrafficDensity() {
+
+    val egoBlockActors =
+        (1..5).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+    val otherBlockActors =
+        (6..25).map { i ->
+          Vehicle(id = i, isEgo = false, lane = road2lane1, positionOnLane = i.toDouble())
+        }
+    val allActors = egoBlockActors + otherBlockActors
+
+    // 2) build TickData with both blocks
     val tickData =
-        emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block, block2))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..5) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    for (i in 6..25) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = false,
-              lane = road2lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    tickData.entities = actors
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block0, block2),
+            entities = allActors)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    // 3) wire back–references and set speed
+    allActors.forEach {
+      it.tickData = tickData
+      it.setVelocityFromEffVelocityMPH(11.0)
+    }
 
-    assert(hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertTrue { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 
   @Test
   fun hasMidTrafficAndOtherBlockHasHighTrafficDensity() {
+
+    val egoBlockActors =
+        (1..10).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+    val otherBlockActors =
+        (11..100).map { i ->
+          Vehicle(id = i, isEgo = false, lane = road2lane1, positionOnLane = i.toDouble())
+        }
+    val allActors = egoBlockActors + otherBlockActors
+
+    // 2) build TickData with both blocks
     val tickData =
-        emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block, block2))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..10) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    for (i in 11..100) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = false,
-              lane = road2lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    tickData.entities = actors
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block0, block2),
+            entities = allActors)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    // 3) wire back–references and set speed
+    allActors.forEach {
+      it.tickData = tickData
+      it.setVelocityFromEffVelocityMPH(11.0)
+    }
 
-    assert(!hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertTrue { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 
   @Test
   fun hasHighTrafficAndOtherBlockHasLowTrafficDensity() {
+
+    val egoBlockActors =
+        (1..20).map { i ->
+          Vehicle(id = i, isEgo = i == 1, lane = road0lane1, positionOnLane = i.toDouble())
+        }
+    val otherBlockActors =
+        (21..25).map { i ->
+          Vehicle(id = i, isEgo = false, lane = road2lane1, positionOnLane = i.toDouble())
+        }
+    val allActors = egoBlockActors + otherBlockActors
+
+    // 2) build TickData with both blocks
     val tickData =
-        emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block, block2))
-    val actors = mutableListOf<Actor>()
-    for (i in 1..20) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = i == 1,
-              lane = road0lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    for (i in 11..15) {
-      val vehicle =
-          emptyVehicle(
-              id = i,
-              egoVehicle = false,
-              lane = road2lane1,
-              tickData = tickData,
-              positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
-      actors += vehicle
-    }
-    tickData.entities = actors
+        TickData(
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks = listOf(block0, block2),
+            entities = allActors)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    // 3) wire back–references and set speed
+    allActors.forEach {
+      it.tickData = tickData
+      it.setVelocityFromEffVelocityMPH(11.0)
+    }
 
-    assert(!hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(!hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
-    assert(hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1))
+    // 4) assert
+    val ctx = PredicateContext(Segment(listOf(tickData), segmentSource = ""))
+    assertFalse { hasLowTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertFalse { hasMidTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
+    assertTrue { hasHighTrafficDensity.holds(ctx, TickDataUnitSeconds(0.0), 1) }
   }
 }

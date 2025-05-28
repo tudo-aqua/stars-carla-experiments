@@ -20,14 +20,14 @@ package tools.aqua.stars.carla.experiments.timeOfDay
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.carla.experiments.noon
 import tools.aqua.stars.core.evaluation.PredicateContext
 import tools.aqua.stars.data.av.dataclasses.Daytime
+import tools.aqua.stars.data.av.dataclasses.Lane
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class DaytimeNoonTest {
 
@@ -40,8 +40,8 @@ class DaytimeNoonTest {
       if (daytime == currentDaytime) {
         return@forEach
       }
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(daytime = daytime, actors = listOf(ego))
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(daytime = daytime, entities = listOf(ego))
       val segment = Segment(listOf(tick), segmentSource = "")
       val context = PredicateContext(segment)
 
@@ -51,8 +51,8 @@ class DaytimeNoonTest {
 
   @Test
   fun testDaytime() {
-    val ego = emptyVehicle(egoVehicle = true)
-    val tick = emptyTickData(daytime = currentDaytime, actors = listOf(ego))
+    val ego = Vehicle(isEgo = true, lane = Lane())
+    val tick = TickData(daytime = currentDaytime, entities = listOf(ego))
     val segment = Segment(listOf(tick), segmentSource = "")
     val context = PredicateContext(segment)
 
@@ -63,13 +63,13 @@ class DaytimeNoonTest {
   fun testDaytimeOver60Percent() {
     val ticks = mutableListOf<TickData>()
     for (i in 1..6) {
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(daytime = currentDaytime, actors = listOf(ego))
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(daytime = currentDaytime, entities = listOf(ego))
       ticks.add(tick)
     }
     for (i in 1..4) {
-      val ego = emptyVehicle(egoVehicle = true)
-      val tick = emptyTickData(daytime = otherDaytime, actors = listOf(ego))
+      val ego = Vehicle(isEgo = true, lane = Lane())
+      val tick = TickData(daytime = otherDaytime, entities = listOf(ego))
       ticks.add(tick)
     }
     val segment = Segment(ticks, segmentSource = "")
@@ -82,21 +82,21 @@ class DaytimeNoonTest {
   fun testDaytimeUnder60Percent() {
     val ticks = mutableListOf<TickData>()
     for (i in 1..5) {
-      val ego = emptyVehicle(egoVehicle = true)
+      val ego = Vehicle(isEgo = true, lane = Lane())
       val tick =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               daytime = currentDaytime,
-              actors = listOf(ego))
+              entities = listOf(ego))
       ticks.add(tick)
     }
     for (i in 6..10) {
-      val ego = emptyVehicle(egoVehicle = true)
+      val ego = Vehicle(isEgo = true, lane = Lane())
       val tick =
-          emptyTickData(
+          TickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               daytime = otherDaytime,
-              actors = listOf(ego))
+              entities = listOf(ego))
       ticks.add(tick)
     }
     val segment = Segment(ticks, segmentSource = "")

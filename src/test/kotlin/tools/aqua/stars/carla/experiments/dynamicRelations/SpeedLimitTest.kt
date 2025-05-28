@@ -19,22 +19,22 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import tools.aqua.stars.carla.experiments.mphLimit30
 import tools.aqua.stars.carla.experiments.mphLimit60
 import tools.aqua.stars.carla.experiments.mphLimit90
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.SpeedLimit
 import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class SpeedLimitTest {
-
   private val mph30SpeedLimit =
       SpeedLimit(speedLimit = 30.0, fromDistanceFromStart = 0.0, toDistanceFromStart = 50.0)
   private val mph60SpeedLimit =
@@ -49,134 +49,134 @@ class SpeedLimitTest {
   private val mph90SpeedLimit3 =
       SpeedLimit(speedLimit = 90.0, fromDistanceFromStart = 100.0, toDistanceFromStart = 150.0)
 
-  private val block = emptyBlock(id = "1")
+  private lateinit var block0: Block
+  private lateinit var block2: Block
 
-  private val road0 = emptyRoad(id = 0, block = block)
-  private val road0lane1 =
-      emptyLane(laneId = 1, road = road0, laneLength = 50.0, speedLimits = listOf(mph30SpeedLimit))
-  private val road0lane2 =
-      emptyLane(laneId = 2, road = road0, laneLength = 50.0, speedLimits = listOf(mph30SpeedLimit))
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
 
-  private val road1 = emptyRoad(id = 1, block = block)
-  private val road1lane1 =
-      emptyLane(laneId = 1, road = road1, laneLength = 50.0, speedLimits = listOf(mph60SpeedLimit))
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val block2 = emptyBlock(id = "2")
+  private lateinit var road2: Road
+  private lateinit var road2lane1: Lane
 
-  private val road2 = emptyRoad(id = 2, block = block2)
-  private val road2lane1 =
-      emptyLane(laneId = 1, road = road2, laneLength = 50.0, speedLimits = listOf(mph90SpeedLimit))
+  private lateinit var road3: Road
+  private lateinit var road3lane1: Lane
 
-  private val road3 = emptyRoad(id = 3, block = block2)
-  private val road3lane1 =
-      emptyLane(
-          laneId = 1,
-          road = road3,
-          laneLength = 150.0,
-          speedLimits = listOf(mph30SpeedLimit1, mph60SpeedLimit2, mph90SpeedLimit3))
-
-  private val blocks = listOf(block, block2)
+  private lateinit var blocks: List<Block>
 
   private val egoId = 0
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2)
-    road1.lanes = listOf(road1lane1)
+    // Lanes for block0
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0, speedLimits = listOf(mph30SpeedLimit))
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0, speedLimits = listOf(mph30SpeedLimit))
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0, speedLimits = listOf(mph60SpeedLimit))
 
-    block.roads = listOf(road0, road1)
+    // Lanes for block2
+    road2lane1 = Lane(laneId = 1, laneLength = 50.0, speedLimits = listOf(mph90SpeedLimit))
+    road3lane1 =
+        Lane(
+            laneId = 1,
+            laneLength = 150.0,
+            speedLimits = listOf(mph30SpeedLimit1, mph60SpeedLimit2, mph90SpeedLimit3))
 
-    road2.lanes = listOf(road2lane1)
-    road3.lanes = listOf(road3lane1)
+    // Roads and block0
+    road0 =
+        Road(id = 0, lanes = listOf(road0lane1, road0lane2)).apply {
+          road0lane1.road = this
+          road0lane2.road = this
+        }
+    road1 = Road(id = 1, lanes = listOf(road1lane1)).apply { road1lane1.road = this }
+    block0 = Block(id = "1", roads = listOf(road0, road1))
 
-    block2.roads = listOf(road2, road3)
+    road0.block = block0
+    road1.block = block0
+
+    // Roads and block2
+    road2 = Road(id = 2, lanes = listOf(road2lane1)).apply { road2lane1.road = this }
+    road3 = Road(id = 3, lanes = listOf(road3lane1)).apply { road3lane1.road = this }
+    block2 = Block(id = "2", roads = listOf(road2, road3))
+
+    road2.block = block2
+    road3.block = block2
+
+    blocks = listOf(block0, block2)
   }
 
   @Test
   fun speedLimit30MPH() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road0lane1,
-            effVelocityMPH = 11.0,
-            tickData = tickData,
-            positionOnLane = 10.0)
-    tickData.entities = listOf(ego)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = road0lane1, positionOnLane = 10.0)
 
-    assert(mphLimit30.holds(ctx, ego))
-    assert(!mphLimit60.holds(ctx, ego))
-    assert(!mphLimit90.holds(ctx, ego))
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
+
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertTrue { mphLimit30.holds(ctx, ego) }
+    assertFalse { mphLimit60.holds(ctx, ego) }
+    assertFalse { mphLimit90.holds(ctx, ego) }
   }
 
   @Test
   fun speedLimit60MPH() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road1lane1,
-            effVelocityMPH = 11.0,
-            tickData = tickData,
-            positionOnLane = 10.0)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = road1lane1, positionOnLane = 10.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
 
-    assert(!mphLimit30.holds(ctx, ego))
-    assert(mphLimit60.holds(ctx, ego))
-    assert(!mphLimit90.holds(ctx, ego))
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { mphLimit30.holds(ctx, ego) }
+    assertTrue { mphLimit60.holds(ctx, ego) }
+    assertFalse { mphLimit90.holds(ctx, ego) }
   }
 
   @Test
   fun speedLimit90MPH() {
-    val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks)
-    val ego =
-        emptyVehicle(
-            id = egoId,
-            egoVehicle = true,
-            lane = road2lane1,
-            effVelocityMPH = 11.0,
-            tickData = tickData,
-            positionOnLane = 10.0)
-    tickData.entities = listOf(ego)
+    val ego = Vehicle(id = egoId, isEgo = true, lane = road2lane1, positionOnLane = 10.0)
 
-    val segment = Segment(listOf(tickData), segmentSource = "")
-    val ctx = PredicateContext(segment)
+    val td =
+        TickData(currentTick = TickDataUnitSeconds(0.0), blocks = blocks, entities = listOf(ego))
 
-    assert(!mphLimit30.holds(ctx, ego))
-    assert(!mphLimit60.holds(ctx, ego))
-    assert(mphLimit90.holds(ctx, ego))
+    ego.tickData = td
+    ego.setVelocityFromEffVelocityMPH(11.0)
+
+    val ctx = PredicateContext(Segment(listOf(td), segmentSource = ""))
+    assertFalse { mphLimit30.holds(ctx, ego) }
+    assertFalse { mphLimit60.holds(ctx, ego) }
+    assertTrue { mphLimit90.holds(ctx, ego) }
   }
 
   @Test
   fun allSpeedLimitsOnOneLane() {
-    val tickDataList = mutableListOf<TickData>()
+    val tds = mutableListOf<TickData>()
+
     for (i in 0..150) {
-      val tickData = emptyTickData(currentTick = TickDataUnitSeconds(i.toDouble()), blocks)
-      val ego =
-          emptyVehicle(
-              id = egoId,
-              egoVehicle = true,
-              lane = road3lane1,
-              effVelocityMPH = 11.0,
-              tickData = tickData,
-              positionOnLane = i.toDouble())
-      tickData.entities = listOf(ego)
-      tickDataList += tickData
+      val ego = Vehicle(id = egoId, isEgo = true, lane = road3lane1, positionOnLane = i.toDouble())
+      val td =
+          TickData(
+              currentTick = TickDataUnitSeconds(i.toDouble()),
+              blocks = blocks,
+              entities = listOf(ego))
+
+      ego.tickData = td
+      ego.setVelocityFromEffVelocityMPH(11.0)
+
+      tds += td
     }
 
-    val segment = Segment(tickDataList, segmentSource = "")
-    val ctx = PredicateContext(segment)
-
-    assert(mphLimit30.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(mphLimit60.holds(ctx, TickDataUnitSeconds(0.0), egoId))
-    assert(mphLimit90.holds(ctx, TickDataUnitSeconds(0.0), egoId))
+    val ctx = PredicateContext(Segment(tds, segmentSource = ""))
+    assertTrue { mphLimit30.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { mphLimit60.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
+    assertTrue { mphLimit90.holds(ctx, TickDataUnitSeconds(0.0), egoId) }
   }
 }

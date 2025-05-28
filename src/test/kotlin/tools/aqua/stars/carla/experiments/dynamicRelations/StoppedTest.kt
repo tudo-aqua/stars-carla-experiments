@@ -19,49 +19,53 @@ package tools.aqua.stars.carla.experiments.dynamicRelations
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import tools.aqua.stars.carla.experiments.emptyBlock
-import tools.aqua.stars.carla.experiments.emptyLane
-import tools.aqua.stars.carla.experiments.emptyRoad
-import tools.aqua.stars.carla.experiments.emptyTickData
-import tools.aqua.stars.carla.experiments.emptyVehicle
 import tools.aqua.stars.carla.experiments.stopped
 import tools.aqua.stars.core.evaluation.PredicateContext
+import tools.aqua.stars.data.av.dataclasses.Block
+import tools.aqua.stars.data.av.dataclasses.Lane
+import tools.aqua.stars.data.av.dataclasses.Road
 import tools.aqua.stars.data.av.dataclasses.Segment
+import tools.aqua.stars.data.av.dataclasses.TickData
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.data.av.dataclasses.Vehicle
 
 class StoppedTest {
+  private lateinit var road0: Road
+  private lateinit var road0lane1: Lane
+  private lateinit var road0lane2: Lane
 
-  private val road0 = emptyRoad(id = 0)
-  private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
-  private val road0lane2 = emptyLane(laneId = 2, road = road0, laneLength = 50.0)
+  private lateinit var road1: Road
+  private lateinit var road1lane1: Lane
 
-  private val road1 = emptyRoad(id = 1)
-  private val road1lane1 = emptyLane(laneId = 1, road = road1, laneLength = 50.0)
-
-  private val block = emptyBlock()
+  private lateinit var block: Block
 
   @BeforeTest
   fun setup() {
-    road0.lanes = listOf(road0lane1, road0lane2)
-    road1.lanes = listOf(road1lane1)
+    road0lane1 = Lane(laneId = 1, laneLength = 50.0)
+    road0lane2 = Lane(laneId = 2, laneLength = 50.0)
+    road1lane1 = Lane(laneId = 1, laneLength = 50.0)
 
-    block.roads = listOf(road0, road1)
+    road0 =
+        Road(id = 0, lanes = listOf(road0lane1, road0lane2)).apply {
+          road0lane1.road = this
+          road0lane2.road = this
+        }
+    road1 = Road(id = 1, lanes = listOf(road1lane1)).apply { road1lane1.road = this }
+
+    block = Block(roads = listOf(road0, road1))
   }
 
   @Test
   fun stopped() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(0.0)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -72,17 +76,14 @@ class StoppedTest {
   @Test
   fun speedIs1MPH() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 1.0)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(1.0)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -93,17 +94,14 @@ class StoppedTest {
   @Test
   fun speedIs0Point5MPH() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.5)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(0.5)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -114,17 +112,14 @@ class StoppedTest {
   @Test
   fun speedIs0MH() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 0.0)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(0.0)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -135,17 +130,14 @@ class StoppedTest {
   @Test
   fun speedIs2MPH() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 2.0)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(2.0)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -156,17 +148,14 @@ class StoppedTest {
   @Test
   fun speedIs30MPH() {
     val vehicle =
-        emptyVehicle(
-            id = 0,
-            egoVehicle = true,
-            lane = road0lane1,
-            positionOnLane = 0.0,
-            effVelocityMPH = 30.0)
+        Vehicle(id = 0, isEgo = true, lane = road0lane1, positionOnLane = 0.0).apply {
+          setVelocityFromEffVelocityMPH(30.0)
+        }
     val tickData =
-        emptyTickData(
+        TickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            entities = listOf(vehicle))
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
