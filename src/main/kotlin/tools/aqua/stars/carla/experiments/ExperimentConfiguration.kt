@@ -59,6 +59,9 @@ class ExperimentConfiguration : CliktCommand() {
   private val allEgo: Boolean by
       option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
 
+  private val firstEgo: Boolean by
+      option("--firstEgo", help = "Whether to treat the first vehicle as ego").flag(default = false)
+
   private val minSegmentTickCount: Int by
       option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(11)
 
@@ -110,6 +113,7 @@ class ExperimentConfiguration : CliktCommand() {
         """
         --input=$simulationRunFolder
         --allEgo=$allEgo
+        --firstEgo=$firstEgo
         --minSegmentTicks=$minSegmentTickCount
         --sorted=$sortBySeed
         --dynamicFilter=$dynamicFilter
@@ -167,6 +171,7 @@ class ExperimentConfiguration : CliktCommand() {
     val segments =
         loadSegments(
             useEveryVehicleAsEgo = allEgo,
+            useFirstVehicleAsEgo = firstEgo,
             minSegmentTickCount = minSegmentTickCount,
             orderFilesBySeed = sortBySeed,
             simulationRunsWrappers = simulationRunsWrappers,

@@ -81,6 +81,9 @@ val reproductionTest by
               "--minSegmentTicks",
               "11",
 
+              // First vehicle is ego
+              "--firstEgo",
+
               // Sort seeds
               "--sorted",
 
