@@ -29,7 +29,9 @@ version = "0.5"
 repositories { mavenCentral() }
 
 dependencies {
-  testImplementation(kotlin("test"))
+  testImplementation(kotlin("test-junit5"))
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
   implementation(group = "tools.aqua", name = "stars-core")
   implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
   implementation(group = "tools.aqua", name = "stars-data-av")
