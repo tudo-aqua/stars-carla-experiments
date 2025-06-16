@@ -33,6 +33,7 @@ dependencies {
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
   implementation(group = "tools.aqua", name = "stars-core")
+  testImplementation(group = "tools.aqua", name = "stars-core", configuration = "tests")
   implementation(group = "tools.aqua", name = "stars-logic-kcmftbl")
   implementation(group = "tools.aqua", name = "stars-data-av")
   implementation(group = "tools.aqua", name = "stars-importer-carla")
