@@ -32,8 +32,11 @@ val manualTests =
             interval(0, 5)
             interval(20, 27)
           }
-          predicate(isOnMultiLane) { interval(13, 15) }
+          predicate(isOnMultiLane) {
+            interval(13, 15)
+            interval(20, 27)
+          }
           predicate(hasMidTrafficDensity) { interval(2, 8) }
           predicate(soBetween) { interval(10, 12) }
-          predicate(weatherHardRain) { interval(10, 12) }
+          predicate(isAtEndOfRoad) { interval(10, 12) }
         }
