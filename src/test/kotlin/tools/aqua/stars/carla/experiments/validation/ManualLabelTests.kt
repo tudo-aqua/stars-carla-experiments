@@ -17,8 +17,6 @@
 
 package tools.aqua.stars.carla.experiments.validation
 
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.TestFactory
 import tools.aqua.stars.core.validation.AbstractManualLabelTest
 import tools.aqua.stars.core.validation.FileSpec
 
