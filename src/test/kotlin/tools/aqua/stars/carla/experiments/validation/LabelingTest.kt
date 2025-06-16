@@ -18,7 +18,7 @@
 package tools.aqua.stars.carla.experiments.validation
 
 import tools.aqua.stars.carla.experiments.*
-import tools.aqua.stars.core.validation.labelFile
+import tools.aqua.stars.core.validation.manuallyLabelledFile
 import tools.aqua.stars.data.av.dataclasses.Actor
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
@@ -26,17 +26,7 @@ import tools.aqua.stars.data.av.dataclasses.TickDataDifferenceSeconds
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 
 val manualTests =
-    labelFile<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>(
+    manuallyLabelledFile<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>(
         "data/session1.csv") {
-          predicate(isOnSingleLane) {
-            interval(0, 5)
-            interval(20, 27)
-          }
-          predicate(isOnMultiLane) {
-            interval(13, 15)
-            interval(20, 27)
-          }
-          predicate(hasMidTrafficDensity) { interval(2, 8) }
-          predicate(soBetween) { interval(10, 12) }
-          predicate(isAtEndOfRoad) { interval(10, 12) }
+          predicate(isOnSingleLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(5.0)) }
         }
