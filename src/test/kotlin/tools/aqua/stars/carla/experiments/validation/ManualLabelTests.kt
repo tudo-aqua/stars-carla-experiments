@@ -17,7 +17,7 @@
 
 package tools.aqua.stars.carla.experiments.validation
 
-import tools.aqua.stars.core.validation.AbstractManualLabelTest
+import tools.aqua.stars.core.validation.ManualLabelTests
 import tools.aqua.stars.data.av.dataclasses.Actor
 import tools.aqua.stars.data.av.dataclasses.Segment
 import tools.aqua.stars.data.av.dataclasses.TickData
@@ -25,7 +25,6 @@ import tools.aqua.stars.data.av.dataclasses.TickDataDifferenceSeconds
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 
 class ManualLabelTests :
-    AbstractManualLabelTest<
-        Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>() {
-  override val manuallyLabelledTests = listOf(manualTests)
+    ManualLabelTests<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>() {
+  override val manualLabelTestFiles = listOf(manualTests)
 }

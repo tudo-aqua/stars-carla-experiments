@@ -19,14 +19,13 @@ package tools.aqua.stars.carla.experiments.validation
 
 import tools.aqua.stars.carla.experiments.*
 import tools.aqua.stars.core.validation.manuallyLabelledFile
-import tools.aqua.stars.data.av.dataclasses.Actor
-import tools.aqua.stars.data.av.dataclasses.Segment
-import tools.aqua.stars.data.av.dataclasses.TickData
-import tools.aqua.stars.data.av.dataclasses.TickDataDifferenceSeconds
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
+import tools.aqua.stars.importer.carla.loadSegments
+
+val simulationRuns = ExperimentConfiguration.getSimulationRuns("manual_tests")
+val segments = loadSegments(simulationRuns).toList()
 
 val manualTests =
-    manuallyLabelledFile<Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>(
-        "data/session1.csv") {
-          predicate(isOnSingleLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(5.0)) }
-        }
+    manuallyLabelledFile(segments) {
+      predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
+    }

@@ -52,7 +52,7 @@ import tools.aqua.stars.importer.carla.loadSegments
 class ExperimentConfiguration : CliktCommand() {
 
   // region command line options
-  private val simulationRunFolder: String by
+  private val defaultSimulationRunFolder: String by
       option("--input", help = "Directory of the input files")
           .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
 
@@ -111,7 +111,7 @@ class ExperimentConfiguration : CliktCommand() {
   override fun run() {
     ApplicationConstantsHolder.executionCommand =
         """
-        --input=$simulationRunFolder
+        --input=$defaultSimulationRunFolder
         --allEgo=$allEgo
         --firstEgo=$firstEgo
         --minSegmentTicks=$minSegmentTickCount
@@ -165,7 +165,8 @@ class ExperimentConfiguration : CliktCommand() {
     println("-----------------")
 
     println("Loading simulation runs...")
-    val simulationRunsWrappers = getSimulationRuns()
+    val simulationRunsWrappers =
+        getSimulationRuns(defaultSimulationRunFolder, staticFilter, dynamicFilter)
 
     println("Loading segments...")
     val segments =
@@ -252,61 +253,73 @@ class ExperimentConfiguration : CliktCommand() {
     }
   }
 
-  private fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
-      File(simulationRunFolder).let { file ->
-        file
-            .walk()
-            .filter {
-              it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
-            }
-            .toList()
-            .mapNotNull { mapFolder ->
-              var staticFile: Path? = null
-              val dynamicFiles = mutableListOf<Path>()
-              mapFolder.walk().forEach { mapFile ->
-                if (mapFile.nameWithoutExtension.contains("static_data") &&
-                    staticFilter.toRegex().containsMatchIn(mapFile.name)) {
-                  staticFile = mapFile.toPath()
+  /** Static functions. */
+  companion object {
+    fun getSimulationRuns(
+        simulationRunFolder: String,
+        staticFilter: String = ".*",
+        dynamicFilter: String = ".*"
+    ): List<CarlaSimulationRunsWrapper> =
+        File(simulationRunFolder).let { file ->
+          file
+              .walk()
+              .filter {
+                it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
+              }
+              .toList()
+              .mapNotNull { mapFolder ->
+                var staticFile: Path? = null
+                val dynamicFiles = mutableListOf<Path>()
+                mapFolder.walk().forEach { mapFile ->
+                  if (mapFile.nameWithoutExtension.contains("static_data") &&
+                      staticFilter.toRegex().containsMatchIn(mapFile.name)) {
+                    staticFile = mapFile.toPath()
+                  }
+                  if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
+                      dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
+                    dynamicFiles.add(mapFile.toPath())
+                  }
                 }
-                if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-                    dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
-                  dynamicFiles.add(mapFile.toPath())
+
+                if (staticFile == null || dynamicFiles.isEmpty()) {
+                  return@mapNotNull null
                 }
-              }
 
-              if (staticFile == null || dynamicFiles.isEmpty()) {
-                return@mapNotNull null
+                dynamicFiles.sortBy {
+                  "_seed([0-9]{1,4})"
+                      .toRegex()
+                      .find(it.fileName.name)
+                      ?.groups
+                      ?.get(1)
+                      ?.value
+                      ?.toInt() ?: 0
+                }
+                return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
               }
+        }
 
-              dynamicFiles.sortBy {
-                "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
-                    ?: 0
-              }
-              return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
-            }
-      }
-
-  /**
-   * Extract a zip file into any directory.
-   *
-   * @param zipFile src zip file
-   * @param outputDir directory to extract into. There will be new folder with the zip's name inside
-   *   [outputDir] directory.
-   * @return the extracted directory i.e.
-   */
-  private fun extractZipFile(zipFile: File, outputDir: File): File? {
-    ZipFile(zipFile).use { zip ->
-      zip.entries().asSequence().forEach { entry ->
-        zip.getInputStream(entry).use { input ->
-          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-          else
-              File(outputDir, entry.name)
-                  .also { it.parentFile.mkdirs() }
-                  .outputStream()
-                  .use { output -> input.copyTo(output) }
+    /**
+     * Extract a zip file into any directory.
+     *
+     * @param zipFile src zip file
+     * @param outputDir directory to extract into. There will be new folder with the zip's name
+     *   inside [outputDir] directory.
+     * @return the extracted directory i.e.
+     */
+    private fun extractZipFile(zipFile: File, outputDir: File): File? {
+      ZipFile(zipFile).use { zip ->
+        zip.entries().asSequence().forEach { entry ->
+          zip.getInputStream(entry).use { input ->
+            if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
+            else
+                File(outputDir, entry.name)
+                    .also { it.parentFile.mkdirs() }
+                    .outputStream()
+                    .use { output -> input.copyTo(output) }
+          }
         }
       }
+      return outputDir
     }
-    return outputDir
   }
 }
