@@ -205,7 +205,7 @@ val inReach =
     }
 
 /**
- * true if at any one time stamp in the future there exists a pedestrian that crosses the lane right
+ * true, if at any one time stamp in the future, there exists a pedestrian that crosses the lane right
  * before v.
  */
 val pedestrianCrossed =
