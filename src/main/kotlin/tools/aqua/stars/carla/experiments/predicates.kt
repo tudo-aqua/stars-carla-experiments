@@ -196,7 +196,7 @@ val onSameLane =
     }
 
 /**
- * pedestrian p is on the same lane es vehicle, v and v is driving towards p with a distance of < 10
+ * pedestrian p is on the same lane as vehicle v and v is driving towards p with a distance of < 10
  * meters.
  */
 val inReach =
