@@ -19,7 +19,7 @@ plugins {
   kotlin("jvm") version "2.1.10"
   application
   id("io.gitlab.arturbosch.detekt") version "1.23.6"
-  id("com.diffplug.spotless") version "7.0.2"
+  id("com.diffplug.spotless") version "7.1.0"
 }
 
 group = "tools.aqua"
