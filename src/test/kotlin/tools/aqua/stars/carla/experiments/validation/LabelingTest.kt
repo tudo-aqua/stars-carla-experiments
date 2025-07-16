@@ -22,10 +22,10 @@ import tools.aqua.stars.core.validation.manuallyLabelledFile
 import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 import tools.aqua.stars.importer.carla.loadSegments
 
-val simulationRuns = ExperimentConfiguration.getSimulationRuns("manual_tests")
-val segments = loadSegments(simulationRuns).toList()
+val simulationRun = ExperimentConfiguration.loadSingleExperiment("manual_tests/manual_recording_1")
+val segments = loadSegments(listOf(simulationRun)).toList()
 
 val manualTests =
-    manuallyLabelledFile(segments) {
-      predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
-    }
+  manuallyLabelledFile(segments) {
+    predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
+  }
