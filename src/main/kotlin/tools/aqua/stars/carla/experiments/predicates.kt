@@ -205,8 +205,8 @@ val inReach =
     }
 
 /**
- * true, if at any one time stamp in the future, there exists a pedestrian that crosses the lane right
- * before v.
+ * true, if at any one time stamp in the future, there exists a pedestrian that crosses the lane
+ * right before v.
  */
 val pedestrianCrossed =
     predicate("Pedestrian crossed", Vehicle::class) { ctx, v ->

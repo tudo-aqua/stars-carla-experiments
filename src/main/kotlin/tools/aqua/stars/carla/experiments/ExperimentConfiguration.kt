@@ -267,36 +267,38 @@ class ExperimentConfiguration : CliktCommand() {
                 it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
               }
               .toList()
-              .mapNotNull { mapFolder ->
-                var staticFile: Path? = null
-                val dynamicFiles = mutableListOf<Path>()
-                mapFolder.walk().forEach { mapFile ->
-                  if (mapFile.nameWithoutExtension.contains("static_data") &&
-                      staticFilter.toRegex().containsMatchIn(mapFile.name)) {
-                    staticFile = mapFile.toPath()
-                  }
-                  if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-                      dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
-                    dynamicFiles.add(mapFile.toPath())
-                  }
-                }
-
-                if (staticFile == null || dynamicFiles.isEmpty()) {
-                  return@mapNotNull null
-                }
-
-                dynamicFiles.sortBy {
-                  "_seed([0-9]{1,4})"
-                      .toRegex()
-                      .find(it.fileName.name)
-                      ?.groups
-                      ?.get(1)
-                      ?.value
-                      ?.toInt() ?: 0
-                }
-                return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
+              .map { mapFolder ->
+                loadSingleExperiment(mapFolder.absolutePath, staticFilter, dynamicFilter)
               }
         }
+
+    fun loadSingleExperiment(
+        folderName: String,
+        staticFilter: String = ".*",
+        dynamicFilter: String = ".*"
+    ): CarlaSimulationRunsWrapper {
+      var staticFile: Path? = null
+      val dynamicFiles = mutableListOf<Path>()
+      val mapFolder = File(folderName)
+      mapFolder.walk().forEach { mapFile ->
+        if (mapFile.nameWithoutExtension.contains("static_data") &&
+            staticFilter.toRegex().containsMatchIn(mapFile.name)) {
+          staticFile = mapFile.toPath()
+        }
+        if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
+            dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
+          dynamicFiles.add(mapFile.toPath())
+        }
+      }
+
+      checkNotNull(staticFile) { "Static data file not found." }
+      check(dynamicFiles.isNotEmpty()) { "Dynamic data file not found." }
+
+      dynamicFiles.sortBy {
+        "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt() ?: 0
+      }
+      return CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
+    }
 
     /**
      * Extract a zip file into any directory.

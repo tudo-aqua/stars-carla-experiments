@@ -26,6 +26,6 @@ val simulationRun = ExperimentConfiguration.loadSingleExperiment("manual_tests/m
 val segments = loadSegments(listOf(simulationRun)).toList()
 
 val manualTests =
-  manuallyLabelledFile(segments) {
-    predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
-  }
+    manuallyLabelledFile(segments) {
+      predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
+    }
