@@ -150,7 +150,7 @@ class ExperimentConfiguration : CliktCommand() {
     val simulationRunsWrappers =
         listOf(
             CarlaSimulationRunsWrapper(
-                mapDataFile = Path("$simulationRunFolder/static_data.json"),
+                staticDataFile = Path("$simulationRunFolder/static_data.json"),
                 dynamicDataFiles = listOf(Path("$simulationRunFolder/dynamic_data.json")),
             ))
 
