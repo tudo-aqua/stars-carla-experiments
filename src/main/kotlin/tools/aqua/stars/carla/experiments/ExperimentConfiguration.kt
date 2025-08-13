@@ -187,7 +187,7 @@ class ExperimentConfiguration : CliktCommand() {
                   FailedMonitorsMetric(validTSCInstancesPerProjectionMetric),
               )
               println("Run Evaluation")
-              runEvaluation(segments = segments)
+              runEvaluation(ticks = ticks)
             }
 
     exitProcess(

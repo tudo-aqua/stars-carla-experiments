@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 The STARS Carla Experiments Authors
+ * Copyright 2023-2025 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +17,7 @@
 
 package tools.aqua.stars.carla.experiments
 
-import kotlin.math.abs
-import kotlin.math.sign
-import tools.aqua.stars.core.evaluation.BinaryPredicate.Companion.predicate
-import tools.aqua.stars.core.evaluation.PredicateContext
-import tools.aqua.stars.core.evaluation.UnaryPredicate.Companion.predicate
-import tools.aqua.stars.data.av.dataclasses.*
-import tools.aqua.stars.logic.kcmftbl.*
-
-// region predicates/formulas
-
+/*
 /** The [Block] of [Vehicle] v has less than 6 vehicles in it. */
 val hasLowTrafficDensity =
     predicate(Vehicle::class) { ctx, v ->
@@ -396,5 +387,4 @@ val makesLeftTurn =
 /** [Vehicle] v made no turn. */
 val makesNoTurn =
     predicate(Vehicle::class) { _, v -> minPrevalence(v, 0.8) { v -> v.lane.isStraight } }
-
-// endregion
+*/
