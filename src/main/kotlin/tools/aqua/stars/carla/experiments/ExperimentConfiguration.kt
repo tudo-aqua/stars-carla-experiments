@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 The STARS Carla Experiments Authors
+ * Copyright 2023-2025 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,13 +23,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.int
-import java.io.File
-import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.zip.ZipFile
-import kotlin.io.path.name
+import kotlin.io.path.Path
 import kotlin.system.exitProcess
 import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_EQUAL_RESULTS
 import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NORMAL
@@ -41,9 +35,8 @@ import tools.aqua.stars.core.metric.metrics.postEvaluation.*
 import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
 import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder.baselineDirectory
 import tools.aqua.stars.data.av.dataclasses.*
-import tools.aqua.stars.data.av.metrics.AverageVehiclesInEgosBlockMetric
 import tools.aqua.stars.importer.carla.CarlaSimulationRunsWrapper
-import tools.aqua.stars.importer.carla.loadSegments
+import tools.aqua.stars.importer.carla.loadTicks
 
 /**
  * The [ExperimentConfiguration] configures all [CliktCommand]s that can be used for this experiment
@@ -53,11 +46,7 @@ class ExperimentConfiguration : CliktCommand() {
 
   // region command line options
   private val simulationRunFolder: String by
-      option("--input", help = "Directory of the input files")
-          .default("./stars-reproduction-source/stars-experiments-data/simulation_runs")
-
-  private val allEgo: Boolean by
-      option("--allEgo", help = "Whether to treat all vehicles as ego").flag(default = false)
+      option("--input", help = "Directory of the input files").default("data")
 
   private val minSegmentTickCount: Int by
       option("--minSegmentTicks", help = "Minimum ticks per segment").int().default(11)
@@ -109,7 +98,6 @@ class ExperimentConfiguration : CliktCommand() {
     ApplicationConstantsHolder.executionCommand =
         """
         --input=$simulationRunFolder
-        --allEgo=$allEgo
         --minSegmentTicks=$minSegmentTickCount
         --sorted=$sortBySeed
         --dynamicFilter=$dynamicFilter
@@ -128,8 +116,6 @@ class ExperimentConfiguration : CliktCommand() {
     println(ApplicationConstantsHolder.executionCommand)
 
     reproduction?.let { baselineDirectory = it }
-
-    downloadAndUnzipExperimentsData()
 
     if (showMemoryConsumption) {
       Thread {
@@ -161,20 +147,23 @@ class ExperimentConfiguration : CliktCommand() {
     println("-----------------")
 
     println("Loading simulation runs...")
-    val simulationRunsWrappers = getSimulationRuns()
+    val simulationRunsWrappers =
+        listOf(
+            CarlaSimulationRunsWrapper(
+                mapDataFile = Path("$simulationRunFolder/static_data.json"),
+                dynamicDataFiles = listOf(Path("$simulationRunFolder/dynamic_data.json")),
+            ))
 
-    println("Loading segments...")
-    val segments =
-        loadSegments(
-            useEveryVehicleAsEgo = allEgo,
-            minSegmentTickCount = minSegmentTickCount,
+    println("Loading ticks...")
+    val ticks =
+        loadTicks(
             orderFilesBySeed = sortBySeed,
             simulationRunsWrappers = simulationRunsWrappers,
-        )
+            bufferSize = 100)
 
     val validTSCInstancesPerProjectionMetric =
         ValidTSCInstancesPerTSCMetric<
-            Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
+            Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>()
 
     println("Creating TSC...")
     val evaluation =
@@ -187,10 +176,10 @@ class ExperimentConfiguration : CliktCommand() {
                 compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
-                  TotalSegmentTickDifferencePerIdentifierMetric(),
-                  SegmentCountMetric(),
-                  AverageVehiclesInEgosBlockMetric(),
-                  TotalSegmentTickDifferenceMetric(),
+                  //                  TotalSegmentTickDifferencePerIdentifierMetric(),
+                  //                  SegmentCountMetric(),
+                  //                  AverageVehiclesInEgosBlockMetric(),
+                  //                  TotalSegmentTickDifferenceMetric(),
                   validTSCInstancesPerProjectionMetric,
                   InvalidTSCInstancesPerTSCMetric(),
                   MissedTSCInstancesPerTSCMetric(),
@@ -214,94 +203,27 @@ class ExperimentConfiguration : CliktCommand() {
             })
   }
 
-  /**
-   * Checks if the experiments data is available. Otherwise, it is downloaded and extracted to the
-   * correct folder.
-   */
-  private fun downloadAndUnzipExperimentsData() {
-    val reproductionSourceFolderName = "stars-reproduction-source"
-    val reproductionSourceZipFile = "$reproductionSourceFolderName.zip"
-
-    if (File(reproductionSourceFolderName).exists()) {
-      println("The 'stars-reproduction-source' already exists")
-      return
-    }
-
-    if (!File(reproductionSourceZipFile).exists()) {
-      println("Start with downloading the experiments data. This may take a while.")
-      URL("https://zenodo.org/record/8131947/files/stars-reproduction-source.zip?download=1")
-          .openStream()
-          .use { Files.copy(it, Paths.get(reproductionSourceZipFile)) }
-    }
-
-    check(File(reproductionSourceZipFile).exists()) {
-      "After downloading the file '$reproductionSourceZipFile' does not exist."
-    }
-
-    println("Extracting experiments data from zip file.")
-    extractZipFile(zipFile = File(reproductionSourceZipFile), outputDir = File("."))
-
-    check(File(reproductionSourceFolderName).exists()) { "Error unzipping simulation data." }
-    check(File("./$reproductionSourceFolderName").totalSpace > 0) {
-      "There was an error while downloading/extracting the simulation data. The test zip file is missing."
-    }
-  }
-
-  private fun getSimulationRuns(): List<CarlaSimulationRunsWrapper> =
-      File(simulationRunFolder).let { file ->
-        file
-            .walk()
-            .filter {
-              it.isDirectory && it != file && staticFilter.toRegex().containsMatchIn(it.name)
-            }
-            .toList()
-            .mapNotNull { mapFolder ->
-              var staticFile: Path? = null
-              val dynamicFiles = mutableListOf<Path>()
-              mapFolder.walk().forEach { mapFile ->
-                if (mapFile.nameWithoutExtension.contains("static_data") &&
-                    staticFilter.toRegex().containsMatchIn(mapFile.name)) {
-                  staticFile = mapFile.toPath()
-                }
-                if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-                    dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
-                  dynamicFiles.add(mapFile.toPath())
-                }
-              }
-
-              if (staticFile == null || dynamicFiles.isEmpty()) {
-                return@mapNotNull null
-              }
-
-              dynamicFiles.sortBy {
-                "_seed([0-9]{1,4})".toRegex().find(it.fileName.name)?.groups?.get(1)?.value?.toInt()
-                    ?: 0
-              }
-              return@mapNotNull CarlaSimulationRunsWrapper(staticFile, dynamicFiles)
-            }
-      }
-
-  /**
-   * Extract a zip file into any directory.
-   *
-   * @param zipFile src zip file
-   * @param outputDir directory to extract into. There will be new folder with the zip's name inside
-   *   [outputDir] directory.
-   * @return the extracted directory i.e.
-   */
-  private fun extractZipFile(zipFile: File, outputDir: File): File? {
-    ZipFile(zipFile).use { zip ->
-      zip.entries().asSequence().forEach { entry ->
-        zip.getInputStream(entry).use { input ->
-          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-          else
-              File(outputDir, entry.name)
-                  .also { it.parentFile.mkdirs() }
-                  .outputStream()
-                  .use { output -> input.copyTo(output) }
-        }
-      }
-    }
-    return outputDir
-  }
+//  /**
+//   * Extract a zip file into any directory.
+//   *
+//   * @param zipFile src zip file
+//   * @param outputDir directory to extract into. There will be new folder with the zip's name inside
+//   *   [outputDir] directory.
+//   * @return the extracted directory i.e.
+//   */
+//  private fun extractZipFile(zipFile: File, outputDir: File): File? {
+//    ZipFile(zipFile).use { zip ->
+//      zip.entries().asSequence().forEach { entry ->
+//        zip.getInputStream(entry).use { input ->
+//          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
+//          else
+//              File(outputDir, entry.name)
+//                  .also { it.parentFile.mkdirs() }
+//                  .outputStream()
+//                  .use { output -> input.copyTo(output) }
+//        }
+//      }
+//    }
+//    return outputDir
+//  }
 }
