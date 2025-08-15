@@ -30,6 +30,7 @@ import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NORMAL
 import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_NO_RESULTS
 import tools.aqua.stars.carla.experiments.Experiment.EXIT_CODE_UNEQUAL_RESULTS
 import tools.aqua.stars.core.evaluation.TSCEvaluation
+import tools.aqua.stars.core.evaluation.TickSequence
 import tools.aqua.stars.core.metric.metrics.evaluation.*
 import tools.aqua.stars.core.metric.metrics.postEvaluation.*
 import tools.aqua.stars.core.metric.utils.ApplicationConstantsHolder
@@ -155,7 +156,7 @@ class ExperimentConfiguration : CliktCommand() {
             ))
 
     println("Loading ticks...")
-    val ticks =
+    val ticks: Sequence<TickSequence<TickData>> =
         loadTicks(
             orderFilesBySeed = sortBySeed,
             simulationRunsWrappers = simulationRunsWrappers,
@@ -168,7 +169,7 @@ class ExperimentConfiguration : CliktCommand() {
     println("Creating TSC...")
     val evaluation =
         TSCEvaluation(
-                tscList = tsc().buildProjections(projectionIgnoreList = projectionIgnoreList),
+                tscList = listOf(tsc()),//.buildProjections(projectionIgnoreList = projectionIgnoreList),
                 writePlots = writePlots,
                 writePlotDataCSV = writePlotDataCSV,
                 writeSerializedResults = writeSerializedResults,
@@ -176,10 +177,8 @@ class ExperimentConfiguration : CliktCommand() {
                 compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
-                  //                  TotalSegmentTickDifferencePerIdentifierMetric(),
-                  //                  SegmentCountMetric(),
-                  //                  AverageVehiclesInEgosBlockMetric(),
-                  //                  TotalSegmentTickDifferenceMetric(),
+                TickCountMetric(),
+                  TotalTickDifferenceMetric(),
                   validTSCInstancesPerProjectionMetric,
                   InvalidTSCInstancesPerTSCMetric(),
                   MissedTSCInstancesPerTSCMetric(),

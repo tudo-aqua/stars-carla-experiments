@@ -17,6 +17,10 @@
 
 package tools.aqua.stars.carla.experiments
 
+import tools.aqua.stars.data.av.dataclasses.TickData
+import tools.aqua.stars.data.av.dataclasses.WeatherType
+import tools.aqua.stars.logic.kcmftbl.minPrevalence
+
 /*
 /** The [Block] of [Vehicle] v has less than 6 vehicles in it. */
 val hasLowTrafficDensity =
@@ -85,43 +89,43 @@ fun ExperimentPredicateContext.sunset(): Boolean =
 /** The daytime was mostly [Daytime.Noon]. */
 fun ExperimentPredicateContext.noon(): Boolean =
     minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.daytime == Daytime.Noon }
-
+*/
 /** The weather was mostly [WeatherType.Clear]. */
-fun ExperimentPredicateContext.weatherClear(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Clear }
+fun TickData.weatherClear(): Boolean =
+    minPrevalence(this, 0.6) { d -> d.weather.type == WeatherType.Clear }
 
 /** The weather was mostly [WeatherType.Cloudy]. */
-fun ExperimentPredicateContext.weatherCloudy(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Cloudy }
+fun TickData.weatherCloudy(): Boolean =
+    minPrevalence(this, 0.6) { d -> d.weather.type == WeatherType.Cloudy }
 
 /** The weather was mostly [WeatherType.Wet]. */
-fun ExperimentPredicateContext.weatherWet(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d -> d.weather.type == WeatherType.Wet }
+fun TickData.weatherWet(): Boolean =
+    minPrevalence(this, 0.6) { d -> d.weather.type == WeatherType.Wet }
 
 /** The weather was mostly [WeatherType.WetCloudy]. */
-fun ExperimentPredicateContext.weatherWetCloudy(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d ->
+fun TickData.weatherWetCloudy(): Boolean =
+    minPrevalence(this, 0.6) { d ->
       d.weather.type == WeatherType.WetCloudy
     }
 
 /** The weather was mostly [WeatherType.SoftRainy]. */
-fun ExperimentPredicateContext.weatherSoftRain(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d ->
+fun TickData.weatherSoftRain(): Boolean =
+    minPrevalence(this, 0.6) { d ->
       d.weather.type == WeatherType.SoftRainy
     }
 
 /** The weather was mostly [WeatherType.MidRainy]. */
-fun ExperimentPredicateContext.weatherMidRain(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d ->
+fun TickData.weatherMidRain(): Boolean =
+    minPrevalence(this, 0.6) { d ->
       d.weather.type == WeatherType.MidRainy
     }
 
 /** The weather was mostly [WeatherType.HardRainy]. */
-fun ExperimentPredicateContext.weatherHardRain(): Boolean =
-    minPrevalence(this.segment.tickData.first(), 0.6) { d ->
+fun TickData.weatherHardRain(): Boolean =
+    minPrevalence(this, 0.6) { d ->
       d.weather.type == WeatherType.HardRainy
     }
-
+/*
 /** There is a [Vehicle] between the two [Vehicle]s v0 and v1. */
 val soBetween =
     predicate(Vehicle::class to Vehicle::class) { _, v0, v1 ->

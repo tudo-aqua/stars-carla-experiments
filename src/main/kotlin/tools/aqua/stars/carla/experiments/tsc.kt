@@ -47,20 +47,20 @@ fun tsc() =
         //          projection(LAYER_MULTI_LANE_DYNAMIC_RELATIONS)
         //        }
         //
-        //        exclusive("Weather") {
-        //          projections {
-        //            projectionRecursive(LAYER_4_5)
-        //            projectionRecursive(LAYER_PEDESTRIAN)
-        //          }
-        //
-        //          leaf("Clear") { condition { ctx -> ctx.weatherClear() } }
-        //          leaf("Cloudy") { condition { ctx -> ctx.weatherCloudy() } }
-        //          leaf("Wet") { condition { ctx -> ctx.weatherWet() } }
-        //          leaf("Wet Cloudy") { condition { ctx -> ctx.weatherWetCloudy() } }
-        //          leaf("Soft Rain") { condition { ctx -> ctx.weatherSoftRain() } }
-        //          leaf("Mid Rain") { condition { ctx -> ctx.weatherMidRain() } }
-        //          leaf("Hard Rain") { condition { ctx -> ctx.weatherHardRain() } }
-        //        }
+                exclusive("Weather") {
+//                  projections {
+//                    projectionRecursive(LAYER_4_5)
+//                    projectionRecursive(LAYER_PEDESTRIAN)
+//                  }
+
+                  leaf("Clear") { condition { ctx -> ctx.weatherClear() } }
+                  leaf("Cloudy") { condition { ctx -> ctx.weatherCloudy() } }
+                  leaf("Wet") { condition { ctx -> ctx.weatherWet() } }
+                  leaf("Wet Cloudy") { condition { ctx -> ctx.weatherWetCloudy() } }
+                  leaf("Soft Rain") { condition { ctx -> ctx.weatherSoftRain() } }
+                  leaf("Mid Rain") { condition { ctx -> ctx.weatherMidRain() } }
+                  leaf("Hard Rain") { condition { ctx -> ctx.weatherHardRain() } }
+                }
         //
         //        exclusive("Road Type") {
         //          projections {
