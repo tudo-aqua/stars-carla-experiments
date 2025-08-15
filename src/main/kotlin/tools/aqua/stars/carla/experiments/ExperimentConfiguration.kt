@@ -169,7 +169,7 @@ class ExperimentConfiguration : CliktCommand() {
     println("Creating TSC...")
     val evaluation =
         TSCEvaluation(
-                tscList = listOf(tsc()),//.buildProjections(projectionIgnoreList = projectionIgnoreList),
+                tscList = listOf(tsc()),
                 writePlots = writePlots,
                 writePlotDataCSV = writePlotDataCSV,
                 writeSerializedResults = writeSerializedResults,
@@ -177,7 +177,7 @@ class ExperimentConfiguration : CliktCommand() {
                 compareToPreviousRun = compareToPreviousRun)
             .apply {
               registerMetricProviders(
-                TickCountMetric(),
+                  TickCountMetric(),
                   TotalTickDifferenceMetric(),
                   validTSCInstancesPerProjectionMetric,
                   InvalidTSCInstancesPerTSCMetric(),
@@ -201,28 +201,4 @@ class ExperimentConfiguration : CliktCommand() {
               EXIT_CODE_NORMAL
             })
   }
-
-//  /**
-//   * Extract a zip file into any directory.
-//   *
-//   * @param zipFile src zip file
-//   * @param outputDir directory to extract into. There will be new folder with the zip's name inside
-//   *   [outputDir] directory.
-//   * @return the extracted directory i.e.
-//   */
-//  private fun extractZipFile(zipFile: File, outputDir: File): File? {
-//    ZipFile(zipFile).use { zip ->
-//      zip.entries().asSequence().forEach { entry ->
-//        zip.getInputStream(entry).use { input ->
-//          if (entry.isDirectory) File(outputDir, entry.name).also { it.mkdirs() }
-//          else
-//              File(outputDir, entry.name)
-//                  .also { it.parentFile.mkdirs() }
-//                  .outputStream()
-//                  .use { output -> input.copyTo(output) }
-//        }
-//      }
-//    }
-//    return outputDir
-//  }
 }

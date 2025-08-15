@@ -40,17 +40,9 @@ fun tsc() =
         }
 
         exclusive("Road Type") {
-          all("Junction") {
-            condition { isInJunction.holds(it) }
-          }
-
-          all("Multi-Lane") {
-            condition { isOnMultiLane.holds(it) }
-          }
-
-          all("Single-Lane") {
-            condition { isOnSingleLane.holds(it) }
-          }
+          all("Junction") { condition { isInJunction.holds(it) } }
+          all("Multi-Lane") { condition { isOnMultiLane.holds(it) } }
+          all("Single-Lane") { condition { isOnSingleLane.holds(it) } }
         }
 
         exclusive("Time of Day") {

@@ -17,7 +17,7 @@
 
 package tools.aqua.stars.carla.experiments
 
-
+import kotlin.math.sign
 import tools.aqua.stars.core.evaluation.NullaryPredicate.Companion.predicate
 import tools.aqua.stars.core.evaluation.UnaryPredicate.Companion.predicate
 import tools.aqua.stars.data.av.dataclasses.Actor
@@ -28,7 +28,6 @@ import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 import tools.aqua.stars.data.av.dataclasses.Vehicle
 import tools.aqua.stars.data.av.dataclasses.WeatherType
 import tools.aqua.stars.logic.kcmftbl.minPrevalence
-import kotlin.math.sign
 
 /*
 /** The [Block] of [Vehicle] v has less than 6 vehicles in it. */
@@ -70,16 +69,14 @@ val oncoming =
     }
 */
 /** [Vehicle] is in a junction. */
-val isInJunction = predicate("IsInJunction", Vehicle::class) { _, v ->
-  v.lane.road.isJunction
-}
+val isInJunction = predicate("IsInJunction", Vehicle::class) { _, v -> v.lane.road.isJunction }
 
 /** [Vehicle] is mostly on a single lane. */
 val isOnSingleLane =
     predicate("isOnSingleLane", Vehicle::class) { _, v ->
       !v.lane.road.isJunction &&
           v.lane.road.lanes.filter { it.laneId.sign == v.lane.laneId.sign }.size == 1
-      }
+    }
 
 /** [Vehicle] is mostly on a multi-lane. */
 val isOnMultiLane =
@@ -90,59 +87,60 @@ val isOnMultiLane =
 
 // region Time of day
 /** The daytime was mostly [Daytime.Sunset]. */
-val sunset = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Sunset") {
-  minPrevalence(it, 0.6) { d -> d.daytime == Daytime.Sunset }
-}
+val sunset =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Sunset") {
+      minPrevalence(it, 0.6) { d -> d.daytime == Daytime.Sunset }
+    }
 
 /** The daytime was mostly [Daytime.Noon]. */
-val noon = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Noon") {
-  minPrevalence(it, 0.6) { d -> d.daytime == Daytime.Noon }
-}
+val noon =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Noon") {
+      minPrevalence(it, 0.6) { d -> d.daytime == Daytime.Noon }
+    }
 // endregion
 
 // region Weather
 /** The weather was mostly [WeatherType.Clear]. */
-val weatherClear = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Clear") {
-    minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Clear }
-}
+val weatherClear =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Clear") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Clear }
+    }
 
 /** The weather was mostly [WeatherType.Cloudy]. */
-val weatherCloudy = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Cloudy") {
-    minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Cloudy }
-}
+val weatherCloudy =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Cloudy") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Cloudy }
+    }
 
 /** The weather was mostly [WeatherType.Wet]. */
-val weatherWet = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Wet") {
-    minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Wet }
-}
+val weatherWet =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("Wet") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.Wet }
+    }
 
 /** The weather was mostly [WeatherType.WetCloudy]. */
-val weatherWetCloudy = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("WetCloudy") {
-    minPrevalence(it, 0.6) { d ->
-      d.weather.type == WeatherType.WetCloudy
+val weatherWetCloudy =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("WetCloudy") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.WetCloudy }
     }
-}
 
 /** The weather was mostly [WeatherType.SoftRainy]. */
-val weatherSoftRain = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("SoftRain") {
-    minPrevalence(it, 0.6) { d ->
-      d.weather.type == WeatherType.SoftRainy
+val weatherSoftRain =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("SoftRain") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.SoftRainy }
     }
-}
 
 /** The weather was mostly [WeatherType.MidRainy]. */
-val weatherMidRain = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("MidRain") {
-    minPrevalence(it, 0.6) { d ->
-      d.weather.type == WeatherType.MidRainy
+val weatherMidRain =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("MidRain") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.MidRainy }
     }
-}
 
 /** The weather was mostly [WeatherType.HardRainy]. */
-val weatherHardRain = predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("HardRain") {
-    minPrevalence(it, 0.6) { d ->
-      d.weather.type == WeatherType.HardRainy
+val weatherHardRain =
+    predicate<Actor, TickData, TickDataUnitSeconds, TickDataDifferenceSeconds>("HardRain") {
+      minPrevalence(it, 0.6) { d -> d.weather.type == WeatherType.HardRainy }
     }
-}
 // endregion
 
 /*
