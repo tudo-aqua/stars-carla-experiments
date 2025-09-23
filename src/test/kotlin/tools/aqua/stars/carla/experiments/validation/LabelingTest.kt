@@ -23,9 +23,10 @@ import tools.aqua.stars.data.av.dataclasses.TickDataUnitSeconds
 import tools.aqua.stars.importer.carla.loadSegments
 
 val simulationRuns = ExperimentConfiguration.getSimulationRuns("manual_tests")
-val segments = loadSegments(simulationRuns).toList()
+val segments = loadSegments(simulationRuns, useFirstVehicleAsEgo = true).first()
 
 val manualTests =
     manuallyLabelledFile(segments) {
-      predicate(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
+      predicateHolds(isOnMultiLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
+        predicateDoesNotHold(isOnSingleLane) { interval(TickDataUnitSeconds(0.0), TickDataUnitSeconds(7.0)) }
     }
