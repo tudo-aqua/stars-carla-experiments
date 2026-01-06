@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,8 @@ class IsInJunctionTest {
               lane = junctionLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(vehicle)
       tickDataList.add(tickData)
     }
@@ -86,7 +87,8 @@ class IsInJunctionTest {
               lane = junctionLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(vehicle)
       tickDataList.add(tickData)
     }
@@ -99,7 +101,8 @@ class IsInJunctionTest {
               lane = singleLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(vehicle)
       tickDataList.add(tickData)
     }
@@ -126,7 +129,8 @@ class IsInJunctionTest {
               lane = singleLane,
               positionOnLane = i.toDouble(),
               egoVehicle = true,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(vehicle)
       tickDataList.add(tickData)
     }

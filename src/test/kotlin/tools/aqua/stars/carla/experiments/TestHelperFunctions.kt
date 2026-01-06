@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The STARS Carla Experiments Authors
+ * Copyright 2023-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ fun emptyLane(
     staticTrafficLights: List<StaticTrafficLight> = listOf(),
     successorLanes: List<ContactLaneInfo> = listOf(),
     landmarks: List<Landmark> = emptyList(),
-    laneDirection: LaneDirection = LaneDirection.UNKNOWN
+    laneDirection: LaneDirection = LaneDirection.UNKNOWN,
 ): Lane =
     Lane(
         laneId = laneId,
@@ -57,7 +57,8 @@ fun emptyLane(
         trafficLights = staticTrafficLights,
         landmarks = landmarks,
         laneDirection = laneDirection,
-        yieldLanes = listOf())
+        yieldLanes = listOf(),
+    )
 
 /** Empty [Rotation]. */
 fun emptyRotation(): Rotation = Rotation(0.0, 0.0, 0.0)
@@ -90,7 +91,8 @@ fun emptyWeatherParameters(weatherType: WeatherType = WeatherType.Clear): Weathe
         sunAzimuthAngle = 0.0,
         windIntensity = 0.0,
         precipitationDeposits = 0.0,
-        precipitation = 0.0)
+        precipitation = 0.0,
+    )
 
 /** Empty [TickData]. */
 fun emptyTickData(
@@ -99,7 +101,7 @@ fun emptyTickData(
     trafficLights: List<TrafficLight> = listOf(),
     weatherParameters: WeatherParameters = emptyWeatherParameters(),
     actors: List<Actor> = listOf(),
-    daytime: Daytime = Daytime.Sunset
+    daytime: Daytime = Daytime.Sunset,
 ): TickData =
     TickData(
         currentTick = currentTick,
@@ -107,14 +109,15 @@ fun emptyTickData(
         blocks = blocks,
         trafficLights = trafficLights,
         weather = weatherParameters,
-        daytime = daytime)
+        daytime = daytime,
+    )
 
 /** Empty [Pedestrian]. */
 fun emptyPedestrian(
     id: Int = 1,
     lane: Lane = emptyLane(),
     positionOnLane: Double = 0.0,
-    tickData: TickData = emptyTickData()
+    tickData: TickData = emptyTickData(),
 ): Pedestrian =
     Pedestrian(id = id, positionOnLane = positionOnLane, tickData = tickData, lane = lane)
 
@@ -126,7 +129,7 @@ fun emptyVehicle(
     positionOnLane: Double = 0.0,
     tickData: TickData = emptyTickData(),
     location: Location = emptyLocation(),
-    effVelocityMPH: Double = 0.0
+    effVelocityMPH: Double = 0.0,
 ): Vehicle =
     Vehicle(
         id = id,
@@ -141,16 +144,21 @@ fun emptyVehicle(
         tickData = tickData,
         typeId = "",
         vehicleType = VehicleType.CAR,
-        velocity = Vector3D(effVelocityMPH / 2.237, 0.0, 0.0))
+        velocity = Vector3D(effVelocityMPH / 2.237, 0.0, 0.0),
+    )
 
 /** Empty [StaticTrafficLight]. */
 fun emptyStaticTrafficLight(): StaticTrafficLight =
     StaticTrafficLight(
-        id = 0, rotation = emptyRotation(), location = emptyLocation(), stopLocations = listOf())
+        id = 0,
+        rotation = emptyRotation(),
+        location = emptyLocation(),
+        stopLocations = listOf(),
+    )
 
 /** Empty [TrafficLight] with state [TrafficLightState.Unknown]. */
 fun emptyTrafficLight(
     id: Int = 0,
     relatedOpenDriveId: Int = 0,
-    state: TrafficLightState = TrafficLightState.Unknown
+    state: TrafficLightState = TrafficLightState.Unknown,
 ): TrafficLight = TrafficLight(id = id, state = state, relatedOpenDriveId = relatedOpenDriveId)

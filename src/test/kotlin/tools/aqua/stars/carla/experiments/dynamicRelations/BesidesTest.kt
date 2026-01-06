@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -145,7 +145,10 @@ class BesidesTest {
 
     val tickData =
         emptyTickData(
-            TickDataUnitSeconds(0.0), listOf(block), actors = listOf(vehicle0, vehicle1, vehicle2))
+            TickDataUnitSeconds(0.0),
+            listOf(block),
+            actors = listOf(vehicle0, vehicle1, vehicle2),
+        )
 
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)

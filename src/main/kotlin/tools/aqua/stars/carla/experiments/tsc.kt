@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The STARS Carla Experiments Authors
+ * Copyright 2023-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -143,7 +143,10 @@ fun tsc() =
 
             condition { ctx ->
               isOnMultiLane.holds(
-                  ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
+                  ctx,
+                  ctx.segment.tickData.first().currentTick,
+                  ctx.segment.primaryEntityId,
+              )
             }
 
             optional("Dynamic Relation") {
@@ -211,7 +214,10 @@ fun tsc() =
 
             condition { ctx ->
               isOnSingleLane.holds(
-                  ctx, ctx.segment.tickData.first().currentTick, ctx.segment.primaryEntityId)
+                  ctx,
+                  ctx.segment.tickData.first().currentTick,
+                  ctx.segment.primaryEntityId,
+              )
             }
 
             optional("Dynamic Relation") {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,7 +74,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -82,7 +83,8 @@ class OncomingTest {
             lane = road0laneMinus1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -102,7 +104,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -110,7 +113,8 @@ class OncomingTest {
             lane = road0laneMinus2,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -130,7 +134,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -138,7 +143,8 @@ class OncomingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -158,7 +164,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -166,7 +173,8 @@ class OncomingTest {
             lane = road2lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -186,7 +194,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -194,7 +203,8 @@ class OncomingTest {
             lane = road0lane1,
             positionOnLane = 10.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,7 +87,8 @@ class DaytimeNoonTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               daytime = currentDaytime,
-              actors = listOf(ego))
+              actors = listOf(ego),
+          )
       ticks.add(tick)
     }
     for (i in 6..10) {
@@ -96,7 +97,8 @@ class DaytimeNoonTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               daytime = otherDaytime,
-              actors = listOf(ego))
+              actors = listOf(ego),
+          )
       ticks.add(tick)
     }
     val segment = Segment(ticks, segmentSource = "")

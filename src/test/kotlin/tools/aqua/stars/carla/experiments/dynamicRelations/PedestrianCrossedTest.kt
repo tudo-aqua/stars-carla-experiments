@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,21 +59,24 @@ class PedestrianCrossedTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
+              actors = listOf(),
+          )
       val ego =
           emptyVehicle(
               id = 0,
               egoVehicle = true,
               positionOnLane = road0lane1.laneLength - 3.0,
               lane = road0lane1,
-              tickData = tickData)
+              tickData = tickData,
+          )
       val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
       val pedestrian =
           emptyPedestrian(
               id = 1,
               lane = pedestrianLane,
               positionOnLane = pedestrianLane.laneLength - 1.0,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(ego, pedestrian)
       tickDataList.add(tickData)
     }
@@ -91,21 +94,24 @@ class PedestrianCrossedTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
+              actors = listOf(),
+          )
       val ego =
           emptyVehicle(
               id = 0,
               egoVehicle = true,
               positionOnLane = road0lane1.laneLength - 20.0,
               lane = road0lane1,
-              tickData = tickData)
+              tickData = tickData,
+          )
       val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
       val pedestrian =
           emptyPedestrian(
               id = 1,
               lane = pedestrianLane,
               positionOnLane = pedestrianLane.laneLength - 1.0,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(ego, pedestrian)
       tickDataList.add(tickData)
     }
@@ -123,21 +129,24 @@ class PedestrianCrossedTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
+              actors = listOf(),
+          )
       val ego =
           emptyVehicle(
               id = 0,
               egoVehicle = true,
               positionOnLane = road0lane1.laneLength - 20.0,
               lane = road0lane1,
-              tickData = tickData)
+              tickData = tickData,
+          )
       val pedestrianLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
       val pedestrian =
           emptyPedestrian(
               id = 1,
               lane = pedestrianLane,
               positionOnLane = pedestrianLane.laneLength - 30.0,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(ego, pedestrian)
       tickDataList.add(tickData)
     }
@@ -155,14 +164,16 @@ class PedestrianCrossedTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
+              actors = listOf(),
+          )
       val ego =
           emptyVehicle(
               id = 0,
               egoVehicle = true,
               positionOnLane = road0lane1.laneLength - 20.0,
               lane = road0lane1,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(ego)
       tickDataList.add(tickData)
     }
@@ -180,21 +191,24 @@ class PedestrianCrossedTest {
           emptyTickData(
               currentTick = TickDataUnitSeconds(i.toDouble()),
               blocks = listOf(block),
-              actors = listOf())
+              actors = listOf(),
+          )
       val ego =
           emptyVehicle(
               id = 0,
               egoVehicle = true,
               positionOnLane = road0lane1.laneLength - 3.0,
               lane = road0lane1,
-              tickData = tickData)
+              tickData = tickData,
+          )
       val otherVehicleLane = if (i == 1) road0lane3 else if (i == 2) road0lane2 else road0lane1
       val otherVehicle =
           emptyVehicle(
               id = 1,
               lane = otherVehicleLane,
               positionOnLane = otherVehicleLane.laneLength - 1.0,
-              tickData = tickData)
+              tickData = tickData,
+          )
       tickData.entities = listOf(ego, otherVehicle)
       tickDataList.add(tickData)
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,8 @@ class ReachedContactPointTest {
             lane1EndPos = 15.0,
             lane2 = road1lane1,
             lane2StartPos = 10.0,
-            lane2EndPos = 15.0)
+            lane2EndPos = 15.0,
+        )
     road0lane1.contactAreas = listOf(road0road1ContactArea)
     road1lane1.contactAreas = listOf(road0road1ContactArea)
     road0lane1.intersectingLanes = listOf(ContactLaneInfo(road1lane1))
@@ -74,14 +75,16 @@ class ReachedContactPointTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 11.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = 1,
             egoVehicle = false,
             lane = road1lane1,
             positionOnLane = 19.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -99,14 +102,16 @@ class ReachedContactPointTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 10.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = 1,
             egoVehicle = false,
             lane = road1lane1,
             positionOnLane = 19.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -120,14 +125,20 @@ class ReachedContactPointTest {
     val tickData = emptyTickData(currentTick = TickDataUnitSeconds(0.0), blocks = listOf(block))
     val ego =
         emptyVehicle(
-            id = 0, egoVehicle = true, lane = road0lane1, positionOnLane = 9.0, tickData = tickData)
+            id = 0,
+            egoVehicle = true,
+            lane = road0lane1,
+            positionOnLane = 9.0,
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = 1,
             egoVehicle = false,
             lane = road1lane1,
             positionOnLane = 19.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -145,14 +156,16 @@ class ReachedContactPointTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 16.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = 1,
             egoVehicle = false,
             lane = road1lane1,
             positionOnLane = 19.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
@@ -170,14 +183,16 @@ class ReachedContactPointTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 11.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = 1,
             egoVehicle = false,
             lane = road1lane2,
             positionOnLane = 19.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)

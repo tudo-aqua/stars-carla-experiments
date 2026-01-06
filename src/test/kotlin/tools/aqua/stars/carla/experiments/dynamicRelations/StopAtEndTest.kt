@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 1.0,
-            positionOnLane = road0lane1.laneLength - 2.0)
+            positionOnLane = road0lane1.laneLength - 2.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -76,7 +77,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 11.0,
-            positionOnLane = road0lane1.laneLength - 2.0)
+            positionOnLane = road0lane1.laneLength - 2.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -95,7 +97,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 1.0,
-            positionOnLane = road0lane1.laneLength - 3.0)
+            positionOnLane = road0lane1.laneLength - 3.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -114,7 +117,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 11.0,
-            positionOnLane = road0lane1.laneLength - 3.0)
+            positionOnLane = road0lane1.laneLength - 3.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -133,7 +137,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 1.0,
-            positionOnLane = road0lane1.laneLength - 4.0)
+            positionOnLane = road0lane1.laneLength - 4.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -152,7 +157,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData,
             effVelocityMPH = 11.0,
-            positionOnLane = road0lane1.laneLength - 4.0)
+            positionOnLane = road0lane1.laneLength - 4.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -171,7 +177,8 @@ class StopAtEndTest {
             lane = road1lane1,
             tickData = tickData,
             effVelocityMPH = 1.0,
-            positionOnLane = road0lane1.laneLength - 1.0)
+            positionOnLane = road0lane1.laneLength - 1.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -190,7 +197,8 @@ class StopAtEndTest {
             lane = road1lane1,
             tickData = tickData,
             effVelocityMPH = 11.0,
-            positionOnLane = road0lane1.laneLength - 1.0)
+            positionOnLane = road0lane1.laneLength - 1.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -209,7 +217,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData0,
             effVelocityMPH = 11.0,
-            positionOnLane = road0lane1.laneLength - 4.0)
+            positionOnLane = road0lane1.laneLength - 4.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -225,7 +234,8 @@ class StopAtEndTest {
             lane = road0lane1,
             tickData = tickData1,
             effVelocityMPH = 1.0,
-            positionOnLane = road0lane1.laneLength - 2.0)
+            positionOnLane = road0lane1.laneLength - 2.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")

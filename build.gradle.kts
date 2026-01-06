@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The STARS Carla Experiments Authors
+ * Copyright 2023-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,15 @@
  */
 
 plugins {
-  kotlin("jvm") version "2.1.10"
+  kotlin("jvm") version "2.3.0"
   application
-  id("io.gitlab.arturbosch.detekt") version "1.23.6"
-  id("com.diffplug.spotless") version "7.0.2"
+  id("io.gitlab.arturbosch.detekt") version "1.23.8"
+  id("com.diffplug.spotless") version "8.1.0"
 }
 
 group = "tools.aqua"
 
-version = "0.5"
+version = "1.0"
 
 repositories { mavenCentral() }
 
@@ -38,7 +38,10 @@ dependencies {
   implementation(group = "tools.aqua", name = "stars-importer-carla", version = starsVersion)
   implementation(group = "com.github.ajalt.clikt", name = "clikt", version = "5.0.2")
   detektPlugins(
-      group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version = "1.23.6")
+      group = "io.gitlab.arturbosch.detekt",
+      name = "detekt-rules-libraries",
+      version = "1.23.8",
+  )
 }
 
 detekt {
@@ -56,7 +59,8 @@ spotless {
   kotlinGradle {
     licenseHeaderFile(
             rootProject.file("contrib/license-header.template.kt"),
-            "(import |@file|plugins |dependencyResolutionManagement|rootProject.name)")
+            "(import |@file|plugins |dependencyResolutionManagement|rootProject.name)",
+        )
         .also { it.updateYearWithLatest(true) }
     ktfmt()
   }
@@ -128,7 +132,8 @@ val reproductionTestAll by
               "baseline-all",
 
               // Show memory usage
-              "--showMemoryConsumption")
+              "--showMemoryConsumption",
+          )
     }
 
 application { mainClass.set("tools.aqua.stars.carla.experiments.Experiment") }

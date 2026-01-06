@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,8 @@ class ChangedLaneTest {
             tickData = tickData0,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
@@ -82,7 +83,8 @@ class ChangedLaneTest {
             tickData = tickData1,
             lane = road0lane2,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
@@ -101,7 +103,8 @@ class ChangedLaneTest {
             tickData = tickData0,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
@@ -112,7 +115,8 @@ class ChangedLaneTest {
             tickData = tickData1,
             lane = road0lane1,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
@@ -131,7 +135,8 @@ class ChangedLaneTest {
             tickData = tickData0,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
@@ -142,7 +147,8 @@ class ChangedLaneTest {
             tickData = tickData1,
             lane = road1lane1,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")
@@ -161,7 +167,8 @@ class ChangedLaneTest {
             tickData = tickData0,
             lane = road0lane2,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val tickData1 = emptyTickData(currentTick = TickDataUnitSeconds(1.0), blocks = blocks)
@@ -172,7 +179,8 @@ class ChangedLaneTest {
             tickData = tickData1,
             lane = road1lane1,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment = Segment(listOf(tickData0, tickData1), segmentSource = "")

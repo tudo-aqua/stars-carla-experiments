@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,8 @@ class MustYieldTest {
             lane = road0lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -79,7 +80,8 @@ class MustYieldTest {
             lane = road1lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -99,7 +101,8 @@ class MustYieldTest {
             lane = road1lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -107,7 +110,8 @@ class MustYieldTest {
             lane = road0lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -127,7 +131,8 @@ class MustYieldTest {
             lane = road0lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -135,7 +140,8 @@ class MustYieldTest {
             lane = road2lane1,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")

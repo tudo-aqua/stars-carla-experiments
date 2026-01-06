@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The STARS Carla Experiments Authors
+ * Copyright 2023-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,7 +75,8 @@ class ExperimentConfiguration : CliktCommand() {
       option(
               "--ignore",
               help =
-                  "A list of TSC projections that should be ignored (given as a String, separated by ',')")
+                  "A list of TSC projections that should be ignored (given as a String, separated by ',')",
+          )
           .split(",")
           .default(listOf())
 
@@ -91,7 +92,8 @@ class ExperimentConfiguration : CliktCommand() {
   private val compareToBaselineResults: Boolean by
       option(
               "--compareToBaselineResults",
-              help = "Whether to compare the results to the baseline results")
+              help = "Whether to compare the results to the baseline results",
+          )
           .flag(default = false)
 
   private val compareToPreviousRun: Boolean by
@@ -139,7 +141,8 @@ class ExperimentConfiguration : CliktCommand() {
               val usedMemory = runtime.totalMemory() - runtime.freeMemory()
               val freeMemory = runtime.freeMemory()
               println(
-                  "Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB")
+                  "Used Memory: ${usedMemory / (1024 * 1024)} MB          Free Memory: ${freeMemory / (1024 * 1024)} MB"
+              )
               Thread.sleep(5000)
             }
           }
@@ -175,7 +178,12 @@ class ExperimentConfiguration : CliktCommand() {
 
     val validTSCInstancesPerProjectionMetric =
         ValidTSCInstancesPerTSCMetric<
-            Actor, TickData, Segment, TickDataUnitSeconds, TickDataDifferenceSeconds>()
+            Actor,
+            TickData,
+            Segment,
+            TickDataUnitSeconds,
+            TickDataDifferenceSeconds,
+        >()
 
     println("Creating TSC...")
     val evaluation =
@@ -185,7 +193,8 @@ class ExperimentConfiguration : CliktCommand() {
                 writePlotDataCSV = writePlotDataCSV,
                 writeSerializedResults = writeSerializedResults,
                 compareToBaselineResults = compareToBaselineResults || reproduction != null,
-                compareToPreviousRun = compareToPreviousRun)
+                compareToPreviousRun = compareToPreviousRun,
+            )
             .apply {
               registerMetricProviders(
                   TotalSegmentTickDifferencePerIdentifierMetric(),
@@ -212,7 +221,8 @@ class ExperimentConfiguration : CliktCommand() {
               }
             } else {
               EXIT_CODE_NORMAL
-            })
+            }
+    )
   }
 
   /**
@@ -260,12 +270,16 @@ class ExperimentConfiguration : CliktCommand() {
               var staticFile: Path? = null
               val dynamicFiles = mutableListOf<Path>()
               mapFolder.walk().forEach { mapFile ->
-                if (mapFile.nameWithoutExtension.contains("static_data") &&
-                    staticFilter.toRegex().containsMatchIn(mapFile.name)) {
+                if (
+                    mapFile.nameWithoutExtension.contains("static_data") &&
+                        staticFilter.toRegex().containsMatchIn(mapFile.name)
+                ) {
                   staticFile = mapFile.toPath()
                 }
-                if (mapFile.nameWithoutExtension.contains("dynamic_data") &&
-                    dynamicFilter.toRegex().containsMatchIn(mapFile.name)) {
+                if (
+                    mapFile.nameWithoutExtension.contains("dynamic_data") &&
+                        dynamicFilter.toRegex().containsMatchIn(mapFile.name)
+                ) {
                   dynamicFiles.add(mapFile.toPath())
                 }
               }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +68,8 @@ class MakesTurnTest {
             lane = laneLeftTurn,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -91,7 +92,8 @@ class MakesTurnTest {
               lane = laneLeftTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -104,7 +106,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -128,7 +131,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -141,7 +145,8 @@ class MakesTurnTest {
               lane = laneLeftTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -163,7 +168,8 @@ class MakesTurnTest {
             lane = laneRightTurn,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -186,7 +192,8 @@ class MakesTurnTest {
               lane = laneRightTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -199,7 +206,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -223,7 +231,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -236,7 +245,8 @@ class MakesTurnTest {
               lane = laneRightTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -258,7 +268,8 @@ class MakesTurnTest {
             lane = laneStraight,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -281,7 +292,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -294,7 +306,8 @@ class MakesTurnTest {
               lane = laneLeftTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -318,7 +331,8 @@ class MakesTurnTest {
               lane = laneLeftTurn,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -331,7 +345,8 @@ class MakesTurnTest {
               lane = laneStraight,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -353,7 +368,8 @@ class MakesTurnTest {
             lane = laneUnknown,
             effVelocityMPH = 11.0,
             positionOnLane = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")

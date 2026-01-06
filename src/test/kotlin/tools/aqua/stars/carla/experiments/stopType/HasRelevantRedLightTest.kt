@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,13 +43,25 @@ class HasRelevantRedLightTest {
 
   private val staticTrafficLight01 =
       StaticTrafficLight(
-          id = 10, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 10,
+          location = emptyLocation(),
+          rotation = emptyRotation(),
+          stopLocations = listOf(),
+      )
   private val staticTrafficLight02 =
       StaticTrafficLight(
-          id = 11, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 11,
+          location = emptyLocation(),
+          rotation = emptyRotation(),
+          stopLocations = listOf(),
+      )
   private val staticTrafficLight11 =
       StaticTrafficLight(
-          id = 12, location = emptyLocation(), rotation = emptyRotation(), stopLocations = listOf())
+          id = 12,
+          location = emptyLocation(),
+          rotation = emptyRotation(),
+          stopLocations = listOf(),
+      )
 
   private val road0 = emptyRoad(id = 0, block = block)
   private val road0lane1 =
@@ -57,19 +69,25 @@ class HasRelevantRedLightTest {
           laneId = 1,
           road = road0,
           laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight01))
+          staticTrafficLights = listOf(staticTrafficLight01),
+      )
   private val road0lane2 =
       emptyLane(
           laneId = 2,
           road = road0,
           laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight02))
+          staticTrafficLights = listOf(staticTrafficLight02),
+      )
 
   private val road = emptyRoad(id = -1, block = block)
   private val contactLaneInfo = ContactLaneInfo(lane = road0lane1)
   private val roadLane1 =
       emptyLane(
-          laneId = 1, road = road, laneLength = 50.0, successorLanes = listOf(contactLaneInfo))
+          laneId = 1,
+          road = road,
+          laneLength = 50.0,
+          successorLanes = listOf(contactLaneInfo),
+      )
 
   private val road1 = emptyRoad(id = 1, block = block)
   private val road1lane1 =
@@ -77,7 +95,8 @@ class HasRelevantRedLightTest {
           laneId = 1,
           road = road1,
           laneLength = 50.0,
-          staticTrafficLights = listOf(staticTrafficLight11))
+          staticTrafficLights = listOf(staticTrafficLight11),
+      )
 
   private val blocks = listOf(block)
 
@@ -95,10 +114,16 @@ class HasRelevantRedLightTest {
   fun laneHasRedLightAndEgoIsAtStart() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Red,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -106,7 +131,8 @@ class HasRelevantRedLightTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -121,10 +147,16 @@ class HasRelevantRedLightTest {
   fun laneHasRedLightAndEgoIsAtEnd() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Red,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -132,7 +164,8 @@ class HasRelevantRedLightTest {
             lane = road0lane1,
             positionOnLane = road0lane1.laneLength - 1.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -147,10 +180,16 @@ class HasRelevantRedLightTest {
   fun laneHasGreenLightAndEgoIstAtStart() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -158,7 +197,8 @@ class HasRelevantRedLightTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -173,10 +213,16 @@ class HasRelevantRedLightTest {
   fun laneHasGreenLightAndEgoIstAtEnd() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -184,7 +230,8 @@ class HasRelevantRedLightTest {
             lane = road0lane1,
             positionOnLane = road0lane1.laneLength - 1.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -199,10 +246,16 @@ class HasRelevantRedLightTest {
   fun successorLaneHasRedLightAndEgoIsAtStart() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Red,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -210,7 +263,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = 0.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -225,10 +279,16 @@ class HasRelevantRedLightTest {
   fun successorLaneHasRedLightAndEgoIsAtEnd() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Red)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Red,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -236,7 +296,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = road0lane1.laneLength - 1.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -251,10 +312,16 @@ class HasRelevantRedLightTest {
   fun successorLaneHasGreenLightAndEgoIsAtStart() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -262,7 +329,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = 0.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -277,10 +345,16 @@ class HasRelevantRedLightTest {
   fun successorLaneHasGreenLightAndEgoIsAtEnd() {
     val trafficLight =
         emptyTrafficLight(
-            id = 1, relatedOpenDriveId = staticTrafficLight01.id, state = TrafficLightState.Green)
+            id = 1,
+            relatedOpenDriveId = staticTrafficLight01.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -288,7 +362,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = road0lane1.laneLength - 1.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -303,10 +378,16 @@ class HasRelevantRedLightTest {
   fun differentLaneHasRedLightAndEgoIsAtStart() {
     val trafficLight =
         emptyTrafficLight(
-            id = 2, relatedOpenDriveId = staticTrafficLight11.id, state = TrafficLightState.Green)
+            id = 2,
+            relatedOpenDriveId = staticTrafficLight11.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -314,7 +395,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = 0.0,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -329,10 +411,16 @@ class HasRelevantRedLightTest {
   fun differentLaneHasRedLightAndEgoIsAtEnd() {
     val trafficLight =
         emptyTrafficLight(
-            id = 2, relatedOpenDriveId = staticTrafficLight11.id, state = TrafficLightState.Green)
+            id = 2,
+            relatedOpenDriveId = staticTrafficLight11.id,
+            state = TrafficLightState.Green,
+        )
     val tickData =
         emptyTickData(
-            currentTick = TickDataUnitSeconds(0.0), blocks, trafficLights = listOf(trafficLight))
+            currentTick = TickDataUnitSeconds(0.0),
+            blocks,
+            trafficLights = listOf(trafficLight),
+        )
     val ego =
         emptyVehicle(
             id = egoId,
@@ -340,7 +428,8 @@ class HasRelevantRedLightTest {
             lane = roadLane1,
             positionOnLane = roadLane1.laneLength - 1,
             effVelocityMPH = 0.0,
-            tickData = tickData)
+            tickData = tickData,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")

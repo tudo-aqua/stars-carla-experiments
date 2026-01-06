@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2025 The STARS Carla Experiments Authors
+ * Copyright 2023-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -160,10 +160,12 @@ val follows =
           behind.holds(ctx, v0, v1)
         } &&
             eventually(
-                v0, v1, TickDataDifferenceSeconds(30.0) to TickDataDifferenceSeconds(31.0)) { _, _
-                  ->
-                  true
-                }
+                v0,
+                v1,
+                TickDataDifferenceSeconds(30.0) to TickDataDifferenceSeconds(31.0),
+            ) { _, _ ->
+              true
+            }
       }
     }
 
@@ -257,9 +259,11 @@ val overtaking =
                               },
                               phi2 = { v0, v1 ->
                                 isBehind.holds(ctx, v1, v0) && bothOver10MPH.holds(ctx, v0, v1)
-                              })
+                              },
+                          )
                         }
-                  })
+                  },
+              )
             }
       }
     }
@@ -301,9 +305,11 @@ val rightOvertaking =
                               },
                               phi2 = { v0, v1 ->
                                 isBehind.holds(ctx, v1, v0) && bothOver10MPH.holds(ctx, v0, v1)
-                              })
+                              },
+                          )
                         }
-                  })
+                  },
+              )
             }
       }
     }
@@ -336,7 +342,8 @@ val hasYielded =
           v0,
           v1,
           phi1 = { v0, v1 -> !passedContactPoint.holds(ctx, v0, v1) },
-          phi2 = { v0, v1 -> passedContactPoint.holds(ctx, v1, v0) })
+          phi2 = { v0, v1 -> passedContactPoint.holds(ctx, v1, v0) },
+      )
     }
 
 /** [Vehicle] v always had a speed lower than the allowed speed limit. */

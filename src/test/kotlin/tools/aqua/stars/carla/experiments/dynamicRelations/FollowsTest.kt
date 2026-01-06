@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,14 +69,16 @@ class FollowsTest {
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+              lane = lane1,
+          )
       tickData.entities = listOf(v1, v2)
       tickDataList.add(tickData)
     }
@@ -106,14 +108,16 @@ class FollowsTest {
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+              lane = lane1,
+          )
       tickData.entities = listOf(v1, v2)
       tickDataList.add(tickData)
     }
@@ -142,21 +146,24 @@ class FollowsTest {
               id = vehicle0.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+              lane = lane1,
+          )
       val v3 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 5.0,
-              lane = lane1)
+              lane = lane1,
+          )
       tickData.entities = listOf(v1, v2, v3)
       tickDataList.add(tickData)
     }
@@ -190,14 +197,16 @@ class FollowsTest {
               id = vehicle0.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = lane2)
+              lane = lane2,
+          )
       tickData.entities = listOf(v1, v2)
       tickDataList.add(tickData)
     }
@@ -226,21 +235,24 @@ class FollowsTest {
               id = vehicle0.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v1 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = laneRoad2)
+              lane = laneRoad2,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = laneRoad2)
+              lane = laneRoad2,
+          )
       tickData.entities = listOf(v0, v1, v2)
       tickDataList.add(tickData)
     }
@@ -268,14 +280,16 @@ class FollowsTest {
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = laneSuccessorRoad)
+              lane = laneSuccessorRoad,
+          )
       tickData.entities = listOf(v1, v2)
       tickDataList.add(tickData)
     }
@@ -304,21 +318,24 @@ class FollowsTest {
               id = vehicle0.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = lane1)
+              lane = lane1,
+          )
       val v1 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle1.id,
               tickData = tickData,
               positionOnLane = i.toDouble() + 10.0,
-              lane = lane1)
+              lane = lane1,
+          )
       val v2 =
           emptyVehicle(
               egoVehicle = false,
               id = vehicle2.id,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              lane = laneSuccessorRoad)
+              lane = laneSuccessorRoad,
+          )
       tickData.entities = listOf(v0, v1, v2)
       tickDataList.add(tickData)
     }

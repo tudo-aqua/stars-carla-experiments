@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,12 +56,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -77,12 +79,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 1.0)
+            effVelocityMPH = 1.0,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -98,12 +102,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 0.5)
+            effVelocityMPH = 0.5,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -119,12 +125,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -140,12 +148,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 2.0)
+            effVelocityMPH = 2.0,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 
@@ -161,12 +171,14 @@ class StoppedTest {
             egoVehicle = true,
             lane = road0lane1,
             positionOnLane = 0.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val tickData =
         emptyTickData(
             currentTick = TickDataUnitSeconds(0.0),
             blocks = listOf(block),
-            actors = listOf(vehicle))
+            actors = listOf(vehicle),
+        )
     val segment = Segment(listOf(tickData), segmentSource = "")
     val ctx = PredicateContext(segment)
 

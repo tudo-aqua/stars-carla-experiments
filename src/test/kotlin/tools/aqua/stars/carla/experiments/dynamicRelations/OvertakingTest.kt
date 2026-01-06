@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +68,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -76,7 +77,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -100,7 +102,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -108,7 +111,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -132,7 +136,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -140,7 +145,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -173,7 +179,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 0.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -181,7 +188,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -205,7 +213,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 50.0)
+            effVelocityMPH = 50.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -213,7 +222,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -237,7 +247,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData2,
             positionOnLane = 8.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -245,7 +256,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData2,
             positionOnLane = 12.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -269,7 +281,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData3,
             positionOnLane = 15.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other3 =
         emptyVehicle(
             id = otherId,
@@ -277,7 +290,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData3,
             positionOnLane = 15.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData3.entities = listOf(ego3, other3)
 
     val segment3 = Segment(listOf(tickData3), segmentSource = "")
@@ -301,7 +315,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData4,
             positionOnLane = 30.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     val other4 =
         emptyVehicle(
             id = otherId,
@@ -309,7 +324,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData4,
             positionOnLane = 18.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData4.entities = listOf(ego4, other4)
 
     val segment4 = Segment(listOf(tickData4), segmentSource = "")
@@ -343,7 +359,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 0.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -351,7 +368,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 5.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -375,7 +393,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -383,7 +402,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -407,7 +427,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData2,
             positionOnLane = 8.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -415,7 +436,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData2,
             positionOnLane = 14.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -450,7 +472,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 0.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -458,7 +481,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 5.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -482,7 +506,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -490,7 +515,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData1,
             positionOnLane = 7.0,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -525,7 +551,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData0,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -533,7 +560,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -557,7 +585,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData1,
             positionOnLane = 5.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -565,7 +594,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData1,
             positionOnLane = 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -600,7 +630,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData0,
             positionOnLane = 15.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -608,7 +639,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData0,
             positionOnLane = 10.0,
-            effVelocityMPH = 40.0)
+            effVelocityMPH = 40.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -632,7 +664,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData1,
             positionOnLane = 16.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -640,7 +673,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData1,
             positionOnLane = 16.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -664,7 +698,8 @@ class OvertakingTest {
             lane = road0lane2,
             tickData = tickData2,
             positionOnLane = 18.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -672,7 +707,8 @@ class OvertakingTest {
             lane = road0lane1,
             tickData = tickData2,
             positionOnLane = 30.0,
-            effVelocityMPH = 60.0)
+            effVelocityMPH = 60.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -709,7 +745,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -717,7 +754,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -741,7 +779,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -749,7 +788,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -773,7 +813,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -781,7 +822,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -814,7 +856,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -822,7 +865,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -846,7 +890,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -854,7 +899,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -878,7 +924,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -886,7 +933,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -919,7 +967,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -927,7 +976,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -951,7 +1001,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -959,7 +1010,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -983,7 +1035,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 5.0)
+            effVelocityMPH = 5.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -991,7 +1044,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -1024,7 +1078,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -1032,7 +1087,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -1056,7 +1112,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -1064,7 +1121,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -1088,7 +1146,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 30.0)
+            effVelocityMPH = 30.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -1096,7 +1155,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 0.0)
+            effVelocityMPH = 0.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")
@@ -1129,7 +1189,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData0,
-            effVelocityMPH = 20.0)
+            effVelocityMPH = 20.0,
+        )
     val other0 =
         emptyVehicle(
             id = otherId,
@@ -1137,7 +1198,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 5.0,
             tickData = tickData0,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData0.entities = listOf(ego0, other0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -1158,7 +1220,8 @@ class OvertakingTest {
             lane = road0lane1,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other1 =
         emptyVehicle(
             id = otherId,
@@ -1166,7 +1229,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 7.0,
             tickData = tickData1,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData1.entities = listOf(ego1, other1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -1187,7 +1251,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 20.0,
             tickData = tickData2,
-            effVelocityMPH = 00.0)
+            effVelocityMPH = 00.0,
+        )
     val other2 =
         emptyVehicle(
             id = otherId,
@@ -1195,7 +1260,8 @@ class OvertakingTest {
             lane = road0lane2,
             positionOnLane = 10.0,
             tickData = tickData2,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData2.entities = listOf(ego2, other2)
 
     val segment2 = Segment(listOf(tickData2), segmentSource = "")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,7 +74,8 @@ class ObeyedSpeedLimitTest {
           laneId = 1,
           road = road3,
           laneLength = 150.0,
-          speedLimits = listOf(mph30SpeedLimit1, mph60SpeedLimit2, mph90SpeedLimit3))
+          speedLimits = listOf(mph30SpeedLimit1, mph60SpeedLimit2, mph90SpeedLimit3),
+      )
 
   private val blocks = listOf(block, block2)
 
@@ -103,7 +104,8 @@ class ObeyedSpeedLimitTest {
             lane = road0lane1,
             effVelocityMPH = 11.0,
             tickData = tickData,
-            positionOnLane = 10.0)
+            positionOnLane = 10.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -122,7 +124,8 @@ class ObeyedSpeedLimitTest {
             lane = road0lane1,
             effVelocityMPH = 40.0,
             tickData = tickData,
-            positionOnLane = 10.0)
+            positionOnLane = 10.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -141,7 +144,8 @@ class ObeyedSpeedLimitTest {
             lane = road1lane1,
             effVelocityMPH = 55.0,
             tickData = tickData,
-            positionOnLane = 10.0)
+            positionOnLane = 10.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -160,7 +164,8 @@ class ObeyedSpeedLimitTest {
             lane = road1lane1,
             effVelocityMPH = 65.0,
             tickData = tickData,
-            positionOnLane = 10.0)
+            positionOnLane = 10.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -179,7 +184,8 @@ class ObeyedSpeedLimitTest {
             lane = road2lane1,
             effVelocityMPH = 11.0,
             tickData = tickData,
-            positionOnLane = 10.0)
+            positionOnLane = 10.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -202,7 +208,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 29.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -221,7 +228,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 59.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -240,7 +248,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 89.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -263,7 +272,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 29.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -282,7 +292,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 59.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }
@@ -301,7 +312,8 @@ class ObeyedSpeedLimitTest {
               lane = road3lane1,
               effVelocityMPH = 99.0,
               tickData = tickData,
-              positionOnLane = i.toDouble())
+              positionOnLane = i.toDouble(),
+          )
       tickData.entities = listOf(ego)
       tickDataList += tickData
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors
@@ -96,7 +97,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors
@@ -121,7 +123,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors
@@ -147,7 +150,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     for (i in 6..25) {
@@ -158,7 +162,8 @@ class TrafficDensityTest {
               lane = road2lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors
@@ -184,7 +189,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     for (i in 11..100) {
@@ -195,7 +201,8 @@ class TrafficDensityTest {
               lane = road2lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors
@@ -221,7 +228,8 @@ class TrafficDensityTest {
               lane = road0lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     for (i in 11..15) {
@@ -232,7 +240,8 @@ class TrafficDensityTest {
               lane = road2lane1,
               tickData = tickData,
               positionOnLane = i.toDouble(),
-              effVelocityMPH = 11.0)
+              effVelocityMPH = 11.0,
+          )
       actors += vehicle
     }
     tickData.entities = actors

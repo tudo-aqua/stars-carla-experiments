@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,7 +61,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -69,7 +70,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -89,7 +91,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -97,7 +100,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -117,7 +121,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -125,7 +130,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -145,7 +151,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -153,7 +160,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -173,7 +181,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -181,7 +190,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -201,7 +211,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -209,7 +220,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -229,7 +241,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -237,7 +250,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -257,7 +271,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -265,7 +280,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -285,7 +301,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -293,7 +310,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -313,7 +331,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -321,7 +340,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -341,7 +361,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -349,7 +370,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -369,7 +391,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -377,7 +400,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 9.0)
+            effVelocityMPH = 9.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -397,7 +421,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -405,7 +430,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -425,7 +451,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -433,7 +460,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -453,7 +481,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -461,7 +490,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -481,7 +511,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -489,7 +520,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -509,7 +541,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -517,7 +550,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -537,7 +571,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -545,7 +580,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -565,7 +601,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -573,7 +610,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -593,7 +631,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -601,7 +640,8 @@ class BothOver10MPHTest {
             lane = road0lane2,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -621,7 +661,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     val other =
         emptyVehicle(
             id = otherId,
@@ -629,7 +670,8 @@ class BothOver10MPHTest {
             lane = road1lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 10.0)
+            effVelocityMPH = 10.0,
+        )
     tickData.entities = listOf(ego, other)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -649,7 +691,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -668,7 +711,8 @@ class BothOver10MPHTest {
             lane = road0lane1,
             positionOnLane = 0.0,
             tickData = tickData,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")

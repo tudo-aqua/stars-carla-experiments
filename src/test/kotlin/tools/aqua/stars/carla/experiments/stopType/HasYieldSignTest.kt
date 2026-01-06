@@ -1,5 +1,5 @@
 /*
- * Copyright 2024-2025 The STARS Carla Experiments Authors
+ * Copyright 2024-2026 The STARS Carla Experiments Authors
  * SPDX-License-Identifier: Apache-2.0
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,8 @@ class HasYieldSignTest {
           unit = "",
           text = "",
           location = emptyLocation(),
-          rotation = emptyRotation())
+          rotation = emptyRotation(),
+      )
   private val yieldSign2 =
       Landmark(
           id = 12,
@@ -60,7 +61,8 @@ class HasYieldSignTest {
           unit = "",
           text = "",
           location = emptyLocation(),
-          rotation = emptyRotation())
+          rotation = emptyRotation(),
+      )
 
   private val road0 = emptyRoad(id = 0)
   private val road0lane1 = emptyLane(laneId = 1, road = road0, laneLength = 50.0)
@@ -105,7 +107,8 @@ class HasYieldSignTest {
             lane = road1lane1,
             tickData = tickData,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -124,7 +127,8 @@ class HasYieldSignTest {
             lane = road1lane1,
             tickData = tickData,
             positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -143,7 +147,8 @@ class HasYieldSignTest {
             lane = road0lane1,
             tickData = tickData,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -162,7 +167,8 @@ class HasYieldSignTest {
             lane = road0lane1,
             tickData = tickData,
             positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -181,7 +187,8 @@ class HasYieldSignTest {
             lane = road0lane1,
             tickData = tickData,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -200,7 +207,8 @@ class HasYieldSignTest {
             lane = road3lane1,
             tickData = tickData,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -219,7 +227,8 @@ class HasYieldSignTest {
             lane = road1lane2,
             tickData = tickData,
             positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData.entities = listOf(ego)
 
     val segment = Segment(listOf(tickData), segmentSource = "")
@@ -239,7 +248,8 @@ class HasYieldSignTest {
             lane = road0lane1,
             tickData = tickData0,
             positionOnLane = road0lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -256,7 +266,8 @@ class HasYieldSignTest {
             lane = road1lane1,
             tickData = tickData1,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
@@ -282,7 +293,8 @@ class HasYieldSignTest {
             lane = road2lane1,
             tickData = tickData0,
             positionOnLane = road2lane1.laneLength - 1.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData0.entities = listOf(ego0)
 
     val segment0 = Segment(listOf(tickData0), segmentSource = "")
@@ -299,7 +311,8 @@ class HasYieldSignTest {
             lane = road3lane1,
             tickData = tickData1,
             positionOnLane = 0.0,
-            effVelocityMPH = 11.0)
+            effVelocityMPH = 11.0,
+        )
     tickData1.entities = listOf(ego1)
 
     val segment1 = Segment(listOf(tickData1), segmentSource = "")
